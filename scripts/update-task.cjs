@@ -184,6 +184,35 @@ function pullLatest() {
     }
 }
 
+function updateTask(taskId, fields) {
+    pullLatest();
+    const data = loadData();
+    const task = data.boardData.tasks[taskId];
+    if (!task) { console.error(`❌ Task ${taskId} not found`); return; }
+
+    const updatable = ['title', 'description', 'priority', 'agent', 'dueDate', 'reviewLink'];
+    const changes = [];
+    for (const key of updatable) {
+        if (fields[key] !== undefined) {
+            task[key] = fields[key];
+            changes.push(`${key}="${fields[key]}"`);
+        }
+    }
+    if (fields.category) {
+        task.tags = [fields.category];
+        changes.push(`category="${fields.category}"`);
+    }
+
+    if (changes.length === 0) {
+        console.log('No fields to update. Use --description, --title, --priority, --agent, --dueDate, --category');
+        return;
+    }
+
+    saveData(data);
+    commitAndPush(`[dashboard] Update "${task.title}": ${changes.join(', ')}`);
+    console.log(`✏️  Updated "${task.title}": ${changes.join(', ')}`);
+}
+
 // CLI
 const [, , command, ...args] = process.argv;
 const flags = {};
@@ -209,11 +238,15 @@ switch (command) {
     case 'view':
         viewTask(flags.id);
         break;
+    case 'update':
+        updateTask(flags.id, flags);
+        break;
     case 'list':
         pullLatest();
         listTasks();
         break;
     default:
-        console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|list> [--flags]`);
+        console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|update|list> [--flags]`);
 }
+
 
