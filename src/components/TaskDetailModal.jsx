@@ -113,7 +113,7 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
 
     const newComment = {
       text: newMessage,
-      author: 'Charley',
+      author: 'Chris',
       timestamp: new Date().toISOString(),
     };
     onSave({

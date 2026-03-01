@@ -96,7 +96,7 @@ function App() {
     return localStorage.getItem('sidebarCollapsed') === 'true';
   });
 
-  // Load data from JSON file (source of truth from git)
+  // Load data from JSON file (source of truth from git) and merge with local
   useEffect(() => {
     const loadFromJson = async () => {
       try {
@@ -104,19 +104,43 @@ function App() {
         const res = await fetch(`${base}data/tasks.json?t=${Date.now()}`);
         if (res.ok) {
           const jsonData = await res.json();
-          if (jsonData.boardData) setData(jsonData.boardData);
+          if (jsonData.boardData) {
+            setData(prev => {
+              const merged = { ...jsonData.boardData };
+              // Merge tasks — keep local comments/edits not yet in JSON
+              if (prev && prev.tasks) {
+                merged.tasks = { ...merged.tasks };
+                for (const [id, localTask] of Object.entries(prev.tasks)) {
+                  if (merged.tasks[id]) {
+                    // Merge comments: combine both, deduplicate by timestamp
+                    const jsonComments = merged.tasks[id].comments || [];
+                    const localComments = localTask.comments || [];
+                    const allComments = [...jsonComments];
+                    for (const lc of localComments) {
+                      if (!allComments.find(jc => jc.timestamp === lc.timestamp)) {
+                        allComments.push(lc);
+                      }
+                    }
+                    allComments.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+                    merged.tasks[id] = { ...merged.tasks[id], comments: allComments };
+                  } else {
+                    // Keep locally-added tasks that aren't in JSON yet
+                    merged.tasks[id] = localTask;
+                  }
+                }
+              }
+              localStorage.setItem('taskDashboardData', JSON.stringify(merged));
+              return merged;
+            });
+          }
           if (jsonData.categories) setCategories(jsonData.categories);
           if (jsonData.activity) setActivity(jsonData.activity);
-          // Also update localStorage cache
-          if (jsonData.boardData) localStorage.setItem('taskDashboardData', JSON.stringify(jsonData.boardData));
-          if (jsonData.categories) localStorage.setItem('taskDashboardCategories', JSON.stringify(jsonData.categories));
         }
       } catch (err) {
         console.log('Using localStorage data (JSON fetch failed)');
       }
     };
     loadFromJson();
-    // Poll for updates every 30 seconds
     const interval = setInterval(loadFromJson, 30000);
     return () => clearInterval(interval);
   }, []);
