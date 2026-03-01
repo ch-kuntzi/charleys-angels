@@ -621,12 +621,12 @@ function App() {
             </div>
           )}
         </div>
+        {showActivity && (
+          <div className="activity-overlay">
+            <ActivityLog activity={activity} />
+          </div>
+        )}
       </div>
-      {showActivity && (
-        <div className="activity-overlay">
-          <ActivityLog activity={activity} />
-        </div>
-      )}
       {isModalOpen && (
         <AddTaskModal
           agents={agents}
