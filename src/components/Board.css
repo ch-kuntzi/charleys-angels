@@ -46,6 +46,114 @@
   background: var(--accent-glow);
 }
 
+/* Column drag wrapper */
+.column-drag-wrapper {
+  flex: 1 1 0;
+  min-width: 180px;
+  transition: transform 0.15s ease;
+}
+
+.column-drag-wrapper[draggable="true"] {
+  cursor: grab;
+}
+
+.column-drag-wrapper.column-dragging {
+  opacity: 0.4;
+}
+
+.column-drag-wrapper.column-drop-target {
+  transform: scale(1.02);
+}
+
+.column-drag-wrapper.column-drop-target>.column {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 16px rgba(124, 58, 237, 0.3);
+}
+
+/* Add column form */
+.add-column-form {
+  flex: 0 0 auto;
+  min-width: 160px;
+  max-width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--accent-primary);
+  border-radius: 8px;
+  box-shadow: 0 0 0 2px var(--accent-glow);
+  align-self: flex-start;
+}
+
+.add-column-input {
+  padding: 8px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: 6px;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.add-column-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.add-column-input::placeholder {
+  color: var(--text-muted);
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 500;
+}
+
+.add-column-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.add-column-confirm {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: var(--accent-primary);
+  border: none;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.add-column-confirm:hover {
+  background: var(--accent-primary-hover);
+}
+
+.add-column-cancel {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid var(--border-default);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.add-column-cancel:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
 @media (max-width: 1400px) {
   .board {
     gap: 12px;

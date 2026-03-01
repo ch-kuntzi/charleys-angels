@@ -410,7 +410,7 @@ function App() {
     showToast('Column renamed!', 'success');
   };
 
-  const handleAddColumn = () => {
+  const handleAddColumn = (name) => {
     const newId = `column-${Date.now()}`;
     const newData = {
       ...data,
@@ -418,15 +418,15 @@ function App() {
         ...data.columns,
         [newId]: {
           id: newId,
-          title: 'New Column',
+          title: name,
           taskIds: [],
         },
       },
       columnOrder: [...data.columnOrder, newId],
     };
     handleSetData(newData);
-    addActivity('created', 'New column added');
-    showToast('Column added!', 'success');
+    addActivity('created', `Column "${name}" added`);
+    showToast(`Column "${name}" added!`, 'success');
   };
 
   const handleDeleteColumn = (columnId) => {
@@ -445,6 +445,17 @@ function App() {
     handleSetData(newData);
     addActivity('deleted', `Column "${column.title}" deleted`);
     showToast('Column deleted!', 'success');
+  };
+
+  const handleReorderColumns = (sourceId, targetId) => {
+    const newOrder = [...data.columnOrder];
+    const sourceIdx = newOrder.indexOf(sourceId);
+    const targetIdx = newOrder.indexOf(targetId);
+    if (sourceIdx === -1 || targetIdx === -1) return;
+    newOrder.splice(sourceIdx, 1);
+    newOrder.splice(targetIdx, 0, sourceId);
+    const newData = { ...data, columnOrder: newOrder };
+    handleSetData(newData);
   };
 
   const handleFilterChange = (filterType, value) => {
@@ -586,6 +597,7 @@ function App() {
                 onTaskClick={handleOpenTaskModal}
                 onRenameColumn={handleRenameColumn}
                 onAddColumn={handleAddColumn}
+                onReorderColumns={handleReorderColumns}
               />
             </div>
           )}
