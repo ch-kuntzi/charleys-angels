@@ -93,6 +93,9 @@ function App() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [categories, setCategories] = useState(getInitialCategories);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    return localStorage.getItem('sidebarCollapsed') === 'true';
+  });
 
   const showToast = (message, type = 'info') => {
     const id = Date.now();
@@ -569,6 +572,12 @@ function App() {
         columns={data.columns}
         selectedAgent={selectedAgentFilter}
         onAgentClick={handleAgentFilterClick}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => {
+          const next = !sidebarCollapsed;
+          setSidebarCollapsed(next);
+          localStorage.setItem('sidebarCollapsed', String(next));
+        }}
       />
       <div className="main-content">
         <Header

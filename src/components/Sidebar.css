@@ -6,10 +6,23 @@
   flex-direction: column;
   border-right: 1px solid var(--border-subtle);
   flex-shrink: 0;
+  transition: width 0.2s ease, padding 0.2s ease;
+}
+
+.sidebar.collapsed {
+  width: 56px;
+  padding: 24px 8px;
 }
 
 .sidebar-header {
   margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sidebar.collapsed .sidebar-header {
+  justify-content: center;
 }
 
 .sidebar-header h2 {
@@ -19,6 +32,24 @@
   letter-spacing: 0.08em;
   color: var(--text-secondary);
   margin: 0;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
 }
 
 .agent-list {
@@ -44,6 +75,11 @@
   border: 1px solid transparent;
 }
 
+.sidebar.collapsed .agent-item {
+  justify-content: center;
+  padding: 8px;
+}
+
 .agent-item:hover {
   background: var(--bg-elevated);
   color: var(--text-primary);
@@ -67,8 +103,8 @@
 
 /* De-emphasized transparent purple pill badge */
 .agent-task-count {
-  background: rgba(167, 139, 250, 0.15); /* Transparent --accent-secondary */
-  color: var(--accent-secondary); /* Darker purple text */
+  background: rgba(167, 139, 250, 0.15);
+  color: var(--accent-secondary);
   font-size: 11px;
   font-weight: 600;
   padding: 2px 8px;

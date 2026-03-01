@@ -7,14 +7,14 @@
 }
 
 .main-content {
-  width: calc(100vw - 220px);
-  max-width: calc(100vw - 220px);
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   padding: 0;
   overflow: hidden;
   background-color: var(--bg-base);
-  flex-shrink: 0;
+  transition: all 0.2s ease;
 }
 
 /* Header and filter bar always full width within main-content */
