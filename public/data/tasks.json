@@ -106,7 +106,7 @@
         "reviewLink": "",
         "archived": false,
         "deliveryMethod": "notebook",
-        "thinkingLevel": "quick"
+        "thinkingLevel": "standard"
       },
       "task-1772387538947": {
         "id": "task-1772387538947",
@@ -117,7 +117,8 @@
         "dueDate": "",
         "dueTime": "07:00",
         "tags": [
-          "Research"
+          "Research",
+          "Urgent"
         ],
         "attachments": [],
         "timestamp": "Just now",
@@ -125,7 +126,9 @@
         "reviewLink": "",
         "archived": false,
         "completedAt": null,
-        "startDate": ""
+        "startDate": "",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick"
       },
       "task-1772387660652": {
         "id": "task-1772387660652",
@@ -232,6 +235,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772389127922,
+      "action": "updated",
+      "details": "\"give me 4 random words\" updated",
+      "timestamp": "3/1/2026, 12:18:47 PM"
+    },
     {
       "id": 1772388203683,
       "action": "moved",

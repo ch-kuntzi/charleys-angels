@@ -100,7 +100,7 @@
   flex-direction: column;
   gap: 16px;
   border-left: 1px solid var(--border-subtle);
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 .form-group {
