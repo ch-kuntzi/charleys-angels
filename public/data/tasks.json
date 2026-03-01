@@ -150,6 +150,12 @@
             "text": "the card did not move along to review and I don't see the link on the card",
             "author": "Chris",
             "timestamp": "2026-03-01T19:03:30.797Z"
+          },
+          {
+            "id": 1772394066493,
+            "author": "Charley",
+            "message": "Apologies for the oversight, Chris! The card should now be in 'Deployed', and here's the direct link to the 'Four Random Words' source in NotebookLM: https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/39dbcfde-be51-40e0-ae86-4a07d320a4b6",
+            "timestamp": "3/1/2026, 1:41:06 PM"
           }
         ],
         "reviewLink": "",
@@ -254,7 +260,115 @@
         ],
         "attachments": [],
         "timestamp": "Just now",
-        "comments": [],
+        "comments": [
+          {
+            "id": 1772394077024,
+            "author": "Charley",
+            "message": "Chris, the document with my name has been created. Here's the link to it in NotebookLM: https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/ad46b20e-c655-49ee-938a-c822669b5ad3. I'm moving this task to Deployed.",
+            "timestamp": "3/1/2026, 1:41:17 PM"
+          }
+        ],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
+      },
+      "task-1772393662846": {
+        "id": "task-1772393662846",
+        "title": "make a document that says \"I love charley\"",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [
+          {
+            "id": 1772394072278,
+            "author": "Charley",
+            "message": "Chris, I've created the document. You can find it here in NotebookLM: https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/23f95229-c53d-491b-a3ec-f618305d096f. I'm moving this task to Deployed.",
+            "timestamp": "3/1/2026, 1:41:12 PM"
+          }
+        ],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
+      },
+      "task-1772395160479": {
+        "id": "task-1772395160479",
+        "title": "what does the name charley mean?",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [
+          {
+            "id": 1772395739471,
+            "author": "Charley",
+            "timestamp": "3/1/2026, 2:08:59 PM"
+          },
+          {
+            "id": 1772395850193,
+            "author": "Charley",
+            "message": "Chris, the name Charley is typically a diminutive of Charles or Charlotte, meaning 'free man' or 'petite and feminine' respectively. I've added this to NotebookLM here: https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/10b190f8-e165-4f3a-8673-4554868e6f1f. I'm moving this task to Deployed.",
+            "timestamp": "3/1/2026, 2:10:50 PM"
+          }
+        ],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
+      },
+      "task-1772395205313": {
+        "id": "task-1772395205313",
+        "title": "what does the name chris mean",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "reply",
+        "thinkingLevel": "quick",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [
+          {
+            "text": "do this quick, 30 seconds or less",
+            "author": "Chris",
+            "timestamp": "2026-03-01T20:02:53.033Z"
+          },
+          {
+            "id": 1772395736508,
+            "author": "Charley",
+            "timestamp": "3/1/2026, 2:08:56 PM"
+          },
+          {
+            "id": 1772395810319,
+            "author": "Charley",
+            "timestamp": "3/1/2026, 2:10:10 PM"
+          },
+          {
+            "id": 1772395844229,
+            "author": "Charley",
+            "message": "Chris, the name Chris is typically a short form of Christopher, Christian, or Christine. It generally means 'bearer of Christ' or 'anointed.'",
+            "timestamp": "3/1/2026, 2:10:44 PM"
+          }
+        ],
         "reviewLink": "",
         "archived": false,
         "completedAt": null
@@ -270,23 +384,25 @@
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772386173974",
-          "task-1772392685581"
+          "task-1772386173974"
         ]
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772387538947"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
         "title": "Deployed",
         "taskIds": [
           "task-1772384091510",
-          "task-1772387660652"
+          "task-1772387660652",
+          "task-1772387538947",
+          "task-1772393662846",
+          "task-1772392685581",
+          "task-1772395205313",
+          "task-1772395160479"
         ]
       }
     },
@@ -305,6 +421,66 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772395851291,
+      "action": "moved",
+      "details": "\"what does the name charley mean?\" → Deployed",
+      "timestamp": "3/1/2026, 2:10:51 PM"
+    },
+    {
+      "id": 1772395845349,
+      "action": "moved",
+      "details": "\"what does the name chris mean\" → Deployed",
+      "timestamp": "3/1/2026, 2:10:45 PM"
+    },
+    {
+      "id": 1772395737928,
+      "action": "moved",
+      "details": "\"what does the name charley mean?\" → In Progress",
+      "timestamp": "3/1/2026, 2:08:57 PM"
+    },
+    {
+      "id": 1772395734249,
+      "action": "moved",
+      "details": "\"what does the name chris mean\" → In Progress",
+      "timestamp": "3/1/2026, 2:08:54 PM"
+    },
+    {
+      "id": 1772395373034,
+      "action": "updated",
+      "details": "\"what does the name chris mean\" updated",
+      "timestamp": "3/1/2026, 2:02:53 PM"
+    },
+    {
+      "id": 1772395205314,
+      "action": "created",
+      "details": "Task \"what does the name chris mean\" created by Charley",
+      "timestamp": "3/1/2026, 2:00:05 PM"
+    },
+    {
+      "id": 1772394078685,
+      "action": "moved",
+      "details": "\"just make a document with your name\" → Deployed",
+      "timestamp": "3/1/2026, 1:41:18 PM"
+    },
+    {
+      "id": 1772394074021,
+      "action": "moved",
+      "details": "\"make a document that says \"I love charley\"\" → Deployed",
+      "timestamp": "3/1/2026, 1:41:14 PM"
+    },
+    {
+      "id": 1772394068550,
+      "action": "moved",
+      "details": "\"give me 4 random words\" → Deployed",
+      "timestamp": "3/1/2026, 1:41:08 PM"
+    },
+    {
+      "id": 1772393662848,
+      "action": "created",
+      "details": "Task \"make a document that says \"I love charley\"\" created by Charley",
+      "timestamp": "3/1/2026, 1:34:22 PM"
+    },
     {
       "id": 1772393582859,
       "action": "moved",
