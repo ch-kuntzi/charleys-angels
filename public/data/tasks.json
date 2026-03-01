@@ -104,7 +104,9 @@
         ],
         "attachments": [],
         "reviewLink": "",
-        "archived": false
+        "archived": false,
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick"
       },
       "task-1772387538947": {
         "id": "task-1772387538947",
@@ -171,11 +173,19 @@
             "author": "Charley",
             "message": "Chris, I apologize for the perceived delay. I was reviewing the NotebookLM skill documentation to ensure I correctly follow the process for creating the document and linking it to the card. I am not hung up and am proceeding with creating the NotebookLM document now, as per your instruction. I will update the card with the link once it's created.",
             "timestamp": "3/1/2026, 12:06:53 PM"
+          },
+          {
+            "id": 1772388935518,
+            "author": "Charley",
+            "message": "Chris, I've added 'D. O. G.' as a source titled 'Spelling of DOG' to the 'Charley's Angels Task Book' NotebookLM. The review link on the card now points to the notebook where you can find this information.",
+            "timestamp": "3/1/2026, 12:15:35 PM"
           }
         ],
-        "reviewLink": "",
+        "reviewLink": "https://notebooklm.google.com/notebook/857e95fd-4f8c-4a0a-a48d-83867f22ff48",
         "archived": false,
-        "completedAt": null
+        "completedAt": null,
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick"
       }
     },
     "columns": {
