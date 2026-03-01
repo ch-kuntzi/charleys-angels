@@ -486,9 +486,7 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772386173974"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
@@ -506,7 +504,8 @@
           "task-1772392685581",
           "task-1772395205313",
           "task-1772395160479",
-          "task-1772397817953"
+          "task-1772397817953",
+          "task-1772386173974"
         ]
       }
     },
@@ -525,6 +524,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772400122089,
+      "action": "moved",
+      "details": "\"Research and present hotel options for Georgia trip\" → Deployed",
+      "timestamp": "3/1/2026, 3:22:02 PM"
+    },
     {
       "id": 1772399999244,
       "action": "moved",
