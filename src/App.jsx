@@ -312,8 +312,9 @@ function App() {
       },
     };
     handleSetData(newData);
+    // Update selectedTask so modal reflects changes immediately (e.g. new comments)
+    setSelectedTask(updatedTask);
     addActivity('updated', `"${updatedTask.title}" updated`);
-    showToast('Task updated successfully!', 'success');
   };
 
   const handleDeleteTask = (taskId) => {
