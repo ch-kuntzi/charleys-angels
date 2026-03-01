@@ -422,13 +422,35 @@
         "reviewLink": "",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772397817953": {
+        "id": "task-1772397817953",
+        "title": "do research on geopolitics in 2026",
+        "description": "",
+        "agent": "Charley",
+        "priority": "Medium",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "standard",
+        "tags": [
+          "Research"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772397817953"
+        ]
       },
       "column-2": {
         "id": "column-2",
