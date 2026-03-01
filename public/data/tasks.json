@@ -264,15 +264,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772392685581"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772386173974"
+          "task-1772386173974",
+          "task-1772392685581"
         ]
       },
       "column-3": {
@@ -306,6 +305,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772393582859,
+      "action": "moved",
+      "details": "\"just make a document with your name\" → In Progress",
+      "timestamp": "3/1/2026, 1:33:02 PM"
+    },
     {
       "id": 1772392126748,
       "action": "moved",

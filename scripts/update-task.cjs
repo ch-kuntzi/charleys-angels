@@ -342,7 +342,7 @@ switch (command) {
         addTask(flags);
         break;
     case 'move':
-        moveTask(flags.id, flags.column);
+        moveTask(flags.id, flags.column || flags.to);
         break;
     case 'complete':
         completeTask(flags.id);
