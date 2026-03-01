@@ -559,7 +559,9 @@ function App() {
   };
 
   // Determine layout class based on active views
-  const isTwoViewLayout = activeViews.length === 2;
+  // Activity is a fixed overlay, so never counts toward layout
+  const contentViews = activeViews.filter(v => v !== 'activity');
+  const isTwoViewLayout = contentViews.length === 2;
   const showBoard = activeViews.includes('board');
   const showCalendar = activeViews.includes('calendar');
   const showActivity = activeViews.includes('activity');
