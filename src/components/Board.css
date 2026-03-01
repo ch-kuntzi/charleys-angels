@@ -60,7 +60,6 @@
 }
 
 .column-drag-wrapper.column-dragging {
-  opacity: 0.35;
   transform: scale(0.95);
   animation: columnWiggle 0.3s ease;
 }
