@@ -83,6 +83,8 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
   const [dueTime, setDueTime] = useState(task.dueTime || '07:00');
 
   const [tags, setTags] = useState(task.tags || []);
+  const [deliveryMethod, setDeliveryMethod] = useState(task.deliveryMethod || 'reply');
+  const [thinkingLevel, setThinkingLevel] = useState(task.thinkingLevel || 'standard');
   const [newMessage, setNewMessage] = useState('');
 
   const discussionEndRef = useRef(null);
@@ -103,7 +105,8 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
       priority,
       dueDate,
       dueTime,
-
+      deliveryMethod,
+      thinkingLevel,
       tags,
     });
     onClose();
@@ -156,9 +159,19 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
 
   const agentOptions = agents.map(({ name }) => ({ value: name, label: name }));
   const priorityOptions = [
-    { value: 'High', label: 'High' },
-    { value: 'Medium', label: 'Medium' },
-    { value: 'Low', label: 'Low' },
+    { value: 'High', label: '🔴 High' },
+    { value: 'Medium', label: '🟡 Medium' },
+    { value: 'Low', label: '🔵 Low' },
+  ];
+  const deliveryOptions = [
+    { value: 'reply', label: '💬 Quick Reply' },
+    { value: 'notebook', label: '📓 NotebookLM' },
+    { value: 'comment', label: '📝 Comment Only' },
+  ];
+  const thinkingOptions = [
+    { value: 'quick', label: '⚡ Quick' },
+    { value: 'standard', label: '🧠 Standard' },
+    { value: 'deep', label: '🔬 Deep Research' },
   ];
 
   return (
@@ -272,6 +285,25 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                   </button>
                 ))}
               </div>
+            </div>
+
+            <div className="form-group">
+              <label>Delivery</label>
+              <ModalSelect
+                value={deliveryMethod}
+                onChange={setDeliveryMethod}
+                options={deliveryOptions}
+                placeholder="Delivery method"
+              />
+            </div>
+            <div className="form-group">
+              <label>Thinking Level</label>
+              <ModalSelect
+                value={thinkingLevel}
+                onChange={setThinkingLevel}
+                options={thinkingOptions}
+                placeholder="Thinking level"
+              />
             </div>
           </div>
         </div>

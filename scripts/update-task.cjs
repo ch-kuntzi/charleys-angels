@@ -303,7 +303,9 @@ function dashboardCheck() {
                 const t = tasks[tid];
                 if (t) {
                     const urgent = (t.tags || []).includes('Urgent') ? ' ⚡URGENT' : '';
-                    console.log(`     ${t.id} | ${t.priority}${urgent} | ${t.agent} | ${t.title}`);
+                    const delivery = t.deliveryMethod === 'notebook' ? ' 📓NLM' : t.deliveryMethod === 'comment' ? ' 📝' : '';
+                    const thinking = t.thinkingLevel === 'deep' ? ' 🔬Deep' : t.thinkingLevel === 'quick' ? ' ⚡Quick' : '';
+                    console.log(`     ${t.id} | ${t.priority}${urgent}${delivery}${thinking} | ${t.agent} | ${t.title}`);
                 }
             }
         }
