@@ -100,6 +100,11 @@
             "author": "Charley",
             "message": "Chris, my apologies for the delay on the hotel research. I was thoroughly reviewing and debugging my understanding and use of the new dashboard task tracking system, including how to properly add descriptions and respond to comments on cards. I wanted to ensure I had the process down correctly before proceeding with new tasks. I am now fully focused on researching and presenting hotel options for your Georgia trip.",
             "timestamp": "3/1/2026, 11:46:31 AM"
+          },
+          {
+            "text": "please move forward with this.  don't overthink it",
+            "author": "Chris",
+            "timestamp": "2026-03-01T19:14:52.937Z"
           }
         ],
         "attachments": [],
@@ -233,13 +238,35 @@
         "reviewLink": "",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772392685581": {
+        "id": "task-1772392685581",
+        "title": "just make a document with your name",
+        "description": "fast test",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "reply",
+        "thinkingLevel": "quick",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772392685581"
+        ]
       },
       "column-2": {
         "id": "column-2",

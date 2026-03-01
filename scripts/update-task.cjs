@@ -318,7 +318,7 @@ function dashboardCheck() {
                     const urgent = (t.tags || []).includes('Urgent') ? ' ⚡URGENT' : '';
                     const delivery = t.deliveryMethod === 'notebook' ? ' 📓NLM' : t.deliveryMethod === 'comment' ? ' 📝' : '';
                     const thinking = t.thinkingLevel === 'deep' ? ' 🔬Deep' : t.thinkingLevel === 'quick' ? ' ⚡Quick' : '';
-                    console.log(`     ${t.id} | ${t.priority}${urgent}${delivery}${thinking} | ${t.agent} | ${t.title}`);
+                    console.log(`     ${t.priority}${urgent}${delivery}${thinking} | ${t.title} (${t.agent})`);
                 }
             }
         }
