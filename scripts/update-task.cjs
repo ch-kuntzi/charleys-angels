@@ -142,6 +142,47 @@ function addComment(taskId, message, author = 'Charley') {
     console.log(`💬 Added comment to "${task.title}"`);
 }
 
+function viewTask(taskId) {
+    pullLatest();
+    const data = loadData();
+    const task = data.boardData.tasks[taskId];
+    if (!task) { console.error(`❌ Task ${taskId} not found`); return; }
+
+    // Find which column it's in
+    let currentColumn = 'Unknown';
+    for (const col of Object.values(data.boardData.columns)) {
+        if (col.taskIds.includes(taskId)) {
+            currentColumn = col.title;
+            break;
+        }
+    }
+
+    console.log(`\n📋 ${task.title}`);
+    console.log(`   ID:       ${task.id}`);
+    console.log(`   Agent:    ${task.agent}`);
+    console.log(`   Priority: ${task.priority}`);
+    console.log(`   Column:   ${currentColumn}`);
+    console.log(`   Due:      ${task.dueDate || 'Not set'}`);
+    if (task.description) console.log(`   Desc:     ${task.description}`);
+
+    if (task.comments && task.comments.length > 0) {
+        console.log(`\n   💬 Conversation (${task.comments.length}):`);
+        for (const c of task.comments) {
+            console.log(`   [${c.timestamp}] ${c.author}: ${c.message}`);
+        }
+    } else {
+        console.log(`\n   💬 No comments yet`);
+    }
+}
+
+function pullLatest() {
+    try {
+        execSync(`git -C "${path.join(__dirname, '..')}" pull --rebase`, { stdio: 'pipe' });
+    } catch (err) {
+        // Silent fail — might be offline
+    }
+}
+
 // CLI
 const [, , command, ...args] = process.argv;
 const flags = {};
@@ -164,9 +205,14 @@ switch (command) {
     case 'comment':
         addComment(flags.id, flags.message, flags.author);
         break;
+    case 'view':
+        viewTask(flags.id);
+        break;
     case 'list':
+        pullLatest();
         listTasks();
         break;
     default:
-        console.log(`Usage: node update-task.js <add|move|complete|comment|list> [--flags]`);
+        console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|list> [--flags]`);
 }
+
