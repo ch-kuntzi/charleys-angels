@@ -150,6 +150,7 @@ function addComment(taskId, message, author = 'Charley') {
     task.comments.push({
         id: Date.now(),
         author,
+        text: message,
         message,
         timestamp: new Date().toLocaleString(),
     });
@@ -365,7 +366,7 @@ switch (command) {
         completeTask(flags.id);
         break;
     case 'comment':
-        addComment(flags.id, flags.message, flags.author);
+        addComment(flags.id, flags.text || flags.message, flags.author);
         break;
     case 'view':
         viewTask(flags.id);
