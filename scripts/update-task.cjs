@@ -213,6 +213,106 @@ function updateTask(taskId, fields) {
     console.log(`✏️  Updated "${task.title}": ${changes.join(', ')}`);
 }
 
+const LAST_CHECK_FILE = path.join(__dirname, '..', '.last-dashboard-check');
+
+function getLastCheckTime() {
+    try {
+        return new Date(fs.readFileSync(LAST_CHECK_FILE, 'utf8').trim());
+    } catch {
+        // First time — treat as 24 hours ago
+        return new Date(Date.now() - 86400000);
+    }
+}
+
+function saveLastCheckTime() {
+    fs.writeFileSync(LAST_CHECK_FILE, new Date().toISOString());
+}
+
+function dashboardCheck() {
+    pullLatest();
+    const data = loadData();
+    const { columns, columnOrder, tasks } = data.boardData;
+    const lastCheck = getLastCheckTime();
+
+    console.log(`\n🔍 Dashboard Check (since ${lastCheck.toLocaleString()})`);
+    console.log('─'.repeat(50));
+
+    // Collect tasks with new activity
+    let hasUpdates = false;
+
+    // Check for 🚀 flagged tasks first
+    const flagged = [];
+    const withNewComments = [];
+
+    for (const [id, task] of Object.entries(tasks)) {
+        if (task.archived) continue;
+        const comments = task.comments || [];
+
+        for (const c of comments) {
+            const commentTime = new Date(c.timestamp);
+            if (commentTime > lastCheck) {
+                const text = c.text || c.message || '';
+                if (text.includes('🚀') || text.includes('Start this now')) {
+                    flagged.push({ task, comment: c, text });
+                } else {
+                    withNewComments.push({ task, comment: c, text });
+                }
+            }
+        }
+    }
+
+    if (flagged.length > 0) {
+        console.log(`\n🚀 FLAGGED — START NOW (${flagged.length}):`);
+        for (const f of flagged) {
+            console.log(`   ${f.task.id} | ${f.task.priority} | ${f.task.agent} | ${f.task.title}`);
+            console.log(`     💬 [${f.comment.author}]: ${f.text}`);
+        }
+        hasUpdates = true;
+    }
+
+    if (withNewComments.length > 0) {
+        console.log(`\n💬 NEW MESSAGES (${withNewComments.length}):`);
+        for (const m of withNewComments) {
+            console.log(`   ${m.task.id} | ${m.task.agent} | ${m.task.title}`);
+            console.log(`     [${m.comment.author}]: ${m.text}`);
+        }
+        hasUpdates = true;
+    }
+
+    // Check activity log for new entries
+    const newActivity = (data.activity || []).filter(a => new Date(a.timestamp) > lastCheck);
+    if (newActivity.length > 0) {
+        console.log(`\n📊 ACTIVITY LOG (${newActivity.length} new):`);
+        for (const a of newActivity.slice(0, 10)) {
+            console.log(`   [${a.action}] ${a.details}`);
+        }
+        hasUpdates = true;
+    }
+
+    if (!hasUpdates) {
+        console.log('\n✅ No new updates since last check.');
+    }
+
+    // Show current board summary
+    console.log('\n📋 BOARD STATUS:');
+    for (const colId of columnOrder) {
+        const col = columns[colId];
+        if (col.taskIds.length > 0) {
+            console.log(`   ${col.title}: ${col.taskIds.length} task(s)`);
+            for (const tid of col.taskIds) {
+                const t = tasks[tid];
+                if (t) {
+                    const urgent = (t.tags || []).includes('Urgent') ? ' ⚡URGENT' : '';
+                    console.log(`     ${t.id} | ${t.priority}${urgent} | ${t.agent} | ${t.title}`);
+                }
+            }
+        }
+    }
+
+    saveLastCheckTime();
+    console.log(`\n✅ Check complete. Next check will show updates after ${new Date().toLocaleString()}`);
+}
+
 // CLI
 const [, , command, ...args] = process.argv;
 const flags = {};
@@ -241,12 +341,13 @@ switch (command) {
     case 'update':
         updateTask(flags.id, flags);
         break;
+    case 'check':
+        dashboardCheck();
+        break;
     case 'list':
         pullLatest();
         listTasks();
         break;
     default:
-        console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|update|list> [--flags]`);
+        console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|update|check|list> [--flags]`);
 }
-
-

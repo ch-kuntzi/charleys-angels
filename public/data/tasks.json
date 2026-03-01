@@ -127,16 +127,29 @@
       },
       "task-1772387660652": {
         "id": "task-1772387660652",
-        "title": "spell CAT",
+        "title": "spell DOG",
         "description": "",
         "agent": "Charley",
-        "priority": "Medium",
+        "priority": "High",
         "dueDate": "",
         "dueTime": "07:00",
-        "tags": [],
+        "tags": [
+          "Urgent"
+        ],
         "attachments": [],
         "timestamp": "Just now",
-        "comments": [],
+        "comments": [
+          {
+            "text": "put the spelling in the description",
+            "author": "Chris",
+            "timestamp": "2026-03-01T17:54:57.023Z"
+          },
+          {
+            "text": "🚀 Start this now",
+            "author": "Chris",
+            "timestamp": "2026-03-01T17:54:57.861Z"
+          }
+        ],
         "reviewLink": "",
         "archived": false,
         "completedAt": null
@@ -186,6 +199,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772387697025,
+      "action": "updated",
+      "details": "\"spell CAT\" updated",
+      "timestamp": "3/1/2026, 11:54:57 AM"
+    },
     {
       "id": 1772387538948,
       "action": "created",
