@@ -6,7 +6,9 @@ import {
   Archive,
   ArchiveRestore,
   Play,
-  ExternalLink
+  ExternalLink,
+  Image,
+  FileText
 } from 'lucide-react';
 import './TaskDetailModal.css';
 
@@ -112,6 +114,8 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
     onClose();
   };
 
+  const fileInputRef = useRef(null);
+
   const handleAddMessage = () => {
     if (newMessage.trim() === '') return;
 
@@ -125,6 +129,66 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
       comments: [...(task.comments || []), newComment],
     });
     setNewMessage('');
+  };
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File exceeds 5MB limit');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = async () => {
+      try {
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            taskId: task.id,
+            fileName: file.name,
+            data: reader.result,
+          }),
+        });
+        const result = await res.json();
+        if (result.ok) {
+          const isImage = file.type.startsWith('image/');
+          const attachment = {
+            name: result.fileName,
+            url: result.url,
+            localPath: result.localPath,
+            type: file.type,
+            size: file.size,
+            isImage,
+          };
+
+          // Add as chat message with attachment
+          const newComment = {
+            text: newMessage.trim() || `📎 ${result.fileName}`,
+            author: 'Chris',
+            timestamp: new Date().toISOString(),
+            attachment,
+          };
+
+          // Also add to task-level attachments
+          const updatedAttachments = [...(task.attachments || []), attachment];
+
+          onSave({
+            ...task,
+            comments: [...(task.comments || []), newComment],
+            attachments: updatedAttachments,
+          });
+          setNewMessage('');
+        } else {
+          alert('Upload failed: ' + result.error);
+        }
+      } catch (err) {
+        alert('Upload error: ' + err.message);
+      }
+    };
+    reader.readAsDataURL(file);
+    e.target.value = ''; // Reset input
   };
 
   const toggleTag = (tag) => {
@@ -226,6 +290,17 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                       <div key={index} className={`chat-row ${isChris ? 'chat-right' : 'chat-left'}`}>
                         <div className={`chat-bubble ${isChris ? 'bubble-chris' : 'bubble-agent'}`}>
                           <p className="chat-text">{msg.text || msg.message}</p>
+                          {msg.attachment && msg.attachment.isImage && (
+                            <a href={msg.attachment.url} target="_blank" rel="noopener noreferrer" className="chat-attachment-img">
+                              <img src={msg.attachment.url} alt={msg.attachment.name} />
+                            </a>
+                          )}
+                          {msg.attachment && !msg.attachment.isImage && (
+                            <a href={msg.attachment.url} target="_blank" rel="noopener noreferrer" className="chat-attachment-file">
+                              <FileText size={14} />
+                              <span>{msg.attachment.name}</span>
+                            </a>
+                          )}
                         </div>
                         <span className="chat-time">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
@@ -236,6 +311,16 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
               </div>
               <div className="discussion-input-area">
                 <div className="message-input-wrapper">
+                  <button onClick={() => fileInputRef.current?.click()} className="attach-button-inlay" title="Attach file">
+                    <Paperclip size={14} />
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                    accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.zip"
+                  />
                   <input
                     type="text"
                     value={newMessage}

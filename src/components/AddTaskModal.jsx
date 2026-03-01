@@ -65,6 +65,9 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
   const [deliveryMethod, setDeliveryMethod] = useState('reply');
   const [thinkingLevel, setThinkingLevel] = useState('standard');
   const [tags, setTags] = useState([]);
+  const [attachments, setAttachments] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -80,6 +83,7 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
       deliveryMethod,
       thinkingLevel,
       tags,
+      attachments,
       timestamp: 'Just now',
     };
     onAddTask(newTask);
@@ -92,6 +96,47 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
     } else {
       setTags([...tags, category]);
     }
+  };
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    setIsUploading(true);
+
+    const tempTaskId = `task-${Date.now()}`;
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        alert(`${file.name} exceeds 5MB limit`);
+        continue;
+      }
+      try {
+        const dataUrl = await new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(file);
+        });
+
+        const res = await fetch('/api/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ taskId: tempTaskId, fileName: file.name, data: dataUrl }),
+        });
+        const result = await res.json();
+        if (result.ok) {
+          setAttachments(prev => [...prev, {
+            name: result.fileName,
+            url: result.url,
+            localPath: result.localPath,
+            type: file.type,
+            size: file.size,
+            isImage: file.type.startsWith('image/'),
+          }]);
+        }
+      } catch (err) {
+        console.error('Upload failed:', err);
+      }
+    }
+    setIsUploading(false);
+    e.target.value = '';
   };
 
   const getCategoryColor = (category) => {
@@ -240,6 +285,41 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
               })}
             </div>
           </div>
+
+          <div className="form-group">
+            <label>Attachments</label>
+            <div
+              className="attachment-dropzone"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                multiple
+                onChange={handleFileUpload}
+                style={{ display: 'none' }}
+                accept="image/*,.pdf,.doc,.docx,.txt,.csv,.xlsx,.zip"
+              />
+              <span className="upload-label-text">{isUploading ? 'Uploading...' : 'Click to attach files (max 5MB)'}</span>
+            </div>
+            {attachments.length > 0 && (
+              <div className="attachment-list">
+                {attachments.map((file, i) => (
+                  <div key={i} className="attachment-pill">
+                    <span className="file-name">{file.name}</span>
+                    <button
+                      type="button"
+                      className="remove-attachment"
+                      onClick={() => setAttachments(attachments.filter((_, j) => j !== i))}
+                    >
+                      &times;
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           <div className="form-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>
               Cancel

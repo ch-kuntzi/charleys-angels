@@ -170,10 +170,23 @@ function viewTask(taskId) {
         for (const c of task.comments) {
             const text = c.text || c.message || '';
             console.log(`   [${c.timestamp}] ${c.author}: ${text}`);
+            if (c.attachment) {
+                console.log(`     📎 ${c.attachment.name} → ${c.attachment.localPath || c.attachment.url}`);
+            }
         }
     } else {
         console.log(`\n   💬 No comments yet`);
     }
+
+    if (task.attachments && task.attachments.length > 0) {
+        console.log(`\n   📎 Attachments (${task.attachments.length}):`);
+        for (const a of task.attachments) {
+            console.log(`     ${a.name} (${a.type}) → ${a.localPath || a.url}`);
+        }
+    }
+
+    if (task.deliveryMethod) console.log(`   📦 Delivery: ${task.deliveryMethod}`);
+    if (task.thinkingLevel) console.log(`   🧠 Thinking: ${task.thinkingLevel}`);
 }
 
 function pullLatest() {

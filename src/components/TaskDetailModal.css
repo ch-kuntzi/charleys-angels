@@ -445,6 +445,52 @@
   background: var(--accent-primary-hover);
 }
 
+.attach-button-inlay {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.attach-button-inlay:hover {
+  color: var(--accent-primary);
+}
+
+/* Attachments in chat */
+.chat-attachment-img {
+  display: block;
+  margin-top: 6px;
+  border-radius: 6px;
+  overflow: hidden;
+  max-width: 200px;
+}
+
+.chat-attachment-img img {
+  width: 100%;
+  display: block;
+  border-radius: 6px;
+}
+
+.chat-attachment-file {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--accent-secondary);
+  text-decoration: none;
+}
+
+.chat-attachment-file:hover {
+  text-decoration: underline;
+}
+
 .modal-footer {
   display: flex;
   justify-content: space-between;
