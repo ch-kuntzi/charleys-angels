@@ -26,13 +26,20 @@ function saveData(data) {
 }
 
 function commitAndPush(message) {
+    const repoDir = path.resolve(path.dirname(DATA_FILE), '..');
     try {
-        execSync(`git -C "${path.dirname(DATA_FILE)}/.." add public/data/tasks.json`, { stdio: 'pipe' });
-        execSync(`git -C "${path.dirname(DATA_FILE)}/.." commit -m "${message}"`, { stdio: 'pipe' });
-        execSync(`git -C "${path.dirname(DATA_FILE)}/.." push`, { stdio: 'pipe' });
+        execSync(`git -C "${repoDir}" add public/data/tasks.json`, { stdio: 'pipe' });
+        execSync(`git -C "${repoDir}" commit -m "${message}"`, { stdio: 'pipe' });
+    } catch (err) {
+        // Nothing to commit — that's fine
+    }
+    try {
+        // Pull latest before pushing to avoid conflicts
+        execSync(`git -C "${repoDir}" pull --rebase`, { stdio: 'pipe' });
+        execSync(`git -C "${repoDir}" push`, { stdio: 'pipe' });
         console.log(`✅ Pushed: ${message}`);
     } catch (err) {
-        console.log('⚠️  Saved locally (git push failed)');
+        console.log('⚠️  Saved locally (git push failed — try: git pull --rebase && git push)');
     }
 }
 
