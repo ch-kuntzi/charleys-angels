@@ -482,13 +482,33 @@
         "reviewLink": "",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772401191550": {
+        "id": "task-1772401191550",
+        "title": "research my emails to find all subscription services paid in 2026",
+        "description": "create a new notebooklm project for this - call it subscriptions",
+        "agent": "Charley",
+        "priority": "Medium",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "standard",
+        "tags": [],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772401191550"
+        ]
       },
       "column-2": {
         "id": "column-2",
