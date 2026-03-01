@@ -479,9 +479,7 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772397817953"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
@@ -500,7 +498,8 @@
           "task-1772393662846",
           "task-1772392685581",
           "task-1772395205313",
-          "task-1772395160479"
+          "task-1772395160479",
+          "task-1772397817953"
         ]
       }
     },
@@ -519,6 +518,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772399980144,
+      "action": "moved",
+      "details": "\"do research on geopolitics in 2026\" → Deployed",
+      "timestamp": "3/1/2026, 3:19:40 PM"
+    },
     {
       "id": 1772398899172,
       "action": "moved",
