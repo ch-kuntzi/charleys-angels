@@ -547,9 +547,7 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772401191550"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
@@ -568,7 +566,8 @@
           "task-1772395205313",
           "task-1772395160479",
           "task-1772397817953",
-          "task-1772386173974"
+          "task-1772386173974",
+          "task-1772401191550"
         ]
       }
     },
@@ -588,6 +587,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772409231723,
+      "action": "moved",
+      "details": "\"research my emails to find all subscription services paid in 2026\" → Deployed",
+      "timestamp": "3/1/2026, 5:53:51 PM"
+    },
     {
       "id": 1772403834041,
       "action": "moved",
