@@ -493,7 +493,9 @@
         "dueTime": "07:00",
         "deliveryMethod": "notebook",
         "thinkingLevel": "standard",
-        "tags": [],
+        "tags": [
+          "Task"
+        ],
         "attachments": [],
         "timestamp": "Just now",
         "comments": [],
@@ -548,9 +550,16 @@
     "Feature",
     "Research",
     "Admin",
-    "Urgent"
+    "Urgent",
+    "Task"
   ],
   "activity": [
+    {
+      "id": 1772401220596,
+      "action": "updated",
+      "details": "\"research my emails to find all subscription services paid in 2026\" updated",
+      "timestamp": "3/1/2026, 3:40:20 PM"
+    },
     {
       "id": 1772400204075,
       "action": "moved",
