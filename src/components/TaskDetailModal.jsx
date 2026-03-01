@@ -159,19 +159,19 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
 
   const agentOptions = agents.map(({ name }) => ({ value: name, label: name }));
   const priorityOptions = [
-    { value: 'High', label: '🔴 High' },
-    { value: 'Medium', label: '🟡 Medium' },
-    { value: 'Low', label: '🔵 Low' },
+    { value: 'High', label: 'High' },
+    { value: 'Medium', label: 'Medium' },
+    { value: 'Low', label: 'Low' },
   ];
   const deliveryOptions = [
-    { value: 'reply', label: '💬 Quick Reply' },
-    { value: 'notebook', label: '📓 NotebookLM' },
-    { value: 'comment', label: '📝 Comment Only' },
+    { value: 'reply', label: 'Quick Reply' },
+    { value: 'notebook', label: 'NotebookLM' },
+    { value: 'comment', label: 'Comment Only' },
   ];
   const thinkingOptions = [
-    { value: 'quick', label: '⚡ Quick' },
-    { value: 'standard', label: '🧠 Standard' },
-    { value: 'deep', label: '🔬 Deep Research' },
+    { value: 'quick', label: 'Quick' },
+    { value: 'standard', label: 'Standard' },
+    { value: 'deep', label: 'Deep Research' },
   ];
 
   return (
