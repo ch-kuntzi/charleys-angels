@@ -535,14 +535,14 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772401191550"
+        ]
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772401191550"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
