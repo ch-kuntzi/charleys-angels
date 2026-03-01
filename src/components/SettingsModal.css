@@ -134,3 +134,43 @@
     padding: 16px 24px;
     border-top: 1px solid var(--border-subtle);
 }
+
+.settings-divider {
+    border: none;
+    border-top: 1px solid var(--border-subtle);
+    margin: 8px 0;
+}
+
+.column-name-editable {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.15s ease;
+}
+
+.column-name-editable:hover {
+    color: var(--accent-secondary);
+}
+
+.column-task-count {
+    font-size: 10px;
+    padding: 1px 6px;
+    background: var(--accent-glow);
+    color: var(--accent-secondary);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.column-edit-inline {
+    background: var(--bg-base);
+    border: 1px solid var(--accent-primary);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: 13px;
+    padding: 4px 8px;
+    outline: none;
+    font-family: 'Inter', sans-serif;
+    width: 100%;
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}

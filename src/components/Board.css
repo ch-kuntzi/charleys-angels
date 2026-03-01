@@ -13,9 +13,37 @@
 }
 
 /* Columns are ALWAYS equal width — never resize based on content */
-.board>* {
-  flex: 1 1 25%;
+.board>.column {
+  flex: 1 1 0;
   min-width: 180px;
+}
+
+.add-column-btn {
+  flex: 0 0 auto;
+  min-width: 120px;
+  max-width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 24px 16px;
+  background: transparent;
+  border: 2px dashed var(--border-default);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  align-self: flex-start;
+}
+
+.add-column-btn:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: var(--accent-glow);
 }
 
 @media (max-width: 1400px) {

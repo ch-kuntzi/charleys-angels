@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { X, Plus, Trash2, Heart } from 'lucide-react';
+import { X, Plus, Trash2 } from 'lucide-react';
 import './SettingsModal.css';
 
-const SettingsModal = ({ categories, onUpdateCategories, onClose }) => {
+const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrder = [], onRenameColumn, onDeleteColumn, onClose }) => {
     const [localCategories, setLocalCategories] = useState([...categories]);
     const [newCategory, setNewCategory] = useState('');
 
@@ -32,6 +32,31 @@ const SettingsModal = ({ categories, onUpdateCategories, onClose }) => {
                 </div>
 
                 <div className="settings-body">
+                    {/* COLUMNS SECTION */}
+                    <div className="settings-section">
+                        <h3>Columns</h3>
+                        <p className="settings-hint">Rename or remove board columns. Columns with tasks cannot be deleted.</p>
+
+                        <div className="category-list">
+                            {columnOrder.map((colId) => {
+                                const col = columns[colId];
+                                if (!col) return null;
+                                return (
+                                    <ColumnItem
+                                        key={colId}
+                                        column={col}
+                                        onRename={(newTitle) => onRenameColumn(colId, newTitle)}
+                                        onDelete={() => onDeleteColumn(colId)}
+                                        hasItems={col.taskIds.length > 0}
+                                    />
+                                );
+                            })}
+                        </div>
+                    </div>
+
+                    <hr className="settings-divider" />
+
+                    {/* CATEGORIES SECTION */}
                     <div className="settings-section">
                         <h3>Categories</h3>
                         <p className="settings-hint">Manage task categories used across the dashboard.</p>
@@ -73,6 +98,55 @@ const SettingsModal = ({ categories, onUpdateCategories, onClose }) => {
                     <button onClick={handleSave} className="btn-primary">Save Settings</button>
                 </div>
             </div>
+        </div>
+    );
+};
+
+/* Inline-editable column item */
+const ColumnItem = ({ column, onRename, onDelete, hasItems }) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editValue, setEditValue] = useState(column.title);
+
+    const handleSave = () => {
+        const trimmed = editValue.trim();
+        if (trimmed && trimmed !== column.title) {
+            onRename(trimmed);
+        }
+        setIsEditing(false);
+    };
+
+    return (
+        <div className="category-item">
+            {isEditing ? (
+                <input
+                    className="column-edit-inline"
+                    value={editValue}
+                    onChange={(e) => setEditValue(e.target.value)}
+                    onBlur={handleSave}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter') handleSave();
+                        if (e.key === 'Escape') { setEditValue(column.title); setIsEditing(false); }
+                    }}
+                    autoFocus
+                />
+            ) : (
+                <span
+                    className="column-name-editable"
+                    onClick={() => { setEditValue(column.title); setIsEditing(true); }}
+                    title="Click to rename"
+                >
+                    {column.title}
+                    {hasItems && <span className="column-task-count">{column.taskIds.length}</span>}
+                </span>
+            )}
+            <button
+                className="remove-category-btn"
+                onClick={onDelete}
+                title={hasItems ? "Remove tasks first" : "Delete column"}
+                style={{ opacity: hasItems ? 0.3 : 1, cursor: hasItems ? 'not-allowed' : 'pointer' }}
+            >
+                <Trash2 size={14} />
+            </button>
         </div>
     );
 };

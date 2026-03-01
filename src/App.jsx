@@ -394,6 +394,59 @@ function App() {
     showToast('Categories updated!', 'success');
   };
 
+  const handleRenameColumn = (columnId, newTitle) => {
+    const newData = {
+      ...data,
+      columns: {
+        ...data.columns,
+        [columnId]: {
+          ...data.columns[columnId],
+          title: newTitle,
+        },
+      },
+    };
+    handleSetData(newData);
+    addActivity('renamed', `Column renamed to "${newTitle}"`);
+    showToast('Column renamed!', 'success');
+  };
+
+  const handleAddColumn = () => {
+    const newId = `column-${Date.now()}`;
+    const newData = {
+      ...data,
+      columns: {
+        ...data.columns,
+        [newId]: {
+          id: newId,
+          title: 'New Column',
+          taskIds: [],
+        },
+      },
+      columnOrder: [...data.columnOrder, newId],
+    };
+    handleSetData(newData);
+    addActivity('created', 'New column added');
+    showToast('Column added!', 'success');
+  };
+
+  const handleDeleteColumn = (columnId) => {
+    const column = data.columns[columnId];
+    if (column.taskIds.length > 0) {
+      showToast('Move or delete tasks in this column first!', 'error');
+      return;
+    }
+    const newColumns = { ...data.columns };
+    delete newColumns[columnId];
+    const newData = {
+      ...data,
+      columns: newColumns,
+      columnOrder: data.columnOrder.filter(id => id !== columnId),
+    };
+    handleSetData(newData);
+    addActivity('deleted', `Column "${column.title}" deleted`);
+    showToast('Column deleted!', 'success');
+  };
+
   const handleFilterChange = (filterType, value) => {
     setFilters(prevFilters => ({
       ...prevFilters,
@@ -531,6 +584,8 @@ function App() {
                 data={filteredData}
                 onDragEnd={onDragEnd}
                 onTaskClick={handleOpenTaskModal}
+                onRenameColumn={handleRenameColumn}
+                onAddColumn={handleAddColumn}
               />
             </div>
           )}
@@ -584,6 +639,10 @@ function App() {
         <SettingsModal
           categories={categories}
           onUpdateCategories={handleUpdateCategories}
+          columns={data.columns}
+          columnOrder={data.columnOrder}
+          onRenameColumn={handleRenameColumn}
+          onDeleteColumn={handleDeleteColumn}
           onClose={() => setShowSettings(false)}
         />
       )}

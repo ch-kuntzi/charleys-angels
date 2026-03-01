@@ -25,6 +25,28 @@
   position: sticky;
   top: 0;
   z-index: 1;
+  cursor: default;
+}
+
+.column-title:hover {
+  color: var(--text-primary);
+}
+
+.column-title-input {
+  margin: 0 0 12px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0 0 12px 0;
+  border: none;
+  border-bottom: 2px solid var(--accent-secondary);
+  background: transparent;
+  flex-shrink: 0;
+  width: 100%;
+  outline: none;
+  font-family: 'Inter', sans-serif;
 }
 
 .task-list {
