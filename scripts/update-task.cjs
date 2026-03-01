@@ -168,7 +168,8 @@ function viewTask(taskId) {
     if (task.comments && task.comments.length > 0) {
         console.log(`\n   💬 Conversation (${task.comments.length}):`);
         for (const c of task.comments) {
-            console.log(`   [${c.timestamp}] ${c.author}: ${c.message}`);
+            const text = c.text || c.message || '';
+            console.log(`   [${c.timestamp}] ${c.author}: ${text}`);
         }
     } else {
         console.log(`\n   💬 No comments yet`);
