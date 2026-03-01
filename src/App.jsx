@@ -12,7 +12,6 @@ import Toast from './components/Toast';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import StatisticsModal from './components/StatisticsModal';
 import SettingsModal from './components/SettingsModal';
-import { useFirestore } from './hooks/useFirestore';
 
 const DEFAULT_CATEGORIES = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
 
@@ -76,10 +75,7 @@ const getInitialActivity = () => {
   return savedActivity ? JSON.parse(savedActivity) : [];
 };
 
-function App({ user, onSignOut }) {
-  // Firebase real-time sync (falls back to localStorage)
-  const firestore = useFirestore(user?.uid);
-
+function App() {
   const [data, setData] = useState(getInitialData);
   const [activity, setActivity] = useState(getInitialActivity);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -100,18 +96,30 @@ function App({ user, onSignOut }) {
     return localStorage.getItem('sidebarCollapsed') === 'true';
   });
 
-  // Sync data from Firestore when it loads
+  // Load data from JSON file (source of truth from git)
   useEffect(() => {
-    if (firestore.data) setData(firestore.data);
-  }, [firestore.data]);
-
-  useEffect(() => {
-    if (firestore.categories) setCategories(firestore.categories);
-  }, [firestore.categories]);
-
-  useEffect(() => {
-    if (firestore.activity?.length > 0) setActivity(firestore.activity);
-  }, [firestore.activity]);
+    const loadFromJson = async () => {
+      try {
+        const base = import.meta.env.BASE_URL || '/';
+        const res = await fetch(`${base}data/tasks.json?t=${Date.now()}`);
+        if (res.ok) {
+          const jsonData = await res.json();
+          if (jsonData.boardData) setData(jsonData.boardData);
+          if (jsonData.categories) setCategories(jsonData.categories);
+          if (jsonData.activity) setActivity(jsonData.activity);
+          // Also update localStorage cache
+          if (jsonData.boardData) localStorage.setItem('taskDashboardData', JSON.stringify(jsonData.boardData));
+          if (jsonData.categories) localStorage.setItem('taskDashboardCategories', JSON.stringify(jsonData.categories));
+        }
+      } catch (err) {
+        console.log('Using localStorage data (JSON fetch failed)');
+      }
+    };
+    loadFromJson();
+    // Poll for updates every 30 seconds
+    const interval = setInterval(loadFromJson, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   const showToast = (message, type = 'info') => {
     const id = Date.now();
@@ -130,13 +138,13 @@ function App({ user, onSignOut }) {
     };
     const updatedActivity = [newActivity, ...activity].slice(0, 50);
     setActivity(updatedActivity);
-    firestore.addActivityEntry(action, details);
+    localStorage.setItem('taskDashboardActivity', JSON.stringify(updatedActivity));
   };
 
   const handleSetData = (newData) => {
     setIsSaving(true);
     setData(newData);
-    firestore.saveData(newData);
+    localStorage.setItem('taskDashboardData', JSON.stringify(newData));
     setTimeout(() => setIsSaving(false), 500);
   };
 
@@ -409,7 +417,7 @@ function App({ user, onSignOut }) {
 
   const handleUpdateCategories = (newCategories) => {
     setCategories(newCategories);
-    firestore.saveCategories(newCategories);
+    localStorage.setItem('taskDashboardCategories', JSON.stringify(newCategories));
     showToast('Categories updated!', 'success');
   };
 
@@ -604,9 +612,6 @@ function App({ user, onSignOut }) {
           activeViews={activeViews}
           onViewToggle={handleViewToggle}
           onSettingsClick={() => setShowSettings(true)}
-          user={user}
-          onSignOut={onSignOut}
-          isFirebaseConnected={firestore.isFirebaseConnected}
         />
         <FilterBar
           agents={agents}

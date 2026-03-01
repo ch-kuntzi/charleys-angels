@@ -1,0 +1,68 @@
+{
+  "boardData": {
+    "tasks": {
+      "task-1772384091510": {
+        "id": "task-1772384091510",
+        "title": "Setup GitHub data sync",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "timestamp": "3/1/2026, 10:54:51 AM",
+        "tags": [
+          "Feature"
+        ],
+        "dueDate": "",
+        "dueTime": "07:00",
+        "comments": [],
+        "attachments": [],
+        "reviewLink": "",
+        "archived": false
+      }
+    },
+    "columns": {
+      "column-1": {
+        "id": "column-1",
+        "title": "In Queue",
+        "taskIds": [
+          "task-1772384091510"
+        ]
+      },
+      "column-2": {
+        "id": "column-2",
+        "title": "In Progress",
+        "taskIds": []
+      },
+      "column-3": {
+        "id": "column-3",
+        "title": "Review",
+        "taskIds": []
+      },
+      "column-4": {
+        "id": "column-4",
+        "title": "Deployed",
+        "taskIds": []
+      }
+    },
+    "columnOrder": [
+      "column-1",
+      "column-2",
+      "column-3",
+      "column-4"
+    ]
+  },
+  "categories": [
+    "Bug",
+    "Feature",
+    "Research",
+    "Admin",
+    "Urgent"
+  ],
+  "activity": [
+    {
+      "id": 1772384091528,
+      "action": "created",
+      "details": "\"Setup GitHub data sync\" assigned to Charley",
+      "timestamp": "3/1/2026, 10:54:51 AM"
+    }
+  ]
+}
