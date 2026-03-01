@@ -508,14 +508,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772401191550"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772401191550"
+        ]
       },
       "column-3": {
         "id": "column-3",
@@ -554,6 +554,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772401392594,
+      "action": "moved",
+      "details": "\"research my emails to find all subscription services paid in 2026\" → In Progress",
+      "timestamp": "3/1/2026, 3:43:12 PM"
+    },
     {
       "id": 1772401220596,
       "action": "updated",
