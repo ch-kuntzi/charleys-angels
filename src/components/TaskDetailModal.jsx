@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { 
-  Paperclip, 
+import {
+  Paperclip,
   Send,
   Trash2,
   Archive,
@@ -19,6 +19,60 @@ const isDateInFuture = (dateString) => {
   return date > today;
 };
 
+/* Reusable custom select matching FilterBar style */
+const ModalSelect = ({ value, onChange, options, placeholder }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedLabel = options.find(o => o.value === value)?.label || placeholder || '';
+
+  return (
+    <div className="modal-custom-select" ref={ref}>
+      <button
+        className={`modal-select-trigger ${isOpen ? 'open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        type="button"
+      >
+        <span>{selectedLabel}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {isOpen && (
+        <div className="modal-select-menu">
+          {options.map(opt => (
+            <div
+              key={opt.value}
+              className={`modal-select-option ${value === opt.value ? 'selected' : ''}`}
+              onClick={() => {
+                onChange(opt.value);
+                setIsOpen(false);
+              }}
+            >
+              {opt.label}
+              {value === opt.value && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, columnTitle, onStartNow }) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
@@ -29,9 +83,9 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
   const [startDate, setStartDate] = useState(task.startDate || '');
   const [tags, setTags] = useState(task.tags || []);
   const [newMessage, setNewMessage] = useState('');
-  
+
   const discussionEndRef = useRef(null);
-  
+
   const hasFutureStartDate = isDateInFuture(task.startDate);
   const isInQueue = columnTitle === 'In Queue';
 
@@ -56,10 +110,10 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
 
   const handleAddMessage = () => {
     if (newMessage.trim() === '') return;
-    
+
     const newComment = {
       text: newMessage,
-      author: 'Charley', // Assuming the user is always Charley for now
+      author: 'Charley',
       timestamp: new Date().toISOString(),
     };
     onSave({
@@ -70,7 +124,7 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
   };
 
   const toggleTag = (tag) => {
-    setTags(prevTags => 
+    setTags(prevTags =>
       prevTags.includes(tag) ? prevTags.filter(t => t !== tag) : [...prevTags, tag]
     );
   };
@@ -91,34 +145,41 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
       border: isActive ? `1px solid ${color}40` : '1px solid var(--border-default)'
     };
   };
-  
+
   const handleStartNow = () => {
     if (onStartNow) {
       onStartNow(task.id);
-      onClose(); // Close the modal after starting
+      onClose();
     }
   };
+
+  const agentOptions = agents.map(({ name }) => ({ value: name, label: name }));
+  const priorityOptions = [
+    { value: 'High', label: 'High' },
+    { value: 'Medium', label: 'Medium' },
+    { value: 'Low', label: 'Low' },
+  ];
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <input 
-            type="text" 
-            value={title} 
-            onChange={(e) => setTitle(e.target.value)} 
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
             className="modal-title-input"
           />
           <button onClick={onClose} className="close-button">&times;</button>
         </div>
-        
+
         <div className="modal-body">
           <div className="modal-main">
             <div className="form-group">
               <label>Description</label>
-              <textarea 
-                value={description} 
-                onChange={(e) => setDescription(e.target.value)} 
+              <textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="textarea-field"
                 rows="4"
                 placeholder="Add a more detailed description..."
@@ -145,17 +206,19 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                 <div ref={discussionEndRef} />
               </div>
               <div className="discussion-input-area">
-                <input 
-                  type="text" 
-                  value={newMessage} 
-                  onChange={(e) => setNewMessage(e.target.value)} 
-                  placeholder="Type a message..."
-                  className="input-field"
-                  onKeyPress={(e) => e.key === 'Enter' && handleAddMessage()}
-                />
-                <button onClick={handleAddMessage} className="send-button">
-                  <Send size={16} />
-                </button>
+                <div className="message-input-wrapper">
+                  <input
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    placeholder="Type a message..."
+                    className="message-input"
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddMessage()}
+                  />
+                  <button onClick={handleAddMessage} className="send-button-inlay">
+                    <Send size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -163,27 +226,31 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
           <div className="modal-sidebar">
             <div className="form-group">
               <label>Agent</label>
-              <select value={agent} onChange={(e) => setAgent(e.target.value)} className="select-field">
-                {agents.map(({ name }) => <option key={name} value={name}>{name}</option>)}
-              </select>
+              <ModalSelect
+                value={agent}
+                onChange={setAgent}
+                options={agentOptions}
+                placeholder="Select agent"
+              />
             </div>
             <div className="form-group">
               <label>Priority</label>
-              <select value={priority} onChange={(e) => setPriority(e.target.value)} className="select-field">
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
+              <ModalSelect
+                value={priority}
+                onChange={setPriority}
+                options={priorityOptions}
+                placeholder="Select priority"
+              />
             </div>
             <div className="form-group">
               <label>Start Date</label>
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="input-field"/>
+              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="date-input" />
             </div>
             <div className="form-group">
               <label>Due Date</label>
-              <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="input-field"/>
+              <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="date-input" />
             </div>
-             <div className="form-group">
+            <div className="form-group">
               <label>Categories</label>
               <div className="tag-selector">
                 {categories.map((cat) => (
@@ -205,8 +272,8 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
               {task.archived ? <ArchiveRestore size={14} /> : <Archive size={14} />}
               {task.archived ? 'Unarchive' : 'Archive'}
             </button>
-             {isInQueue && !hasFutureStartDate && (
-              <button 
+            {isInQueue && !hasFutureStartDate && (
+              <button
                 className="btn-secondary start-now-btn"
                 onClick={handleStartNow}
                 title="Move to In Progress"
