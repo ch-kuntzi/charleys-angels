@@ -86,12 +86,12 @@
 }
 
 .modal-main {
-  flex: 2;
+  flex: 1;
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  border-right: 1px solid var(--border-subtle);
+  gap: 12px;
+  background: var(--bg-base);
   overflow-y: auto;
 }
 
@@ -140,7 +140,7 @@
 
 .textarea-field {
   resize: vertical;
-  min-height: 80px;
+  min-height: 48px;
 }
 
 /* Custom Modal Select */
@@ -308,12 +308,13 @@
 .discussion-thread {
   flex-grow: 1;
   overflow-y: auto;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding-right: 4px;
-  max-height: 300px;
+  min-height: 150px;
+  max-height: calc(100vh - 400px);
   scrollbar-width: thin;
   scrollbar-color: var(--border-subtle) transparent;
 }
