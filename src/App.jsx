@@ -165,10 +165,28 @@ function App() {
     localStorage.setItem('taskDashboardActivity', JSON.stringify(updatedActivity));
   };
 
+  // Sync data back to tasks.json via local API (dev server only)
+  const syncToJson = async (boardData, cats, act) => {
+    try {
+      await fetch('/api/sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          boardData: boardData,
+          categories: cats || categories,
+          activity: act || activity,
+        }),
+      });
+    } catch (err) {
+      // Sync only works on localhost dev server — silent fail on production
+    }
+  };
+
   const handleSetData = (newData) => {
     setIsSaving(true);
     setData(newData);
     localStorage.setItem('taskDashboardData', JSON.stringify(newData));
+    syncToJson(newData);
     setTimeout(() => setIsSaving(false), 500);
   };
 
