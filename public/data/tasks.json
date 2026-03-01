@@ -186,7 +186,7 @@
         ],
         "reviewLink": "https://notebooklm.google.com/notebook/857e95fd-4f8c-4a0a-a48d-83867f22ff48",
         "archived": false,
-        "completedAt": null,
+        "completedAt": "2026-03-01T18:21:23.305Z",
         "deliveryMethod": "notebook",
         "thinkingLevel": "quick"
       }
@@ -208,15 +208,14 @@
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772387660652"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
         "title": "Deployed",
         "taskIds": [
-          "task-1772384091510"
+          "task-1772384091510",
+          "task-1772387660652"
         ]
       }
     },
