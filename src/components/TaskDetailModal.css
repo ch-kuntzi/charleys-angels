@@ -15,8 +15,7 @@
 
 .modal-content {
   width: 90%;
-  max-width: 800px;
-  /* Increased width for two-column layout */
+  max-width: 900px;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
@@ -86,22 +85,21 @@
 }
 
 .modal-main {
-  flex: 1;
+  flex: 2;
   padding: 24px;
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background: var(--bg-base);
   overflow-y: auto;
 }
 
 .modal-sidebar {
   flex: 1;
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background: var(--bg-base);
+  gap: 16px;
+  border-left: 1px solid var(--border-subtle);
   overflow-y: auto;
 }
 
