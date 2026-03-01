@@ -199,8 +199,8 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                       <div key={index} className={`chat-row ${isChris ? 'chat-right' : 'chat-left'}`}>
                         <div className={`chat-bubble ${isChris ? 'bubble-chris' : 'bubble-agent'}`}>
                           <p className="chat-text">{msg.text || msg.message}</p>
-                          <span className="chat-time">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                         </div>
+                        <span className="chat-time">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                     );
                   })

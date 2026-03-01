@@ -333,9 +333,8 @@
 
 .chat-bubble {
   max-width: 75%;
-  padding: 8px 12px;
+  padding: 6px 12px;
   border-radius: 16px;
-  position: relative;
 }
 
 .bubble-chris {
@@ -361,9 +360,18 @@
 .chat-time {
   display: block;
   font-size: 9px;
-  margin-top: 2px;
-  opacity: 0.6;
+  margin-top: 1px;
+  padding: 0 4px;
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+.chat-right .chat-time {
   text-align: right;
+}
+
+.chat-left .chat-time {
+  text-align: left;
 }
 
 /* Message Input with Inlaid Send Button */
