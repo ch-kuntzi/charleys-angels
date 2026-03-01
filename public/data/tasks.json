@@ -466,14 +466,15 @@
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772386173974",
           "task-1772397817953"
         ]
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": []
+        "taskIds": [
+          "task-1772386173974"
+        ]
       },
       "column-4": {
         "id": "column-4",
@@ -504,6 +505,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772398899172,
+      "action": "moved",
+      "details": "\"Research and present hotel options for Georgia trip\" → Review",
+      "timestamp": "3/1/2026, 3:01:39 PM"
+    },
     {
       "id": 1772397950719,
       "action": "moved",
