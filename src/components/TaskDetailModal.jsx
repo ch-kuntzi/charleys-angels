@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 import './TaskDetailModal.css';
 
-const categories = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
+
 
 const isDateInFuture = (dateString) => {
   if (!dateString) return false;
@@ -73,7 +73,7 @@ const ModalSelect = ({ value, onChange, options, placeholder }) => {
   );
 };
 
-const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, columnTitle, onStartNow }) => {
+const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, columnTitle, onStartNow, categories = [] }) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const [agent, setAgent] = useState(task.agent);

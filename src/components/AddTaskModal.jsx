@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './AddTaskModal.css';
 
-const categories = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
 
-const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
+
+const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories = [] }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [agent, setAgent] = useState(agents[0].name);

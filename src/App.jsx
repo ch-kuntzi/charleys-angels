@@ -522,6 +522,7 @@ function App() {
           searchTerm={searchTerm}
           showArchived={showArchived}
           onToggleArchived={() => setShowArchived(!showArchived)}
+          categories={categories}
         />
         <div className="view-container">
           {showBoard && (
@@ -556,6 +557,7 @@ function App() {
           onAddTask={handleAddTask}
           onClose={() => setIsModalOpen(false)}
           initialDate={modalInitialDate}
+          categories={categories}
         />
       )}
       {selectedTask && (
@@ -568,6 +570,7 @@ function App() {
           onArchive={handleArchiveTask}
           onStartNow={handleStartNow}
           columnTitle={Object.values(data.columns).find(col => col.taskIds.includes(selectedTask.id))?.title}
+          categories={categories}
         />
       )}
       {deleteConfirmModal && (

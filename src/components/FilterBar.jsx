@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './FilterBar.css';
 
-const categories = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
-
 const CustomSelect = ({ value, onChange, options, placeholder }) => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
@@ -55,7 +53,7 @@ const CustomSelect = ({ value, onChange, options, placeholder }) => {
   );
 };
 
-const FilterBar = ({ filters, onFilterChange, onSearch, searchTerm, showArchived, onToggleArchived }) => {
+const FilterBar = ({ filters, onFilterChange, onSearch, searchTerm, showArchived, onToggleArchived, categories = [] }) => {
   const activeFilterCount = [
     filters.priority,
     filters.tag
