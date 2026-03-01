@@ -11,6 +11,14 @@ import ActivityLog from './components/ActivityLog';
 import Toast from './components/Toast';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import StatisticsModal from './components/StatisticsModal';
+import SettingsModal from './components/SettingsModal';
+
+const DEFAULT_CATEGORIES = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
+
+const getInitialCategories = () => {
+  const saved = localStorage.getItem('taskDashboardCategories');
+  return saved ? JSON.parse(saved) : DEFAULT_CATEGORIES;
+};
 
 const initialData = {
   tasks: {
@@ -83,6 +91,8 @@ function App() {
   const [showArchived, setShowArchived] = useState(false);
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(null);
   const [showStatistics, setShowStatistics] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [categories, setCategories] = useState(getInitialCategories);
 
   const showToast = (message, type = 'info') => {
     const id = Date.now();
@@ -362,6 +372,28 @@ function App() {
     }
   };
 
+  const handleUpdateTaskDate = (taskId, newDate) => {
+    const task = data.tasks[taskId];
+    if (!task) return;
+    const updatedTask = { ...task, dueDate: newDate };
+    const newData = {
+      ...data,
+      tasks: {
+        ...data.tasks,
+        [taskId]: updatedTask,
+      },
+    };
+    handleSetData(newData);
+    addActivity('rescheduled', `"${task.title}" rescheduled to ${newDate}`);
+    showToast('Due date updated!', 'success');
+  };
+
+  const handleUpdateCategories = (newCategories) => {
+    setCategories(newCategories);
+    localStorage.setItem('taskDashboardCategories', JSON.stringify(newCategories));
+    showToast('Categories updated!', 'success');
+  };
+
   const handleFilterChange = (filterType, value) => {
     setFilters(prevFilters => ({
       ...prevFilters,
@@ -480,6 +512,7 @@ function App() {
           isSaving={isSaving}
           activeViews={activeViews}
           onViewToggle={handleViewToggle}
+          onSettingsClick={() => setShowSettings(true)}
         />
         <FilterBar
           agents={agents}
@@ -506,6 +539,7 @@ function App() {
                 tasks={filteredTasks}
                 onTaskClick={handleOpenTaskModal}
                 onAddTaskWithDate={handleAddTaskWithDate}
+                onUpdateTaskDate={handleUpdateTaskDate}
               />
             </div>
           )}
@@ -541,6 +575,13 @@ function App() {
           taskTitle={data.tasks[deleteConfirmModal]?.title}
           onConfirm={confirmDelete}
           onCancel={() => setDeleteConfirmModal(null)}
+        />
+      )}
+      {showSettings && (
+        <SettingsModal
+          categories={categories}
+          onUpdateCategories={handleUpdateCategories}
+          onClose={() => setShowSettings(false)}
         />
       )}
       <Toast toasts={toasts} />

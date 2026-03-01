@@ -159,6 +159,22 @@
   box-shadow: 0 0 8px rgba(167, 139, 250, 0.4);
 }
 
+.calendar-day.drag-over {
+  background: var(--accent-glow) !important;
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 0 12px rgba(124, 58, 237, 0.4);
+  transform: scale(1.02);
+}
+
+.calendar-task[draggable="true"] {
+  cursor: grab;
+}
+
+.calendar-task[draggable="true"]:active {
+  cursor: grabbing;
+  opacity: 0.6;
+}
+
 .day-number {
   font-weight: 600;
   color: var(--text-primary);

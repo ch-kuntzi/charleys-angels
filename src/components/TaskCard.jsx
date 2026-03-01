@@ -1,19 +1,18 @@
 import React from 'react';
 import { Draggable } from '@hello-pangea/dnd';
-import { 
-  Brain, 
-  ShieldCheck, 
-  Search, 
-  Hammer, 
-  Mail, 
-  Wallet, 
-  Calendar, 
-  Compass, 
-  Code, 
+import {
+  Brain,
+  ShieldCheck,
+  Search,
+  Hammer,
+  Mail,
+  Wallet,
+  Calendar,
+  Compass,
+  Code,
   CheckCircle,
   ExternalLink,
-  CalendarClock,
-  Play
+
 } from 'lucide-react';
 import './TaskCard.css';
 
@@ -72,7 +71,7 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
   const recentComments = (task.comments || []).slice(-2);
   const hasMoreComments = (task.comments || []).length > 2;
   const AgentIcon = agentIconMap[task.agent];
-  const hasFutureStartDate = isDateInFuture(task.startDate);
+
   const isInReviewOrDeployed = columnTitle === 'Review' || columnTitle === 'Deployed';
 
   return (
@@ -87,16 +86,16 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
         >
           <h4 className="task-title">{task.title}</h4>
           <p className="task-description">{task.description}</p>
-          
+
           {task.tags && task.tags.length > 0 && (
             <div className="task-tags">
               {task.tags.map((tag) => {
                 const color = getCategoryColor(tag);
                 return (
-                  <span 
-                    key={tag} 
+                  <span
+                    key={tag}
                     className="tag-pill"
-                    style={{ 
+                    style={{
                       backgroundColor: `${color}26`,
                       color: color
                     }}
@@ -108,15 +107,7 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
             </div>
           )}
 
-          {/* Future Start Date indicator */}
-          {hasFutureStartDate && (
-            <div className="task-start-date">
-              <div className="start-date-info">
-                <CalendarClock size={14} strokeWidth={2} />
-                <span>Starts: {new Date(task.startDate).toLocaleDateString()}</span>
-              </div>
-            </div>
-          )}
+
 
           {/* Completion Timestamp for Deployed Tasks */}
           {task.completedAt && (
@@ -129,30 +120,30 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
           {/* Review Link - Only show on Review/Deployed cards */}
           {isInReviewOrDeployed && task.reviewLink && (
             <div className="task-review-link">
-              <a 
-                href={task.reviewLink} 
-                target="_blank" 
+              <a
+                href={task.reviewLink}
+                target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink size={14} strokeWidth={2} />
                 <span className="review-link-text">
-                  {task.reviewLink.length > 30 
-                    ? task.reviewLink.substring(0, 30) + '...' 
+                  {task.reviewLink.length > 30
+                    ? task.reviewLink.substring(0, 30) + '...'
                     : task.reviewLink}
                 </span>
               </a>
             </div>
           )}
-          
+
           <div className="task-footer">
             <div className="footer-left">
               <div className="agent-badge">
                 {AgentIcon && <AgentIcon size={16} strokeWidth={1.5} />}
                 <span>{task.agent}</span>
               </div>
-              <div 
-                className="priority-tag" 
+              <div
+                className="priority-tag"
                 style={{ color: priorityColors[task.priority] }}
               >
                 {task.priority}

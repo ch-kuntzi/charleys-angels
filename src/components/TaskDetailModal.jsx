@@ -80,13 +80,13 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
   const [priority, setPriority] = useState(task.priority);
   const [dueDate, setDueDate] = useState(task.dueDate || '');
   const [dueTime, setDueTime] = useState(task.dueTime || '07:00');
-  const [startDate, setStartDate] = useState(task.startDate || '');
+
   const [tags, setTags] = useState(task.tags || []);
   const [newMessage, setNewMessage] = useState('');
 
   const discussionEndRef = useRef(null);
 
-  const hasFutureStartDate = isDateInFuture(task.startDate);
+  const hasFutureStartDate = false;
   const isInQueue = columnTitle === 'In Queue';
 
   useEffect(() => {
@@ -102,7 +102,7 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
       priority,
       dueDate,
       dueTime,
-      startDate,
+
       tags,
     });
     onClose();
@@ -242,10 +242,7 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                 placeholder="Select priority"
               />
             </div>
-            <div className="form-group">
-              <label>Start Date</label>
-              <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="date-input" />
-            </div>
+
             <div className="form-group">
               <label>Due Date</label>
               <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} className="date-input" />

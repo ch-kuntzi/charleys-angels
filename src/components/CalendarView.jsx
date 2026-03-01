@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { ChevronLeft, ChevronRight, Heart } from 'lucide-react';
 import './CalendarView.css';
 
-const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
+const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate, onUpdateTaskDate }) => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [showHeartbeatReminders, setShowHeartbeatReminders] = useState(false);
+  const [dragOverDay, setDragOverDay] = useState(null);
 
   const getDaysInMonth = () => {
     const year = currentDate.getFullYear();
@@ -22,12 +23,13 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
   const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
+  const getDateString = (day) => {
+    return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  };
+
   const getTasksForDate = (day) => {
-    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-    return tasks.filter(task => {
-      // Match both dueDate and startDate
-      return task.dueDate === dateString || task.startDate === dateString;
-    });
+    const dateString = getDateString(day);
+    return tasks.filter(task => task.dueDate === dateString);
   };
 
   const isOverdue = (day) => {
@@ -40,7 +42,6 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
   const hasHeartbeatReminder = (day) => {
     if (!showHeartbeatReminders) return false;
     const tasksForDay = getTasksForDate(day);
-    // Simple heuristic: mark days with high priority tasks or multiple tasks
     return tasksForDay.some(t => t.priority === 'High') || tasksForDay.length > 2;
   };
 
@@ -52,11 +53,36 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
   };
 
-  // This function is kept for potential future use, but the onDoubleClick is removed.
   const handleDayClick = (day) => {
-    const dateString = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    const dateString = getDateString(day);
     if (onAddTaskWithDate) {
       onAddTaskWithDate(dateString);
+    }
+  };
+
+  // Drag and drop handlers
+  const handleDragStart = (e, task) => {
+    e.dataTransfer.setData('taskId', task.id);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e, day) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    setDragOverDay(day);
+  };
+
+  const handleDragLeave = () => {
+    setDragOverDay(null);
+  };
+
+  const handleDrop = (e, day) => {
+    e.preventDefault();
+    setDragOverDay(null);
+    const taskId = e.dataTransfer.getData('taskId');
+    const newDate = getDateString(day);
+    if (onUpdateTaskDate && taskId) {
+      onUpdateTaskDate(taskId, newDate);
     }
   };
 
@@ -70,12 +96,16 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
     const isToday = day === today && month === currentMonth && year === currentYear;
     const overdue = isOverdue(day) && tasksForDay.length > 0;
     const hasHeartbeat = hasHeartbeatReminder(day);
+    const isDragTarget = dragOverDay === day;
 
     days.push(
-      <div 
-        key={day} 
-        className={`calendar-day ${isToday ? 'today' : ''} ${overdue ? 'overdue' : ''} ${hasHeartbeat ? 'heartbeat-reminder' : ''}`}
-        onClick={() => handleDayClick(day)} // Changed from onDoubleClick
+      <div
+        key={day}
+        className={`calendar-day ${isToday ? 'today' : ''} ${overdue ? 'overdue' : ''} ${hasHeartbeat ? 'heartbeat-reminder' : ''} ${isDragTarget ? 'drag-over' : ''}`}
+        onClick={() => handleDayClick(day)}
+        onDragOver={(e) => handleDragOver(e, day)}
+        onDragLeave={handleDragLeave}
+        onDrop={(e) => handleDrop(e, day)}
       >
         <div className="day-number">
           {day}
@@ -86,12 +116,10 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
             <div
               key={task.id}
               className="calendar-task"
-              onClick={(e) => { e.stopPropagation(); onTaskClick?.(task); }} // Stop propagation to avoid day click
+              draggable
+              onDragStart={(e) => handleDragStart(e, task)}
+              onClick={(e) => { e.stopPropagation(); onTaskClick?.(task); }}
             >
-              <div className="task-dot" style={{ 
-                backgroundColor: task.priority === 'High' ? 'var(--status-error)' : 
-                                 task.priority === 'Medium' ? 'var(--status-warning)' : 'var(--status-success)' 
-              }}></div>
               <span className="task-name">{task.title}</span>
             </div>
           ))}
@@ -118,7 +146,7 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
           </button>
         </div>
         <div className="calendar-options">
-          <button 
+          <button
             className={`heartbeat-toggle-btn ${showHeartbeatReminders ? 'active' : ''}`}
             onClick={() => setShowHeartbeatReminders(!showHeartbeatReminders)}
           >
@@ -135,7 +163,6 @@ const CalendarView = ({ tasks, onTaskClick, onAddTaskWithDate }) => {
       <div className="calendar-grid">
         {days}
       </div>
-      {/* Note removed from the bottom */}
     </div>
   );
 };

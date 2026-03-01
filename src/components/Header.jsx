@@ -1,31 +1,37 @@
 import React from 'react';
+import { Settings } from 'lucide-react';
 import './Header.css';
 
-const Header = ({ onAddTaskClick, isSaving, activeViews = [], onViewToggle }) => {
+const Header = ({ onAddTaskClick, isSaving, activeViews = [], onViewToggle, onSettingsClick }) => {
   return (
     <header className="header">
       <div className="header-main">
         <h1 className="header-title">Charley's Angels Task Dashboard</h1>
-        <button className="add-task-btn btn-primary" onClick={onAddTaskClick}>
-          + Add Task
-        </button>
+        <div className="header-actions">
+          <button className="settings-btn" onClick={onSettingsClick} title="Settings">
+            <Settings size={18} />
+          </button>
+          <button className="add-task-btn btn-primary" onClick={onAddTaskClick}>
+            + Add Task
+          </button>
+        </div>
       </div>
       <div className="view-toggle">
-        <button 
+        <button
           className={activeViews.includes('board') ? 'active' : ''}
           onClick={() => onViewToggle('board')}
           title="Board View"
         >
           Board
         </button>
-        <button 
+        <button
           className={activeViews.includes('calendar') ? 'active' : ''}
           onClick={() => onViewToggle('calendar')}
           title="Calendar View"
         >
           Calendar
         </button>
-        <button 
+        <button
           className={activeViews.includes('activity') ? 'active' : ''}
           onClick={() => onViewToggle('activity')}
           title="Project Activity"

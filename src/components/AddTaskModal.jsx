@@ -10,7 +10,7 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
   const [priority, setPriority] = useState('Medium');
   const [dueDate, setDueDate] = useState(initialDate);
   const [dueTime, setDueTime] = useState('07:00');
-  const [startDate, setStartDate] = useState('');
+
   const [tags, setTags] = useState([]);
   const [attachments, setAttachments] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -26,7 +26,7 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
       priority,
       dueDate,
       dueTime,
-      startDate,
+
       tags,
       attachments,
       timestamp: 'Just now',
@@ -137,9 +137,9 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="agent">Assign to</label>
-              <select 
-                id="agent" 
-                value={agent} 
+              <select
+                id="agent"
+                value={agent}
                 onChange={(e) => setAgent(e.target.value)}
                 className="select-field"
               >
@@ -152,9 +152,9 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
             </div>
             <div className="form-group">
               <label htmlFor="priority">Priority</label>
-              <select 
-                id="priority" 
-                value={priority} 
+              <select
+                id="priority"
+                value={priority}
                 onChange={(e) => setPriority(e.target.value)}
                 className="select-field"
               >
@@ -164,33 +164,24 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
               </select>
             </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="startDate">Start Date (Optional)</label>
-            <input 
-              type="date" 
-              id="startDate"
-              value={startDate} 
-              onChange={(e) => setStartDate(e.target.value)}
-              className="input-field"
-            />
-          </div>
+
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="dueDate">Due Date</label>
-              <input 
-                type="date" 
+              <input
+                type="date"
                 id="dueDate"
-                value={dueDate} 
+                value={dueDate}
                 onChange={(e) => setDueDate(e.target.value)}
                 className="input-field"
               />
             </div>
             <div className="form-group">
               <label htmlFor="dueTime">Time</label>
-              <input 
-                type="time" 
+              <input
+                type="time"
                 id="dueTime"
-                value={dueTime} 
+                value={dueTime}
                 onChange={(e) => setDueTime(e.target.value)}
                 className="input-field"
               />
@@ -208,10 +199,10 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
                     onClick={() => toggleTag(category)}
                     className={`tag-pill ${tags.includes(category) ? 'active' : ''}`}
                     style={{
-                      backgroundColor: tags.includes(category) 
+                      backgroundColor: tags.includes(category)
                         ? `${color}26`
                         : 'var(--bg-elevated)',
-                      color: tags.includes(category) 
+                      color: tags.includes(category)
                         ? color
                         : 'var(--text-primary)',
                       border: tags.includes(category) ? 'none' : '1px solid var(--border-default)'
@@ -225,16 +216,16 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
           </div>
           <div className="form-group">
             <label>Attachments</label>
-            <div 
+            <div
               className={`attachment-dropzone ${isDragging ? 'dragging' : ''}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-              <input 
-                type="file" 
-                id="file-upload-add" 
-                multiple 
+              <input
+                type="file"
+                id="file-upload-add"
+                multiple
                 onChange={handleFileUpload}
                 style={{ display: 'none' }}
               />
@@ -256,9 +247,9 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '' }) => {
                       <span className="file-name">{file.name}</span>
                       <span className="file-size">{formatFileSize(file.size)}</span>
                     </div>
-                    <button 
+                    <button
                       type="button"
-                      className="remove-attachment" 
+                      className="remove-attachment"
                       onClick={() => removeAttachment(file.id)}
                       title="Remove attachment"
                     >
