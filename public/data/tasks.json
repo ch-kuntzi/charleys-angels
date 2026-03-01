@@ -438,7 +438,14 @@
         ],
         "attachments": [],
         "timestamp": "Just now",
-        "comments": [],
+        "comments": [
+          {
+            "id": 1772397946215,
+            "author": "Charley",
+            "message": "On it, Chris! I'm moving this task to 'In Progress' and starting a deep research session on geopolitics in 2026 using NotebookLM. I'll update the card with the research findings once available.",
+            "timestamp": "3/1/2026, 2:45:46 PM"
+          }
+        ],
         "reviewLink": "",
         "archived": false,
         "completedAt": null
