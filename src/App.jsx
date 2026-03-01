@@ -379,67 +379,29 @@ function App() {
 
   const handleStartNow = (taskId) => {
     const task = data.tasks[taskId];
-    const updatedTask = {
-      ...task,
-      startDate: '', // Clear the start date to start immediately
+    const startComment = {
+      text: '🚀 Start this now',
+      author: 'Chris',
+      timestamp: new Date().toISOString(),
     };
 
-    // Find which column the task is currently in
-    let sourceColumnId = null;
-    for (const columnId in data.columns) {
-      if (data.columns[columnId].taskIds.includes(taskId)) {
-        sourceColumnId = columnId;
-        break;
-      }
-    }
+    const updatedTask = {
+      ...task,
+      comments: [...(task.comments || []), startComment],
+    };
 
-    // If task is in Queue (column-1), move it to In Progress (column-2)
-    if (sourceColumnId === 'column-1') {
-      const sourceColumn = data.columns[sourceColumnId];
-      const destColumn = data.columns['column-2'];
+    const newData = {
+      ...data,
+      tasks: {
+        ...data.tasks,
+        [taskId]: updatedTask,
+      },
+    };
 
-      // Remove from Queue
-      const newSourceTaskIds = sourceColumn.taskIds.filter(id => id !== taskId);
-
-      // Add to In Progress at the top
-      const newDestTaskIds = [taskId, ...destColumn.taskIds];
-
-      const newData = {
-        ...data,
-        tasks: {
-          ...data.tasks,
-          [taskId]: updatedTask,
-        },
-        columns: {
-          ...data.columns,
-          [sourceColumnId]: {
-            ...sourceColumn,
-            taskIds: newSourceTaskIds,
-          },
-          'column-2': {
-            ...destColumn,
-            taskIds: newDestTaskIds,
-          },
-        },
-      };
-
-      handleSetData(newData);
-      addActivity('started', `"${task.title}" moved from Queue to In Progress`);
-      showToast('Task started now!', 'success');
-    } else {
-      // For tasks with future start dates in other columns, just clear the date
-      const newData = {
-        ...data,
-        tasks: {
-          ...data.tasks,
-          [taskId]: updatedTask,
-        },
-      };
-
-      handleSetData(newData);
-      addActivity('started', `"${task.title}" started early (bypassed schedule)`);
-      showToast('Task started now!', 'success');
-    }
+    handleSetData(newData);
+    setSelectedTask(updatedTask);
+    addActivity('requested', `Chris requested "${task.title}" to start now`);
+    showToast('Notified — waiting for Charley to acknowledge', 'info');
   };
 
   const handleUpdateTaskDate = (taskId, newDate) => {

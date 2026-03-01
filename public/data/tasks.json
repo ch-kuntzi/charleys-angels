@@ -89,22 +89,72 @@
         ],
         "dueDate": "",
         "dueTime": "07:00",
-        "comments": [],
+        "comments": [
+          {
+            "text": "how's the research going?  seems to be taking a long time",
+            "author": "Chris",
+            "timestamp": "2026-03-01T17:46:10.301Z"
+          },
+          {
+            "id": 1772387191588,
+            "author": "Charley",
+            "message": "Chris, my apologies for the delay on the hotel research. I was thoroughly reviewing and debugging my understanding and use of the new dashboard task tracking system, including how to properly add descriptions and respond to comments on cards. I wanted to ensure I had the process down correctly before proceeding with new tasks. I am now fully focused on researching and presenting hotel options for your Georgia trip.",
+            "timestamp": "3/1/2026, 11:46:31 AM"
+          }
+        ],
         "attachments": [],
         "reviewLink": "",
         "archived": false
+      },
+      "task-1772387538947": {
+        "id": "task-1772387538947",
+        "title": "give me 4 random words",
+        "description": "",
+        "agent": "Charley",
+        "priority": "Medium",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "tags": [
+          "Research"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null,
+        "startDate": ""
+      },
+      "task-1772387660652": {
+        "id": "task-1772387660652",
+        "title": "spell CAT",
+        "description": "",
+        "agent": "Charley",
+        "priority": "Medium",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "tags": [],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772387660652"
+        ]
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
+          "task-1772387538947",
           "task-1772386173974"
         ]
       },
@@ -136,6 +186,12 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772387538948,
+      "action": "created",
+      "details": "Task \"give me 4 random words\" created by Charley",
+      "timestamp": "3/1/2026, 11:52:18 AM"
+    },
     {
       "id": 1772386175442,
       "action": "moved",
