@@ -12,6 +12,7 @@ import Toast from './components/Toast';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import StatisticsModal from './components/StatisticsModal';
 import SettingsModal from './components/SettingsModal';
+import { useFirestore } from './hooks/useFirestore';
 
 const DEFAULT_CATEGORIES = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
 
@@ -75,7 +76,10 @@ const getInitialActivity = () => {
   return savedActivity ? JSON.parse(savedActivity) : [];
 };
 
-function App() {
+function App({ user, onSignOut }) {
+  // Firebase real-time sync (falls back to localStorage)
+  const firestore = useFirestore(user?.uid);
+
   const [data, setData] = useState(getInitialData);
   const [activity, setActivity] = useState(getInitialActivity);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -83,7 +87,6 @@ function App() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [filters, setFilters] = useState({ agent: '', priority: '', tag: '' });
   const [searchTerm, setSearchTerm] = useState('');
-  // Changed from single view to array of active views
   const [activeViews, setActiveViews] = useState(['board']);
   const [toasts, setToasts] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -96,6 +99,19 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     return localStorage.getItem('sidebarCollapsed') === 'true';
   });
+
+  // Sync data from Firestore when it loads
+  useEffect(() => {
+    if (firestore.data) setData(firestore.data);
+  }, [firestore.data]);
+
+  useEffect(() => {
+    if (firestore.categories) setCategories(firestore.categories);
+  }, [firestore.categories]);
+
+  useEffect(() => {
+    if (firestore.activity?.length > 0) setActivity(firestore.activity);
+  }, [firestore.activity]);
 
   const showToast = (message, type = 'info') => {
     const id = Date.now();
@@ -114,13 +130,13 @@ function App() {
     };
     const updatedActivity = [newActivity, ...activity].slice(0, 50);
     setActivity(updatedActivity);
-    localStorage.setItem('taskDashboardActivity', JSON.stringify(updatedActivity));
+    firestore.addActivityEntry(action, details);
   };
 
   const handleSetData = (newData) => {
     setIsSaving(true);
     setData(newData);
-    localStorage.setItem('taskDashboardData', JSON.stringify(newData));
+    firestore.saveData(newData);
     setTimeout(() => setIsSaving(false), 500);
   };
 
@@ -393,7 +409,7 @@ function App() {
 
   const handleUpdateCategories = (newCategories) => {
     setCategories(newCategories);
-    localStorage.setItem('taskDashboardCategories', JSON.stringify(newCategories));
+    firestore.saveCategories(newCategories);
     showToast('Categories updated!', 'success');
   };
 
@@ -588,6 +604,9 @@ function App() {
           activeViews={activeViews}
           onViewToggle={handleViewToggle}
           onSettingsClick={() => setShowSettings(true)}
+          user={user}
+          onSignOut={onSignOut}
+          isFirebaseConnected={firestore.isFirebaseConnected}
         />
         <FilterBar
           agents={agents}
