@@ -4,7 +4,7 @@ import { Plus, Check, X } from 'lucide-react';
 import Column from './Column';
 import './Board.css';
 
-const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onReorderColumns }) => {
+const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onReorderColumns, onAddTask }) => {
   const [isAddingColumn, setIsAddingColumn] = useState(false);
   const [newColumnName, setNewColumnName] = useState('');
   const [draggedColumnId, setDraggedColumnId] = useState(null);
@@ -117,6 +117,7 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
                 tasks={tasks}
                 onTaskClick={onTaskClick}
                 onRenameColumn={onRenameColumn}
+                onAddTask={onAddTask}
               />
             </div>
           );

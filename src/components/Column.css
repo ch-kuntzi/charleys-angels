@@ -76,3 +76,25 @@
   padding: 4px;
   padding-bottom: 120px;
 }
+
+.quick-add-task {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  background: transparent;
+  border: 1px dashed var(--border-default);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.quick-add-task:hover {
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  background: rgba(124, 58, 237, 0.06);
+}

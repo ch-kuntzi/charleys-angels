@@ -3,7 +3,7 @@ import { Droppable } from '@hello-pangea/dnd';
 import TaskCard from './TaskCard';
 import './Column.css';
 
-const Column = ({ column, tasks, onTaskClick, onRenameColumn }) => {
+const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(column.title);
 
@@ -27,6 +27,8 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn }) => {
       setIsEditing(false);
     }
   };
+
+  const isQueue = column.id === 'column-1';
 
   return (
     <div className="column">
@@ -64,6 +66,11 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn }) => {
           </div>
         )}
       </Droppable>
+      {isQueue && onAddTask && (
+        <button className="quick-add-task" onClick={onAddTask}>
+          + New Task
+        </button>
+      )}
     </div>
   );
 };

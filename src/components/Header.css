@@ -1,22 +1,23 @@
 .header {
   background: var(--bg-surface);
-  padding: 16px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--border-subtle);
 }
 
-.header-main {
+.header-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin: 0 auto 16px;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .header-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--text-primary);
   letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .header-actions {
@@ -48,13 +49,12 @@
 .view-toggle {
   display: flex;
   gap: 8px;
-  margin: 0 auto;
 }
 
 .view-toggle button {
   background: transparent;
   color: var(--text-secondary);
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: 6px;
   font-weight: 500;
   font-size: 13px;
@@ -78,17 +78,16 @@
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .header {
-    padding: 14px 0;
+    padding: 10px 0;
   }
 
-  .header-main {
-    flex-direction: column;
-    gap: 12px;
-    align-items: stretch;
+  .header-row {
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
   .header-title {
-    font-size: 20px;
+    font-size: 16px;
   }
 
   .view-toggle {
