@@ -27,19 +27,29 @@ function saveData(data) {
 
 function commitAndPush(message) {
     const repoDir = path.resolve(path.dirname(DATA_FILE), '..');
+    const git = (cmd) => execSync(`git -C "${repoDir}" ${cmd}`, { stdio: 'pipe' }).toString().trim();
+
     try {
-        execSync(`git -C "${repoDir}" add public/data/tasks.json`, { stdio: 'pipe' });
-        execSync(`git -C "${repoDir}" commit -m "${message}"`, { stdio: 'pipe' });
-    } catch (err) {
-        // Nothing to commit — that's fine
-    }
-    try {
-        // Pull latest before pushing to avoid conflicts
-        execSync(`git -C "${repoDir}" pull --rebase`, { stdio: 'pipe' });
-        execSync(`git -C "${repoDir}" push`, { stdio: 'pipe' });
+        // Save current tasks.json content before any git operations
+        const currentContent = fs.readFileSync(DATA_FILE, 'utf-8');
+
+        // Pull latest (reset any conflicts)
+        try { git('stash'); } catch (e) { }
+        try { git('pull --rebase'); } catch (e) {
+            try { git('rebase --abort'); } catch (e2) { }
+            try { git('pull --ff-only'); } catch (e3) { }
+        }
+        try { git('stash pop'); } catch (e) { }
+
+        // Overwrite with our version (our local data is always the truth for tasks.json)
+        fs.writeFileSync(DATA_FILE, currentContent);
+
+        git('add public/data/tasks.json');
+        try { git(`commit -m "${message}"`); } catch (e) { }
+        git('push');
         console.log(`✅ Pushed: ${message}`);
     } catch (err) {
-        console.log('⚠️  Saved locally (git push failed — try: git pull --rebase && git push)');
+        console.log('⚠️  Saved locally (git sync issue)');
     }
 }
 
