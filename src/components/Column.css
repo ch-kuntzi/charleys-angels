@@ -8,7 +8,8 @@
   max-height: calc(100vh - 200px);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .column-title {

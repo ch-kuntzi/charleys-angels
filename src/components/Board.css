@@ -51,6 +51,8 @@
   flex: 1 1 0;
   min-width: 180px;
   transition: transform 0.15s ease;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .column-drag-wrapper[draggable="true"] {
