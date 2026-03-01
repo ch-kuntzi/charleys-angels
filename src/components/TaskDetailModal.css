@@ -294,8 +294,20 @@
   margin-bottom: 12px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding-right: 8px;
+  gap: 6px;
+  padding-right: 4px;
+  max-height: 300px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-subtle) transparent;
+}
+
+.discussion-thread::-webkit-scrollbar {
+  width: 4px;
+}
+
+.discussion-thread::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
 }
 
 .empty-state {
@@ -305,40 +317,53 @@
   padding: 20px;
 }
 
-.message-bubble {
-  background: var(--bg-elevated);
-  border-radius: 12px;
-  padding: 10px 14px;
-  animation: fadeIn 0.3s ease;
-  max-width: 90%;
-  align-self: flex-start;
-}
-
-.message-header {
+/* iMessage-style chat rows */
+.chat-row {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
+  animation: fadeIn 0.2s ease;
 }
 
-.message-author {
-  font-weight: 600;
-  color: var(--accent-secondary);
-  font-size: 12px;
+.chat-right {
+  justify-content: flex-end;
 }
 
-.message-timestamp {
-  font-size: 10px;
-  color: var(--text-muted);
+.chat-left {
+  justify-content: flex-start;
 }
 
-.message-text {
-  margin: 0;
+.chat-bubble {
+  max-width: 75%;
+  padding: 8px 12px;
+  border-radius: 16px;
+  position: relative;
+}
+
+.bubble-chris {
+  background: var(--accent-primary);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+}
+
+.bubble-agent {
+  background: var(--bg-elevated);
   color: var(--text-primary);
+  border-bottom-left-radius: 4px;
+}
+
+.chat-text {
+  margin: 0;
   font-size: 13px;
-  line-height: 1.5;
+  line-height: 1.4;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.chat-time {
+  display: block;
+  font-size: 9px;
+  margin-top: 2px;
+  opacity: 0.6;
+  text-align: right;
 }
 
 /* Message Input with Inlaid Send Button */

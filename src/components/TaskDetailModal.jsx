@@ -193,15 +193,17 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                 {(task.comments || []).length === 0 ? (
                   <p className="empty-state">No messages yet. Start the conversation!</p>
                 ) : (
-                  (task.comments || []).map((msg, index) => (
-                    <div key={index} className="message-bubble">
-                      <div className="message-header">
-                        <span className="message-author">{msg.author}</span>
-                        <span className="message-timestamp">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  (task.comments || []).map((msg, index) => {
+                    const isChris = msg.author === 'Chris';
+                    return (
+                      <div key={index} className={`chat-row ${isChris ? 'chat-right' : 'chat-left'}`}>
+                        <div className={`chat-bubble ${isChris ? 'bubble-chris' : 'bubble-agent'}`}>
+                          <p className="chat-text">{msg.text || msg.message}</p>
+                          <span className="chat-time">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
                       </div>
-                      <p className="message-text">{msg.text}</p>
-                    </div>
-                  ))
+                    );
+                  })
                 )}
                 <div ref={discussionEndRef} />
               </div>
