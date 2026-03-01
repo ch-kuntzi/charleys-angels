@@ -117,8 +117,8 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
             </div>
           )}
 
-          {/* Review Link - Only show on Review/Deployed cards */}
-          {isInReviewOrDeployed && task.reviewLink && (
+          {/* Deliverable Link */}
+          {task.reviewLink && (
             <div className="task-review-link">
               <a
                 href={task.reviewLink}
@@ -126,12 +126,8 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
               >
-                <ExternalLink size={14} strokeWidth={2} />
-                <span className="review-link-text">
-                  {task.reviewLink.length > 30
-                    ? task.reviewLink.substring(0, 30) + '...'
-                    : task.reviewLink}
-                </span>
+                <ExternalLink size={12} strokeWidth={2} />
+                <span className="review-link-text">View Deliverable</span>
               </a>
             </div>
           )}

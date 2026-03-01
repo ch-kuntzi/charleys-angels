@@ -74,6 +74,24 @@
         ],
         "attachments": [],
         "reviewLink": "",
+        "archived": false,
+        "completedAt": "2026-03-01T17:29:19.304Z"
+      },
+      "task-1772386173974": {
+        "id": "task-1772386173974",
+        "title": "Research and present hotel options for Georgia trip",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "timestamp": "3/1/2026, 11:29:33 AM",
+        "tags": [
+          "Research"
+        ],
+        "dueDate": "",
+        "dueTime": "07:00",
+        "comments": [],
+        "attachments": [],
+        "reviewLink": "",
         "archived": false
       }
     },
@@ -81,14 +99,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772384091510"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772386173974"
+        ]
       },
       "column-3": {
         "id": "column-3",
@@ -98,7 +116,9 @@
       "column-4": {
         "id": "column-4",
         "title": "Deployed",
-        "taskIds": []
+        "taskIds": [
+          "task-1772384091510"
+        ]
       }
     },
     "columnOrder": [
@@ -116,6 +136,24 @@
     "Urgent"
   ],
   "activity": [
+    {
+      "id": 1772386175442,
+      "action": "moved",
+      "details": "\"Research and present hotel options for Georgia trip\" → In Progress",
+      "timestamp": "3/1/2026, 11:29:35 AM"
+    },
+    {
+      "id": 1772386173988,
+      "action": "created",
+      "details": "\"Research and present hotel options for Georgia trip\" assigned to Charley",
+      "timestamp": "3/1/2026, 11:29:33 AM"
+    },
+    {
+      "id": 1772386157272,
+      "action": "moved",
+      "details": "\"Setup GitHub data sync\" moved from In Queue to Review",
+      "timestamp": "3/1/2026, 11:29:17 AM"
+    },
     {
       "id": 1772384091528,
       "action": "created",

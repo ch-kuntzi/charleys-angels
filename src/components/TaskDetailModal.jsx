@@ -5,7 +5,8 @@ import {
   Trash2,
   Archive,
   ArchiveRestore,
-  Play
+  Play,
+  ExternalLink
 } from 'lucide-react';
 import './TaskDetailModal.css';
 
@@ -185,6 +186,19 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
                 placeholder="Add a more detailed description..."
               />
             </div>
+
+            {/* Deliverable Link */}
+            {task.reviewLink && (
+              <a
+                href={task.reviewLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="deliverable-link"
+              >
+                <ExternalLink size={13} strokeWidth={2} />
+                View Deliverable
+              </a>
+            )}
 
             {/* DISCUSSION THREAD */}
             <div className="discussion-section">

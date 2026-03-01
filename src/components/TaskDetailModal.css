@@ -272,6 +272,23 @@
   transition: all 0.15s ease;
 }
 
+.deliverable-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--accent-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  transition: color 0.15s ease;
+}
+
+.deliverable-link:hover {
+  color: var(--accent-primary);
+  text-decoration: underline;
+}
+
 /* DISCUSSION / CHAT STYLES */
 .discussion-section {
   flex-grow: 1;
