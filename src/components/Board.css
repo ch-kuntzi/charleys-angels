@@ -50,7 +50,7 @@
 .column-drag-wrapper {
   flex: 1 1 0;
   min-width: 180px;
-  transition: transform 0.15s ease;
+  transition: transform 0.25s cubic-bezier(0.2, 0, 0, 1);
   overflow: visible;
   box-sizing: border-box;
 }
@@ -60,16 +60,74 @@
 }
 
 .column-drag-wrapper.column-dragging {
-  opacity: 0.4;
+  opacity: 0.35;
+  transform: scale(0.95);
+  animation: columnWiggle 0.3s ease;
 }
 
-.column-drag-wrapper.column-drop-target {
-  transform: scale(1.02);
+.column-drag-wrapper.shift-right {
+  transform: translateX(20px);
+}
+
+.column-drag-wrapper.shift-left {
+  transform: translateX(-20px);
+}
+
+.column-drag-wrapper.column-settled {
+  animation: columnSettle 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .column-drag-wrapper.column-drop-target>.column {
   border-color: var(--accent-primary);
   box-shadow: 0 0 16px rgba(124, 58, 237, 0.3);
+}
+
+@keyframes columnWiggle {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  20% {
+    transform: scale(0.97) rotate(-1deg);
+  }
+
+  40% {
+    transform: scale(0.95) rotate(1deg);
+  }
+
+  60% {
+    transform: scale(0.95) rotate(-0.5deg);
+  }
+
+  80% {
+    transform: scale(0.95) rotate(0.5deg);
+  }
+
+  100% {
+    transform: scale(0.95) rotate(0deg);
+  }
+}
+
+@keyframes columnSettle {
+  0% {
+    transform: scale(0.95) rotate(0deg);
+  }
+
+  30% {
+    transform: scale(1.03) rotate(-1deg);
+  }
+
+  50% {
+    transform: scale(0.99) rotate(0.5deg);
+  }
+
+  70% {
+    transform: scale(1.01) rotate(-0.3deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 
 /* Add column form */
