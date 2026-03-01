@@ -521,7 +521,7 @@
             "timestamp": "3/1/2026, 3:45:14 PM"
           }
         ],
-        "reviewLink": "",
+        "reviewLink": "https://notebooklm.google.com/notebooks/4e288679-15aa-4075-a95c-5e71de2590bb",
         "archived": false,
         "completedAt": null
       }
@@ -535,14 +535,14 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772401191550"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": []
+        "taskIds": [
+          "task-1772401191550"
+        ]
       },
       "column-4": {
         "id": "column-4",
@@ -576,6 +576,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772401516936,
+      "action": "moved",
+      "details": "\"research my emails to find all subscription services paid in 2026\" → Review",
+      "timestamp": "3/1/2026, 3:45:16 PM"
+    },
     {
       "id": 1772401392594,
       "action": "moved",
