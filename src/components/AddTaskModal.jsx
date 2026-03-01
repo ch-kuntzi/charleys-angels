@@ -1,7 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './AddTaskModal.css';
 
+// Reusable custom select matching the card detail style
+const ModalSelect = ({ value, onChange, options, placeholder }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const ref = useRef(null);
 
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const selectedLabel = options.find(o => o.value === value)?.label || placeholder || '';
+
+  return (
+    <div className="modal-custom-select" ref={ref}>
+      <button
+        className={`modal-select-trigger ${isOpen ? 'open' : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        type="button"
+      >
+        <span>{selectedLabel}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M3 5L6 8L9 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {isOpen && (
+        <div className="modal-select-menu">
+          {options.map(opt => (
+            <div
+              key={opt.value}
+              className={`modal-select-option ${value === opt.value ? 'selected' : ''}`}
+              onClick={() => {
+                onChange(opt.value);
+                setIsOpen(false);
+              }}
+            >
+              {opt.label}
+              {value === opt.value && (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
 const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories = [] }) => {
   const [title, setTitle] = useState('');
@@ -10,10 +62,9 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
   const [priority, setPriority] = useState('Medium');
   const [dueDate, setDueDate] = useState(initialDate);
   const [dueTime, setDueTime] = useState('07:00');
-
+  const [deliveryMethod, setDeliveryMethod] = useState('reply');
+  const [thinkingLevel, setThinkingLevel] = useState('standard');
   const [tags, setTags] = useState([]);
-  const [attachments, setAttachments] = useState([]);
-  const [isDragging, setIsDragging] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,9 +77,9 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
       priority,
       dueDate,
       dueTime,
-
+      deliveryMethod,
+      thinkingLevel,
       tags,
-      attachments,
       timestamp: 'Just now',
     };
     onAddTask(newTask);
@@ -54,59 +105,22 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
     return colorMap[category] || '#8B949E';
   };
 
-  const handleFileUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const newAttachments = files.map(file => ({
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      id: Date.now() + Math.random(),
-    }));
-    setAttachments([...attachments, ...newAttachments]);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-    setIsDragging(true);
-  };
-
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const files = Array.from(e.dataTransfer.files);
-    const newAttachments = files.map(file => ({
-      name: file.name,
-      type: file.type,
-      size: file.size,
-      id: Date.now() + Math.random(),
-    }));
-    setAttachments([...attachments, ...newAttachments]);
-  };
-
-  const removeAttachment = (id) => {
-    setAttachments(attachments.filter(a => a.id !== id));
-  };
-
-  const getFileIcon = (type) => {
-    if (type.includes('pdf')) return '📄';
-    if (type.includes('image')) return '🖼️';
-    if (type.includes('video')) return '🎥';
-    if (type.includes('audio')) return '🎵';
-    if (type.includes('zip') || type.includes('compressed')) return '📦';
-    if (type.includes('word') || type.includes('doc')) return '📝';
-    if (type.includes('excel') || type.includes('sheet')) return '📊';
-    return '📎';
-  };
-
-  const formatFileSize = (bytes) => {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  };
+  const agentOptions = agents.map(({ name }) => ({ value: name, label: name }));
+  const priorityOptions = [
+    { value: 'High', label: 'High' },
+    { value: 'Medium', label: 'Medium' },
+    { value: 'Low', label: 'Low' },
+  ];
+  const deliveryOptions = [
+    { value: 'reply', label: 'Quick Reply' },
+    { value: 'notebook', label: 'NotebookLM' },
+    { value: 'comment', label: 'Comment Only' },
+  ];
+  const thinkingOptions = [
+    { value: 'quick', label: 'Quick' },
+    { value: 'standard', label: 'Standard' },
+    { value: 'deep', label: 'Deep Research' },
+  ];
 
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -131,37 +145,27 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="textarea-field"
-              rows="4"
+              rows="3"
             />
           </div>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="agent">Assign to</label>
-              <select
-                id="agent"
+              <label>Assign to</label>
+              <ModalSelect
                 value={agent}
-                onChange={(e) => setAgent(e.target.value)}
-                className="select-field"
-              >
-                {agents.map(({ name }) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-              </select>
+                onChange={setAgent}
+                options={agentOptions}
+                placeholder="Select agent"
+              />
             </div>
             <div className="form-group">
-              <label htmlFor="priority">Priority</label>
-              <select
-                id="priority"
+              <label>Priority</label>
+              <ModalSelect
                 value={priority}
-                onChange={(e) => setPriority(e.target.value)}
-                className="select-field"
-              >
-                <option value="High">High</option>
-                <option value="Medium">Medium</option>
-                <option value="Low">Low</option>
-              </select>
+                onChange={setPriority}
+                options={priorityOptions}
+                placeholder="Select priority"
+              />
             </div>
           </div>
 
@@ -187,6 +191,28 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
               />
             </div>
           </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Delivery</label>
+              <ModalSelect
+                value={deliveryMethod}
+                onChange={setDeliveryMethod}
+                options={deliveryOptions}
+                placeholder="Delivery method"
+              />
+            </div>
+            <div className="form-group">
+              <label>Thinking Level</label>
+              <ModalSelect
+                value={thinkingLevel}
+                onChange={setThinkingLevel}
+                options={thinkingOptions}
+                placeholder="Thinking level"
+              />
+            </div>
+          </div>
+
           <div className="form-group">
             <label>Categories</label>
             <div className="tag-selector">
@@ -213,52 +239,6 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
                 );
               })}
             </div>
-          </div>
-          <div className="form-group">
-            <label>Attachments</label>
-            <div
-              className={`attachment-dropzone ${isDragging ? 'dragging' : ''}`}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              <input
-                type="file"
-                id="file-upload-add"
-                multiple
-                onChange={handleFileUpload}
-                style={{ display: 'none' }}
-              />
-              <label htmlFor="file-upload-add" className="upload-label">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="17 8 12 3 7 8" />
-                  <line x1="12" y1="3" x2="12" y2="15" />
-                </svg>
-                <span>Drop files here or click to upload</span>
-              </label>
-            </div>
-            {attachments.length > 0 && (
-              <div className="attachment-list">
-                {attachments.map((file) => (
-                  <div key={file.id} className="attachment-pill">
-                    <span className="file-icon">{getFileIcon(file.type)}</span>
-                    <div className="file-info">
-                      <span className="file-name">{file.name}</span>
-                      <span className="file-size">{formatFileSize(file.size)}</span>
-                    </div>
-                    <button
-                      type="button"
-                      className="remove-attachment"
-                      onClick={() => removeAttachment(file.id)}
-                      title="Remove attachment"
-                    >
-                      &times;
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
           <div className="form-actions">
             <button type="button" className="btn-secondary" onClick={onClose}>

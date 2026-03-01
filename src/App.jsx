@@ -638,7 +638,7 @@ function App() {
                 onRenameColumn={handleRenameColumn}
                 onAddColumn={handleAddColumn}
                 onReorderColumns={handleReorderColumns}
-                onAddTask={() => setShowAddTaskModal(true)}
+                onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
               />
             </div>
           )}
