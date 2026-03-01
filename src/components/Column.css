@@ -8,7 +8,7 @@
   max-height: calc(100vh - 200px);
   display: flex;
   flex-direction: column;
-  overflow: visible;
+  overflow: hidden;
   box-sizing: border-box;
 }
 
@@ -53,19 +53,21 @@
 .task-list {
   min-height: 120px;
   padding-bottom: 120px;
+  padding-right: 4px;
+  margin-right: -4px;
   transition: all 0.15s ease;
   border-radius: 6px;
-  overflow-y: auto;
+  overflow-y: scroll;
+  overflow-x: hidden;
   flex: 1;
   scrollbar-width: none;
-  /* Firefox */
   -ms-overflow-style: none;
-  /* IE/Edge */
 }
 
 .task-list::-webkit-scrollbar {
+  width: 0;
+  height: 0;
   display: none;
-  /* Chrome/Safari */
 }
 
 .task-list.dragging-over {
