@@ -292,7 +292,7 @@
         "attachments": [],
         "timestamp": "Just now",
         "comments": [],
-        "reviewLink": "",
+        "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48",
         "archived": false,
         "completedAt": null
       },
@@ -622,14 +622,15 @@
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772429150151",
-          "task-1772389885955"
+          "task-1772429150151"
         ]
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": []
+        "taskIds": [
+          "task-1772389885955"
+        ]
       },
       "column-4": {
         "id": "column-4",
@@ -666,6 +667,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431264207,
+      "action": "moved",
+      "details": "\"provide 2  basic colors\" → Review",
+      "timestamp": "3/2/2026, 12:01:04 AM"
+    },
     {
       "id": 1772431232321,
       "action": "moved",
