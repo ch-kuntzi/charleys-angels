@@ -553,7 +553,13 @@
         ],
         "attachments": [],
         "timestamp": "Just now",
-        "comments": [],
+        "comments": [
+          {
+            "text": "🚀 Start this now",
+            "author": "Chris",
+            "timestamp": "2026-03-02T02:47:36.309Z"
+          }
+        ],
         "reviewLink": "",
         "archived": false,
         "completedAt": null
