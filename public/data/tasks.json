@@ -536,13 +536,36 @@
         "reviewLink": "https://notebooklm.google.com/notebooks/4e288679-15aa-4075-a95c-5e71de2590bb",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772418849016": {
+        "id": "task-1772418849016",
+        "title": "I want research on new cameras from Nikon in 2026.",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "standard",
+        "tags": [
+          "Research",
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772418849016"
+        ]
       },
       "column-2": {
         "id": "column-2",
