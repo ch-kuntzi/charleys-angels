@@ -641,9 +641,7 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772430718855"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
@@ -665,7 +663,8 @@
           "task-1772386173974",
           "task-1772401191550",
           "task-1772418849016",
-          "task-1772429150151"
+          "task-1772429150151",
+          "task-1772430718855"
         ]
       }
     },
@@ -685,6 +684,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431031058,
+      "action": "moved",
+      "details": "\"translate super in 3 languages\" → Deployed",
+      "timestamp": "3/1/2026, 11:57:11 PM"
+    },
     {
       "id": 1772430780412,
       "action": "moved",
