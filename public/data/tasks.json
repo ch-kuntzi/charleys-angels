@@ -610,34 +610,6 @@
         "attachments": [],
         "reviewLink": "",
         "archived": false
-      },
-      "task-1772430718855": {
-        "id": "task-1772430718855",
-        "title": "translate super in 5 languages",
-        "description": "",
-        "agent": "Charley",
-        "priority": "High",
-        "dueDate": "2026-03-02",
-        "dueTime": "07:00",
-        "deliveryMethod": "comment",
-        "thinkingLevel": "quick",
-        "tags": [
-          "Urgent"
-        ],
-        "attachments": [],
-        "timestamp": "Just now",
-        "comments": [
-          {
-            "id": 1772431227739,
-            "author": "Charley",
-            "text": "Here's 'super' translated into 5 languages: \\n- Spanish: súper\\n- French: super\\n- German: super\\n- Italian: super\\n- Portuguese: super",
-            "message": "Here's 'super' translated into 5 languages: \\n- Spanish: súper\\n- French: super\\n- German: super\\n- Italian: super\\n- Portuguese: super",
-            "timestamp": "3/2/2026, 12:00:27 AM"
-          }
-        ],
-        "reviewLink": "",
-        "archived": false,
-        "completedAt": null
       }
     },
     "columns": {
@@ -657,14 +629,13 @@
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772430718855"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
         "title": "Deployed",
         "taskIds": [
+          "task-1772429150151",
           "task-1772384091510",
           "task-1772387660652",
           "task-1772387538947",
