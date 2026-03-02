@@ -334,7 +334,8 @@ function dashboardCheck() {
                 const t = tasks[tid];
                 if (t) {
                     const urgent = (t.tags || []).includes('Urgent') ? ' ⚡URGENT' : '';
-                    const delivery = t.deliveryMethod === 'notebook' ? ' 📓NLM' : t.deliveryMethod === 'comment' ? ' 📝' : '';
+                    const deliveryMap = { 'nlm-infographic': ' 📊Infographic', 'nlm-audio': ' 🎙️Audio', 'nlm-slides': ' 📑Slides', 'nlm-mindmap': ' 🧠MindMap', 'nlm-summary': ' 📝Summary', 'comment': ' 💬Comment', 'notebook': ' 📓NLM' };
+                    const delivery = deliveryMap[t.deliveryMethod] || '';
                     const thinking = t.thinkingLevel === 'deep' ? ' 🔬Deep' : t.thinkingLevel === 'quick' ? ' ⚡Quick' : '';
                     console.log(`     ${t.priority}${urgent}${delivery}${thinking} | ${t.title} (${t.agent})`);
                 }
