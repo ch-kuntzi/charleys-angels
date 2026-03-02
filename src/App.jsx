@@ -112,6 +112,12 @@ function App() {
         if (remote.boardData) {
           setData(remote.boardData);
           localStorage.setItem('taskDashboardData', JSON.stringify(remote.boardData));
+          // Keep open modal in sync — Charley's replies appear live without refresh
+          setSelectedTask(prev =>
+            prev && remote.boardData.tasks[prev.id]
+              ? remote.boardData.tasks[prev.id]
+              : prev
+          );
         }
         if (remote.categories) setCategories(remote.categories);
         if (remote.activity) setActivity(remote.activity);
