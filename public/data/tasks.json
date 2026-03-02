@@ -540,13 +540,35 @@
         "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/10b190f8-e165-4f3a-8673-4554868e6f1f",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772432788286-0mna": {
+        "id": "task-1772432788286-0mna",
+        "title": "what does the name charley mean? (copy)",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "3/2/2026, 12:26:28 AM",
+        "comments": [],
+        "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/10b190f8-e165-4f3a-8673-4554868e6f1f",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772432788286-0mna"
+        ]
       },
       "column-2": {
         "id": "column-2",
@@ -592,6 +614,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772432768985,
+      "action": "moved",
+      "details": "\"spell DOG (copy)\" moved from Review to Deployed",
+      "timestamp": "3/2/2026, 12:26:08 AM"
+    },
     {
       "id": 1772432742222,
       "action": "moved",
@@ -885,24 +913,6 @@
       "action": "moved",
       "details": "\"give me 4 random words\" → Deployed",
       "timestamp": "3/1/2026, 1:41:08 PM"
-    },
-    {
-      "id": 1772393662848,
-      "action": "created",
-      "details": "Task \"make a document that says \"I love charley\"\" created by Charley",
-      "timestamp": "3/1/2026, 1:34:22 PM"
-    },
-    {
-      "id": 1772393582859,
-      "action": "moved",
-      "details": "\"just make a document with your name\" → In Progress",
-      "timestamp": "3/1/2026, 1:33:02 PM"
-    },
-    {
-      "id": 1772392126748,
-      "action": "moved",
-      "details": "\"give me 4 random words\" → Review",
-      "timestamp": "3/1/2026, 1:08:46 PM"
     }
   ]
 }
