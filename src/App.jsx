@@ -652,6 +652,7 @@ function App() {
                     onAddColumn={handleAddColumn}
                     onReorderColumns={handleReorderColumns}
                     onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
+                    categoryColors={taskColors}
                   />
                 </div>
               )}

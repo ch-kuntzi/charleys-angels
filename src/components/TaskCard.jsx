@@ -35,15 +35,16 @@ const priorityColors = {
   Low: '#10B981',
 };
 
-const getCategoryColor = (category) => {
-  const colorMap = {
-    'Bug': '#EF4444',
-    'Feature': '#10B981',
-    'Research': '#A78BFA',
-    'Admin': '#A78BFA',
-    'Urgent': '#F59E0B',
-  };
-  return colorMap[category] || '#8B949E';
+const DEFAULT_CATEGORY_COLORS = {
+  'Bug': '#EF4444',
+  'Feature': '#10B981',
+  'Research': '#A78BFA',
+  'Admin': '#A78BFA',
+  'Urgent': '#F59E0B',
+};
+
+const getCategoryColor = (category, customColors = {}) => {
+  return customColors[category] || DEFAULT_CATEGORY_COLORS[category] || '#8B949E';
 };
 
 const formatTimestamp = (isoString) => {
@@ -67,7 +68,7 @@ const isDateInFuture = (dateString) => {
   return date > today;
 };
 
-const TaskCard = ({ task, index, onClick, columnTitle }) => {
+const TaskCard = ({ task, index, onClick, columnTitle, categoryColors = {} }) => {
   const recentComments = (task.comments || []).slice(-2);
   const hasMoreComments = (task.comments || []).length > 2;
   const AgentIcon = agentIconMap[task.agent];
@@ -90,7 +91,7 @@ const TaskCard = ({ task, index, onClick, columnTitle }) => {
           {task.tags && task.tags.length > 0 && (
             <div className="task-tags">
               {task.tags.map((tag) => {
-                const color = getCategoryColor(tag);
+                const color = getCategoryColor(tag, categoryColors);
                 return (
                   <span
                     key={tag}

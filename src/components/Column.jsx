@@ -3,7 +3,7 @@ import { Droppable } from '@hello-pangea/dnd';
 import TaskCard from './TaskCard';
 import './Column.css';
 
-const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask }) => {
+const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categoryColors = {} }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(column.title);
 
@@ -60,6 +60,7 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask }) => {
                 index={index}
                 onClick={() => onTaskClick(task)}
                 columnTitle={column.title}
+                categoryColors={categoryColors}
               />
             ))}
             {provided.placeholder}

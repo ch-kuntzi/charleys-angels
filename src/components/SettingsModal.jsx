@@ -2,19 +2,30 @@ import React, { useState } from 'react';
 import { X, Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import './SettingsModal.css';
 
-const TASK_COLORS = [
-    { value: '', label: 'None' },
-    { value: '#6366f1', label: 'Indigo' },
-    { value: '#8b5cf6', label: 'Purple' },
-    { value: '#ec4899', label: 'Pink' },
-    { value: '#ef4444', label: 'Red' },
-    { value: '#f97316', label: 'Orange' },
-    { value: '#eab308', label: 'Yellow' },
-    { value: '#22c55e', label: 'Green' },
-    { value: '#06b6d4', label: 'Cyan' },
-    { value: '#3b82f6', label: 'Blue' },
-    { value: '#64748b', label: 'Slate' },
+const DEFAULT_CATEGORY_COLORS = {
+    'Bug': '#EF4444',
+    'Feature': '#10B981',
+    'Research': '#A78BFA',
+    'Admin': '#A78BFA',
+    'Urgent': '#F59E0B',
+};
+
+const AVAILABLE_COLORS = [
+    { value: '#EF4444', label: 'Red' },
+    { value: '#F97316', label: 'Orange' },
+    { value: '#F59E0B', label: 'Amber' },
+    { value: '#22C55E', label: 'Green' },
+    { value: '#10B981', label: 'Emerald' },
+    { value: '#06B6D4', label: 'Cyan' },
+    { value: '#3B82F6', label: 'Blue' },
+    { value: '#6366F1', label: 'Indigo' },
+    { value: '#8B5CF6', label: 'Violet' },
+    { value: '#A78BFA', label: 'Purple' },
+    { value: '#EC4899', label: 'Pink' },
+    { value: '#64748B', label: 'Slate' },
 ];
+
+const getColor = (cat, customColors) => customColors[cat] || DEFAULT_CATEGORY_COLORS[cat] || '#8B949E';
 
 const CollapsibleSection = ({ title, hint, defaultOpen = false, children }) => {
     const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -97,38 +108,37 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
                     {/* CATEGORIES SECTION */}
                     <CollapsibleSection
                         title={`Categories (${localCategories.length})`}
-                        hint="Manage task categories. Assign colors to visually distinguish card types."
+                        hint="Manage categories and their colors. Colors are reflected on task card tags."
                     >
                         <div className="category-list">
-                            {localCategories.map((cat) => (
-                                <div key={cat} className="category-item">
-                                    <div className="category-item-left">
-                                        <div
-                                            className="color-swatch"
-                                            style={{ backgroundColor: localTaskColors[cat] || 'var(--border-default)' }}
-                                        />
-                                        <span>{cat}</span>
+                            {localCategories.map((cat) => {
+                                const color = getColor(cat, localTaskColors);
+                                return (
+                                    <div key={cat} className="category-item">
+                                        <span className="category-name" style={{ color }}>{cat}</span>
+                                        <div className="category-item-right">
+                                            <div className="color-picker-row">
+                                                {AVAILABLE_COLORS.map(c => (
+                                                    <button
+                                                        key={c.value}
+                                                        className={`color-dot ${color === c.value ? 'active' : ''}`}
+                                                        style={{ backgroundColor: c.value }}
+                                                        onClick={() => handleColorChange(cat, c.value)}
+                                                        title={c.label}
+                                                    />
+                                                ))}
+                                            </div>
+                                            <button
+                                                className="remove-category-btn"
+                                                onClick={() => handleRemoveCategory(cat)}
+                                                title="Remove category"
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div className="category-item-right">
-                                        <select
-                                            className="color-picker-select"
-                                            value={localTaskColors[cat] || ''}
-                                            onChange={(e) => handleColorChange(cat, e.target.value)}
-                                        >
-                                            {TASK_COLORS.map(c => (
-                                                <option key={c.value} value={c.value}>{c.label}</option>
-                                            ))}
-                                        </select>
-                                        <button
-                                            className="remove-category-btn"
-                                            onClick={() => handleRemoveCategory(cat)}
-                                            title="Remove category"
-                                        >
-                                            <Trash2 size={14} />
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         <div className="add-category-row">
