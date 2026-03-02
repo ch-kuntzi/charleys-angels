@@ -159,11 +159,11 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
   const deliveryOptions = [
     { value: 'reply', label: 'Quick Reply' },
     { value: 'comment', label: 'Comment Only' },
-    { value: 'nlm-infographic', label: '📊 NLM Infographic' },
-    { value: 'nlm-audio', label: '🎙️ NLM Audio' },
-    { value: 'nlm-slides', label: '📑 NLM Slides' },
-    { value: 'nlm-mindmap', label: '🧠 NLM Mind Map' },
-    { value: 'nlm-summary', label: '📝 NLM Summary' },
+    { value: 'nlm-infographic', label: 'NLM Infographic' },
+    { value: 'nlm-audio', label: 'NLM Audio' },
+    { value: 'nlm-slides', label: 'NLM Slides' },
+    { value: 'nlm-mindmap', label: 'NLM Mind Map' },
+    { value: 'nlm-summary', label: 'NLM Summary' },
   ];
   const thinkingOptions = [
     { value: 'quick', label: 'Quick' },

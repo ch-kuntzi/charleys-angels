@@ -77,6 +77,10 @@ function App() {
   const [showStatistics, setShowStatistics] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [categories, setCategories] = useState(getInitialCategories);
+  const [taskColors, setTaskColors] = useState(() => {
+    const saved = localStorage.getItem('taskDashboardColors');
+    return saved ? JSON.parse(saved) : {};
+  });
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     return localStorage.getItem('sidebarCollapsed') === 'true';
   });
@@ -422,6 +426,11 @@ function App() {
     showToast('Categories updated!', 'success');
   };
 
+  const handleUpdateTaskColors = (newColors) => {
+    setTaskColors(newColors);
+    localStorage.setItem('taskDashboardColors', JSON.stringify(newColors));
+  };
+
   const handleRenameColumn = (columnId, newTitle) => {
     const newData = {
       ...data,
@@ -702,6 +711,8 @@ function App() {
           columnOrder={data.columnOrder}
           onRenameColumn={handleRenameColumn}
           onDeleteColumn={handleDeleteColumn}
+          taskColors={taskColors}
+          onUpdateTaskColors={handleUpdateTaskColors}
           onClose={() => setShowSettings(false)}
         />
       )}

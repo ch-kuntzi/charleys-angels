@@ -1,10 +1,43 @@
 import React, { useState } from 'react';
-import { X, Plus, Trash2 } from 'lucide-react';
+import { X, Plus, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import './SettingsModal.css';
 
-const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrder = [], onRenameColumn, onDeleteColumn, onClose }) => {
+const TASK_COLORS = [
+    { value: '', label: 'None' },
+    { value: '#6366f1', label: 'Indigo' },
+    { value: '#8b5cf6', label: 'Purple' },
+    { value: '#ec4899', label: 'Pink' },
+    { value: '#ef4444', label: 'Red' },
+    { value: '#f97316', label: 'Orange' },
+    { value: '#eab308', label: 'Yellow' },
+    { value: '#22c55e', label: 'Green' },
+    { value: '#06b6d4', label: 'Cyan' },
+    { value: '#3b82f6', label: 'Blue' },
+    { value: '#64748b', label: 'Slate' },
+];
+
+const CollapsibleSection = ({ title, hint, defaultOpen = false, children }) => {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
+    return (
+        <div className="settings-section">
+            <div className="section-header" onClick={() => setIsOpen(!isOpen)}>
+                {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+                <h3>{title}</h3>
+            </div>
+            {isOpen && (
+                <div className="section-content">
+                    {hint && <p className="settings-hint">{hint}</p>}
+                    {children}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrder = [], onRenameColumn, onDeleteColumn, taskColors = {}, onUpdateTaskColors, onClose }) => {
     const [localCategories, setLocalCategories] = useState([...categories]);
     const [newCategory, setNewCategory] = useState('');
+    const [localTaskColors, setLocalTaskColors] = useState({ ...taskColors });
 
     const handleAddCategory = () => {
         const trimmed = newCategory.trim();
@@ -18,8 +51,13 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
         setLocalCategories(localCategories.filter(c => c !== cat));
     };
 
+    const handleColorChange = (category, color) => {
+        setLocalTaskColors(prev => ({ ...prev, [category]: color }));
+    };
+
     const handleSave = () => {
         onUpdateCategories(localCategories);
+        if (onUpdateTaskColors) onUpdateTaskColors(localTaskColors);
         onClose();
     };
 
@@ -33,10 +71,10 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
 
                 <div className="settings-body">
                     {/* COLUMNS SECTION */}
-                    <div className="settings-section">
-                        <h3>Columns</h3>
-                        <p className="settings-hint">Rename or remove board columns. Columns with tasks cannot be deleted.</p>
-
+                    <CollapsibleSection
+                        title={`Columns (${columnOrder.length})`}
+                        hint="Click a column name to rename. Columns with tasks cannot be deleted."
+                    >
                         <div className="category-list">
                             {columnOrder.map((colId) => {
                                 const col = columns[colId];
@@ -52,26 +90,43 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
                                 );
                             })}
                         </div>
-                    </div>
+                    </CollapsibleSection>
 
                     <hr className="settings-divider" />
 
                     {/* CATEGORIES SECTION */}
-                    <div className="settings-section">
-                        <h3>Categories</h3>
-                        <p className="settings-hint">Manage task categories used across the dashboard.</p>
-
+                    <CollapsibleSection
+                        title={`Categories (${localCategories.length})`}
+                        hint="Manage task categories. Assign colors to visually distinguish card types."
+                    >
                         <div className="category-list">
                             {localCategories.map((cat) => (
                                 <div key={cat} className="category-item">
-                                    <span>{cat}</span>
-                                    <button
-                                        className="remove-category-btn"
-                                        onClick={() => handleRemoveCategory(cat)}
-                                        title="Remove category"
-                                    >
-                                        <Trash2 size={14} />
-                                    </button>
+                                    <div className="category-item-left">
+                                        <div
+                                            className="color-swatch"
+                                            style={{ backgroundColor: localTaskColors[cat] || 'var(--border-default)' }}
+                                        />
+                                        <span>{cat}</span>
+                                    </div>
+                                    <div className="category-item-right">
+                                        <select
+                                            className="color-picker-select"
+                                            value={localTaskColors[cat] || ''}
+                                            onChange={(e) => handleColorChange(cat, e.target.value)}
+                                        >
+                                            {TASK_COLORS.map(c => (
+                                                <option key={c.value} value={c.value}>{c.label}</option>
+                                            ))}
+                                        </select>
+                                        <button
+                                            className="remove-category-btn"
+                                            onClick={() => handleRemoveCategory(cat)}
+                                            title="Remove category"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
                                 </div>
                             ))}
                         </div>
@@ -90,7 +145,7 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
                                 Add
                             </button>
                         </div>
-                    </div>
+                    </CollapsibleSection>
                 </div>
 
                 <div className="settings-footer">

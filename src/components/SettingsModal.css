@@ -32,15 +32,57 @@
     flex: 1;
 }
 
-.settings-section h3 {
-    margin: 0 0 4px 0;
+/* Collapsible Section */
+.settings-section {
+    margin-bottom: 4px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 4px;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+    user-select: none;
+}
+
+.section-header:hover {
+    background: var(--bg-elevated);
+}
+
+.section-header h3 {
+    margin: 0;
     font-size: 14px;
     font-weight: 600;
     color: var(--text-primary);
 }
 
+.section-header svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.section-content {
+    padding: 8px 0 8px 24px;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 .settings-hint {
-    margin: 0 0 16px 0;
+    margin: 0 0 12px 0;
     font-size: 12px;
     color: var(--text-muted);
 }
@@ -62,6 +104,44 @@
     border: 1px solid var(--border-subtle);
     font-size: 13px;
     color: var(--text-primary);
+}
+
+.category-item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.category-item-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Color Swatch */
+.color-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    flex-shrink: 0;
+}
+
+.color-picker-select {
+    background: var(--bg-base);
+    border: 1px solid var(--border-default);
+    border-radius: 4px;
+    color: var(--text-secondary);
+    font-size: 11px;
+    padding: 2px 6px;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: border-color 0.15s ease;
+}
+
+.color-picker-select:focus {
+    outline: none;
+    border-color: var(--accent-primary);
 }
 
 .remove-category-btn {
@@ -138,7 +218,7 @@
 .settings-divider {
     border: none;
     border-top: 1px solid var(--border-subtle);
-    margin: 8px 0;
+    margin: 4px 0;
 }
 
 .column-name-editable {
