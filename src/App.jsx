@@ -602,19 +602,21 @@ function App() {
 
   return (
     <div className={`app ${isTwoViewLayout ? 'two-view-layout' : ''}`}>
-      <Sidebar
-        agents={agents}
-        tasks={data.tasks}
-        columns={data.columns}
-        selectedAgent={selectedAgentFilter}
-        onAgentClick={handleAgentFilterClick}
-        collapsed={sidebarCollapsed}
-        onToggleCollapse={() => {
-          const next = !sidebarCollapsed;
-          setSidebarCollapsed(next);
-          localStorage.setItem('sidebarCollapsed', String(next));
-        }}
-      />
+      {!isMobile && (
+        <Sidebar
+          agents={agents}
+          tasks={data.tasks}
+          columns={data.columns}
+          selectedAgent={selectedAgentFilter}
+          onAgentClick={handleAgentFilterClick}
+          collapsed={sidebarCollapsed}
+          onToggleCollapse={() => {
+            const next = !sidebarCollapsed;
+            setSidebarCollapsed(next);
+            localStorage.setItem('sidebarCollapsed', String(next));
+          }}
+        />
+      )}
       <div className="main-content">
         <Header
           onAddTaskClick={() => { setModalInitialDate(''); setIsModalOpen(true); }}
