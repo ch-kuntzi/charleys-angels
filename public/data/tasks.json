@@ -615,9 +615,7 @@
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772431397227"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
@@ -633,7 +631,8 @@
           "task-1772397817953",
           "task-1772386173974",
           "task-1772401191550",
-          "task-1772418849016"
+          "task-1772418849016",
+          "task-1772431397227"
         ]
       }
     },
@@ -653,6 +652,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431505588,
+      "action": "moved",
+      "details": "\"spell cat\" → Deployed",
+      "timestamp": "3/2/2026, 12:05:05 AM"
+    },
     {
       "id": 1772431437563,
       "action": "moved",
