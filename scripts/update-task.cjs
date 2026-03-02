@@ -349,9 +349,13 @@ function dashboardCheck() {
 // CLI
 const [, , command, ...args] = process.argv;
 const flags = {};
-for (let i = 0; i < args.length; i += 2) {
+let currentFlag = null;
+for (let i = 0; i < args.length; i++) {
     if (args[i]?.startsWith('--')) {
-        flags[args[i].slice(2)] = args[i + 1];
+        currentFlag = args[i].slice(2);
+        flags[currentFlag] = '';
+    } else if (currentFlag) {
+        flags[currentFlag] = flags[currentFlag] ? flags[currentFlag] + ' ' + args[i] : args[i];
     }
 }
 
