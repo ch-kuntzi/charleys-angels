@@ -558,6 +558,13 @@
             "text": "🚀 Start this now",
             "author": "Chris",
             "timestamp": "2026-03-02T02:47:36.309Z"
+          },
+          {
+            "id": 1772419775825,
+            "author": "Charley",
+            "text": "Testing comment from CLI",
+            "message": "Testing comment from CLI",
+            "timestamp": "3/1/2026, 8:49:35 PM"
           }
         ],
         "reviewLink": "",
