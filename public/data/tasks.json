@@ -164,70 +164,6 @@
         "deliveryMethod": "notebook",
         "thinkingLevel": "standard"
       },
-      "task-1772418849016": {
-        "id": "task-1772418849016",
-        "title": "I want research on new cameras from Nikon in 2026.",
-        "description": "",
-        "agent": "Charley",
-        "priority": "High",
-        "dueDate": "",
-        "dueTime": "07:00",
-        "deliveryMethod": "notebook",
-        "thinkingLevel": "standard",
-        "tags": [
-          "Research",
-          "Urgent",
-          "Bug",
-          "Task"
-        ],
-        "attachments": [],
-        "timestamp": "Just now",
-        "comments": [
-          {
-            "text": "🚀 Start this now",
-            "author": "Chris",
-            "timestamp": "2026-03-02T02:47:36.309Z"
-          },
-          {
-            "id": 1772419775825,
-            "author": "Charley",
-            "text": "Testing comment from CLI",
-            "message": "Testing comment from CLI",
-            "timestamp": "3/1/2026, 8:49:35 PM"
-          },
-          {
-            "id": 1772419820593,
-            "author": "Charley",
-            "text": "This is a multi word test without quotes",
-            "message": "This is a multi word test without quotes",
-            "timestamp": "3/1/2026, 8:50:20 PM"
-          },
-          {
-            "id": 1772419903556,
-            "author": "Charley",
-            "text": "Understood, Chris! Trying to add a comment to this card again to test the connection. Hoping for a successful push this time!",
-            "message": "Understood, Chris! Trying to add a comment to this card again to test the connection. Hoping for a successful push this time!",
-            "timestamp": "3/1/2026, 8:51:43 PM"
-          },
-          {
-            "id": 1772426331485,
-            "author": "Charley",
-            "text": "Chris, understood! I'm confirming that research on new Nikon cameras for 2026 is now actively In Progress. I'll provide updates here as I gather information.",
-            "message": "Chris, understood! I'm confirming that research on new Nikon cameras for 2026 is now actively In Progress. I'll provide updates here as I gather information.",
-            "timestamp": "3/1/2026, 10:38:51 PM"
-          },
-          {
-            "id": 1772461605730,
-            "author": "Charley",
-            "text": "Chris, I've resumed research on new Nikon cameras for 2026. I'll provide updates here as I gather information.",
-            "message": "Chris, I've resumed research on new Nikon cameras for 2026. I'll provide updates here as I gather information.",
-            "timestamp": "3/2/2026, 8:26:45 AM"
-          }
-        ],
-        "reviewLink": "",
-        "archived": false,
-        "completedAt": null
-      },
       "task-1772477140134": {
         "id": "task-1772477140134",
         "title": "Ensure reliable weather requests",
@@ -262,9 +198,7 @@
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772418849016"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
