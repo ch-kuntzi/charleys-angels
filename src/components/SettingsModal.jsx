@@ -95,6 +95,12 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
         onClose();
     };
 
+    const handleResetDefaults = () => {
+        const defaultCats = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
+        setLocalCategories(defaultCats);
+        setLocalTaskColors({ ...DEFAULT_CATEGORY_COLORS });
+    };
+
     return (
         <div className="modal-backdrop" onClick={onClose}>
             <div className="settings-modal" onClick={(e) => e.stopPropagation()}>
@@ -183,8 +189,11 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
                 </div>
 
                 <div className="settings-footer">
-                    <button onClick={onClose} className="btn-secondary">Cancel</button>
-                    <button onClick={handleSave} className="btn-primary">Save Settings</button>
+                    <button onClick={handleResetDefaults} className="btn-reset">Reset to Defaults</button>
+                    <div className="footer-actions">
+                        <button onClick={onClose} className="btn-secondary">Cancel</button>
+                        <button onClick={handleSave} className="btn-primary">Save Settings</button>
+                    </div>
                 </div>
             </div>
         </div>

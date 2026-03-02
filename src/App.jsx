@@ -274,7 +274,7 @@ function App() {
 
     addActivity('moved', `"${task.title}" moved from ${start.title} to ${finish.title}`);
     if (finish.id === 'column-4') {
-      showToast(`Task completed! 🎉`, 'success');
+      showToast(`Task completed!`, 'success');
     }
     handleSetData(newState);
   };
@@ -380,7 +380,7 @@ function App() {
   const handleStartNow = (taskId) => {
     const task = data.tasks[taskId];
     const startComment = {
-      text: '🚀 Start this now',
+      text: 'Start this now',
       author: 'Chris',
       timestamp: new Date().toISOString(),
     };
