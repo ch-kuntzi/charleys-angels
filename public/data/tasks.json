@@ -610,14 +610,14 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772431397227"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": []
+        "taskIds": [
+          "task-1772431397227"
+        ]
       },
       "column-4": {
         "id": "column-4",
@@ -653,6 +653,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431437563,
+      "action": "moved",
+      "details": "\"spell cat\" → Review",
+      "timestamp": "3/2/2026, 12:03:57 AM"
+    },
     {
       "id": 1772431434913,
       "action": "moved",
