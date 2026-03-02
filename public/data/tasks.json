@@ -587,7 +587,15 @@
         "tags": [],
         "attachments": [],
         "timestamp": "Just now",
-        "comments": [],
+        "comments": [
+          {
+            "id": 1772431436247,
+            "author": "Charley",
+            "text": "C. A. T.",
+            "message": "C. A. T.",
+            "timestamp": "3/2/2026, 12:03:56 AM"
+          }
+        ],
         "reviewLink": "",
         "archived": false,
         "completedAt": null
@@ -597,14 +605,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772431397227"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772431397227"
+        ]
       },
       "column-3": {
         "id": "column-3",
@@ -645,6 +653,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431434913,
+      "action": "moved",
+      "details": "\"spell cat\" → In Progress",
+      "timestamp": "3/2/2026, 12:03:54 AM"
+    },
     {
       "id": 1772431400202,
       "action": "moved",
