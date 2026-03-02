@@ -10,20 +10,42 @@ const DEFAULT_CATEGORY_COLORS = {
     'Urgent': '#F59E0B',
 };
 
-const AVAILABLE_COLORS = [
-    { value: '#EF4444', label: 'Red' },
-    { value: '#F97316', label: 'Orange' },
-    { value: '#F59E0B', label: 'Amber' },
-    { value: '#22C55E', label: 'Green' },
-    { value: '#10B981', label: 'Emerald' },
-    { value: '#06B6D4', label: 'Cyan' },
-    { value: '#3B82F6', label: 'Blue' },
-    { value: '#6366F1', label: 'Indigo' },
-    { value: '#8B5CF6', label: 'Violet' },
-    { value: '#A78BFA', label: 'Purple' },
-    { value: '#EC4899', label: 'Pink' },
-    { value: '#64748B', label: 'Slate' },
-];
+// Convert hue (0-360) to hex color at 65% sat, 55% lightness
+const hueToHex = (hue) => {
+    const h = hue / 360;
+    const s = 0.65;
+    const l = 0.55;
+    const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const r = Math.round(hue2rgb(p, q, h + 1 / 3) * 255);
+    const g = Math.round(hue2rgb(p, q, h) * 255);
+    const b = Math.round(hue2rgb(p, q, h - 1 / 3) * 255);
+    return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+};
+
+// Estimate hue from a hex color
+const hexToHue = (hex) => {
+    if (!hex) return 0;
+    const r = parseInt(hex.slice(1, 3), 16) / 255;
+    const g = parseInt(hex.slice(3, 5), 16) / 255;
+    const b = parseInt(hex.slice(5, 7), 16) / 255;
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    if (max === min) return 0;
+    let h;
+    const d = max - min;
+    if (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+    else if (max === g) h = ((b - r) / d + 2) / 6;
+    else h = ((r - g) / d + 4) / 6;
+    return Math.round(h * 360);
+};
 
 const getColor = (cat, customColors) => customColors[cat] || DEFAULT_CATEGORY_COLORS[cat] || '#8B949E';
 
@@ -62,8 +84,9 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
         setLocalCategories(localCategories.filter(c => c !== cat));
     };
 
-    const handleColorChange = (category, color) => {
-        setLocalTaskColors(prev => ({ ...prev, [category]: color }));
+    const handleHueChange = (category, hue) => {
+        const hex = hueToHex(parseInt(hue));
+        setLocalTaskColors(prev => ({ ...prev, [category]: hex }));
     };
 
     const handleSave = () => {
@@ -108,26 +131,16 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
                     {/* CATEGORIES SECTION */}
                     <CollapsibleSection
                         title={`Categories (${localCategories.length})`}
-                        hint="Manage categories and their colors. Colors are reflected on task card tags."
+                        hint="Manage categories and their colors. Colors sync with task card tags."
                     >
                         <div className="category-list">
                             {localCategories.map((cat) => {
                                 const color = getColor(cat, localTaskColors);
+                                const hue = hexToHue(color);
                                 return (
-                                    <div key={cat} className="category-item">
-                                        <span className="category-name" style={{ color }}>{cat}</span>
-                                        <div className="category-item-right">
-                                            <div className="color-picker-row">
-                                                {AVAILABLE_COLORS.map(c => (
-                                                    <button
-                                                        key={c.value}
-                                                        className={`color-dot ${color === c.value ? 'active' : ''}`}
-                                                        style={{ backgroundColor: c.value }}
-                                                        onClick={() => handleColorChange(cat, c.value)}
-                                                        title={c.label}
-                                                    />
-                                                ))}
-                                            </div>
+                                    <div key={cat} className="category-item category-color-item">
+                                        <div className="category-row-top">
+                                            <span className="category-name" style={{ color }}>{cat}</span>
                                             <button
                                                 className="remove-category-btn"
                                                 onClick={() => handleRemoveCategory(cat)}
@@ -135,6 +148,17 @@ const SettingsModal = ({ categories, onUpdateCategories, columns = {}, columnOrd
                                             >
                                                 <Trash2 size={14} />
                                             </button>
+                                        </div>
+                                        <div className="color-slider-row">
+                                            <input
+                                                type="range"
+                                                min="0"
+                                                max="360"
+                                                value={hue}
+                                                onChange={(e) => handleHueChange(cat, e.target.value)}
+                                                className="hue-slider"
+                                                style={{ '--thumb-color': color }}
+                                            />
                                         </div>
                                     </div>
                                 );

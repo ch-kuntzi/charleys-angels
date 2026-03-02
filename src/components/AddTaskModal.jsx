@@ -55,7 +55,7 @@ const ModalSelect = ({ value, onChange, options, placeholder }) => {
   );
 };
 
-const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories = [] }) => {
+const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories = [], taskColors = {} }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [agent, setAgent] = useState(agents[0].name);
@@ -140,14 +140,14 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
   };
 
   const getCategoryColor = (category) => {
-    const colorMap = {
+    const defaults = {
       'Bug': '#EF4444',
       'Feature': '#10B981',
       'Research': '#A78BFA',
       'Admin': '#A78BFA',
       'Urgent': '#F59E0B',
     };
-    return colorMap[category] || '#8B949E';
+    return (taskColors && taskColors[category]) || defaults[category] || '#8B949E';
   };
 
   const agentOptions = agents.map(({ name }) => ({ value: name, label: name }));

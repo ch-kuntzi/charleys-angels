@@ -682,6 +682,7 @@ function App() {
           onClose={() => setIsModalOpen(false)}
           initialDate={modalInitialDate}
           categories={categories}
+          taskColors={taskColors}
         />
       )}
       {selectedTask && (
@@ -695,6 +696,7 @@ function App() {
           onStartNow={handleStartNow}
           columnTitle={Object.values(data.columns).find(col => col.taskIds.includes(selectedTask.id))?.title}
           categories={categories}
+          taskColors={taskColors}
         />
       )}
       {deleteConfirmModal && (

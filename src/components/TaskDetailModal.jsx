@@ -76,7 +76,7 @@ const ModalSelect = ({ value, onChange, options, placeholder }) => {
   );
 };
 
-const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, columnTitle, onStartNow, categories = [] }) => {
+const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, columnTitle, onStartNow, categories = [], taskColors = {} }) => {
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const [agent, setAgent] = useState(task.agent);
@@ -198,14 +198,14 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
   };
 
   const getCategoryPillStyle = (category) => {
-    const colorMap = {
-      'Bug': 'var(--status-error)',
-      'Feature': 'var(--status-success)',
-      'Research': 'var(--accent-secondary)',
-      'Admin': 'var(--accent-secondary)',
-      'Urgent': 'var(--status-warning)',
+    const defaults = {
+      'Bug': '#EF4444',
+      'Feature': '#10B981',
+      'Research': '#A78BFA',
+      'Admin': '#A78BFA',
+      'Urgent': '#F59E0B',
     };
-    const color = colorMap[category] || 'var(--text-secondary)';
+    const color = (taskColors && taskColors[category]) || defaults[category] || '#8B949E';
     const isActive = tags.includes(category);
     return {
       backgroundColor: isActive ? `${color}26` : 'var(--bg-elevated)',
