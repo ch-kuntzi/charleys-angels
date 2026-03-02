@@ -60,7 +60,8 @@ const AddTaskModal = ({ agents, onAddTask, onClose, initialDate = '', categories
   const [description, setDescription] = useState('');
   const [agent, setAgent] = useState(agents[0].name);
   const [priority, setPriority] = useState('Medium');
-  const [dueDate, setDueDate] = useState(initialDate);
+  const todayStr = new Date().toISOString().split('T')[0];
+  const [dueDate, setDueDate] = useState(initialDate || todayStr);
   const [dueTime, setDueTime] = useState('07:00');
   const [deliveryMethod, setDeliveryMethod] = useState('reply');
   const [thinkingLevel, setThinkingLevel] = useState('standard');

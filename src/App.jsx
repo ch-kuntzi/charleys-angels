@@ -128,6 +128,22 @@ function App() {
                     merged.tasks[id] = localTask;
                   }
                 }
+                // Merge column taskIds — preserve locally-added task IDs not yet in JSON
+                if (prev.columns && merged.columns) {
+                  for (const [colId, localCol] of Object.entries(prev.columns)) {
+                    if (merged.columns[colId]) {
+                      const jsonIds = merged.columns[colId].taskIds || [];
+                      const localIds = localCol.taskIds || [];
+                      const localOnly = localIds.filter(id => !jsonIds.includes(id) && merged.tasks[id]);
+                      if (localOnly.length > 0) {
+                        merged.columns[colId] = {
+                          ...merged.columns[colId],
+                          taskIds: [...localOnly, ...jsonIds],
+                        };
+                      }
+                    }
+                  }
+                }
               }
               localStorage.setItem('taskDashboardData', JSON.stringify(merged));
               return merged;

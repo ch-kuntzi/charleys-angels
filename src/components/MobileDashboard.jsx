@@ -216,8 +216,8 @@ const MobileActivityPanel = ({ activities, onClose }) => {
           {activities && activities.length > 0 ? (
             activities.slice().reverse().map((a, i) => (
               <div key={i} className="m-activity-item">
-                <div className="m-activity-text">{a.description}</div>
-                <div className="m-activity-time">{formatTimestamp(a.timestamp)}</div>
+                <div className="m-activity-text">{a.details || a.description || a.action}</div>
+                <div className="m-activity-time">{a.timestamp}</div>
               </div>
             ))
           ) : (
