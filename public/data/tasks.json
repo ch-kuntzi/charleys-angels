@@ -613,7 +613,7 @@
       },
       "task-1772430718855": {
         "id": "task-1772430718855",
-        "title": "translate super in 3 languages",
+        "title": "translate super in 5 languages",
         "description": "",
         "agent": "Charley",
         "priority": "High",
@@ -636,12 +636,17 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772430718855"
+        ]
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772429150151",
+          "task-1772430718855"
+        ]
       },
       "column-3": {
         "id": "column-3",
