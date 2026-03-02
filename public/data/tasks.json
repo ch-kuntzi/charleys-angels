@@ -650,7 +650,8 @@
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772429150151"
+          "task-1772429150151",
+          "task-1772389885955"
         ]
       },
       "column-3": {
@@ -694,6 +695,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431232321,
+      "action": "moved",
+      "details": "\"provide 2  basic colors\" → In Progress",
+      "timestamp": "3/2/2026, 12:00:32 AM"
+    },
     {
       "id": 1772431229681,
       "action": "moved",
