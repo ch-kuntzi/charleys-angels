@@ -234,8 +234,33 @@ function updateTask(taskId, fields) {
         changes.push(`category="${fields.category}"`);
     }
 
+    // Handle --status flag by moving to matching column
+    if (fields.status) {
+        const targetCol = Object.values(data.boardData.columns).find(c =>
+            c.title.toLowerCase() === fields.status.toLowerCase()
+        );
+        if (targetCol) {
+            // Remove from all columns first
+            for (const col of Object.values(data.boardData.columns)) {
+                col.taskIds = col.taskIds.filter(id => id !== taskId);
+            }
+            targetCol.taskIds.push(taskId);
+            changes.push(`status="${targetCol.title}"`);
+
+            data.activity = data.activity || [];
+            data.activity.unshift({
+                id: Date.now(),
+                action: 'moved',
+                details: `"${task.title}" → ${targetCol.title}`,
+                timestamp: new Date().toLocaleString(),
+            });
+        } else {
+            console.warn(`⚠️  Column "${fields.status}" not found — status not changed`);
+        }
+    }
+
     if (changes.length === 0) {
-        console.log('No fields to update. Use --description, --title, --priority, --agent, --dueDate, --category');
+        console.log('No fields to update. Use --description, --title, --priority, --agent, --dueDate, --category, --status, --reviewLink');
         return;
     }
 
