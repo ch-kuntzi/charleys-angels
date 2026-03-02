@@ -220,26 +220,6 @@
         "reviewLink": "https://notebooklm.google.com/notebooks/fec1a999-3436-4bd5-9b35-76a1af0db0fe",
         "archived": false,
         "completedAt": null
-      },
-      "task-1772432788286-0mna": {
-        "id": "task-1772432788286-0mna",
-        "title": "what does the name charley mean? (copy)",
-        "description": "",
-        "agent": "Charley",
-        "priority": "High",
-        "dueDate": "",
-        "dueTime": "07:00",
-        "deliveryMethod": "notebook",
-        "thinkingLevel": "quick",
-        "tags": [
-          "Urgent"
-        ],
-        "attachments": [],
-        "timestamp": "3/2/2026, 12:26:28 AM",
-        "comments": [],
-        "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48",
-        "archived": false,
-        "completedAt": null
       }
     },
     "columns": {
@@ -256,9 +236,7 @@
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772432788286-0mna"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
