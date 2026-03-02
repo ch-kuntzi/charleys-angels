@@ -379,71 +379,61 @@ function App() {
     setDeleteConfirmModal(null);
   };
 
-  const handleArchiveTask = (taskId) => {
-    const task = data.tasks[taskId];
-    const isArchiving = !task.archived;
-
-    const newData = {
-      ...data,
-      tasks: {
-        ...data.tasks,
-        [taskId]: {
-          ...task,
-          archived: isArchiving,
-        },
-      },
-    };
-
-    handleSetData(newData);
-    addActivity(isArchiving ? 'archived' : 'unarchived', `"${task.title}" ${isArchiving ? 'archived' : 'unarchived'}`);
-    showToast(`Task ${isArchiving ? 'archived' : 'unarchived'}!`, 'success');
+  const handleArchiveTask = (taskIdOrIds) => {
+    const ids = Array.isArray(taskIdOrIds) ? taskIdOrIds : [taskIdOrIds];
+    const newTasks = { ...data.tasks };
+    let count = 0;
+    ids.forEach(id => {
+      const task = newTasks[id];
+      if (task) {
+        newTasks[id] = { ...task, archived: !task.archived };
+        count++;
+      }
+    });
+    handleSetData({ ...data, tasks: newTasks });
+    addActivity('archived', `${count} task(s) archived`);
+    showToast(`${count} task(s) archived!`, 'success');
     setSelectedTask(null);
   };
 
-  const handleBatchDeleteTask = (taskId) => {
-    const task = data.tasks[taskId];
-    if (!task) return;
+  const handleBatchDeleteTask = (taskIds) => {
+    const ids = Array.isArray(taskIds) ? taskIds : [taskIds];
     const newTasks = { ...data.tasks };
-    delete newTasks[taskId];
+    const names = [];
+    ids.forEach(id => {
+      if (newTasks[id]) { names.push(newTasks[id].title); delete newTasks[id]; }
+    });
     const newCols = {};
+    const idSet = new Set(ids);
     Object.keys(data.columns).forEach(colId => {
       newCols[colId] = {
         ...data.columns[colId],
-        taskIds: data.columns[colId].taskIds.filter(id => id !== taskId),
+        taskIds: data.columns[colId].taskIds.filter(id => !idSet.has(id)),
       };
     });
-    const newData = { ...data, tasks: newTasks, columns: newCols };
-    handleSetData(newData);
-    addActivity('deleted', `"${task.title}" deleted`);
+    handleSetData({ ...data, tasks: newTasks, columns: newCols });
+    addActivity('deleted', `${names.length} task(s) deleted`);
+    showToast(`${names.length} task(s) deleted`, 'success');
   };
 
-  const handleCopyTask = (taskId) => {
-    const task = data.tasks[taskId];
-    if (!task) return;
-    const newId = `task-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-    const copiedTask = {
-      ...task,
-      id: newId,
-      title: `${task.title} (copy)`,
-      timestamp: new Date().toLocaleString(),
-      comments: [],
-      archived: false,
-      completedAt: null,
-    };
-    const newData = {
-      ...data,
-      tasks: { ...data.tasks, [newId]: copiedTask },
-      columns: {
-        ...data.columns,
-        'column-1': {
-          ...data.columns['column-1'],
-          taskIds: [newId, ...data.columns['column-1'].taskIds],
-        },
-      },
-    };
+  const handleCopyTask = (taskIds) => {
+    const ids = Array.isArray(taskIds) ? taskIds : [taskIds];
+    let newData = { ...data, tasks: { ...data.tasks }, columns: { ...data.columns } };
+    const queueIds = [...newData.columns['column-1'].taskIds];
+    ids.forEach(id => {
+      const task = newData.tasks[id];
+      if (!task) return;
+      const newId = `task-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+      newData.tasks[newId] = {
+        ...task, id: newId, title: `${task.title} (copy)`,
+        timestamp: new Date().toLocaleString(), comments: [], archived: false, completedAt: null,
+      };
+      queueIds.unshift(newId);
+    });
+    newData.columns['column-1'] = { ...newData.columns['column-1'], taskIds: queueIds };
     handleSetData(newData);
-    addActivity('created', `"${copiedTask.title}" copied to Queue`);
-    showToast('Task copied to Queue!', 'success');
+    addActivity('created', `${ids.length} task(s) copied to Queue`);
+    showToast(`${ids.length} task(s) copied to Queue!`, 'success');
   };
 
   const handleStartNow = (taskId) => {

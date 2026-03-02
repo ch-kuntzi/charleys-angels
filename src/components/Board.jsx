@@ -43,27 +43,34 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
   };
 
   const handleBatchArchive = () => {
-    if (onArchiveTask) {
-      selectedIds.forEach(id => onArchiveTask(id));
-    }
+    if (onArchiveTask) onArchiveTask(Array.from(selectedIds));
     setSelectedIds(new Set());
     setSelectMode(false);
   };
 
   const handleBatchDelete = () => {
-    if (onDeleteTask) {
-      selectedIds.forEach(id => onDeleteTask(id));
-    }
+    if (onDeleteTask) onDeleteTask(Array.from(selectedIds));
     setSelectedIds(new Set());
     setSelectMode(false);
   };
 
   const handleBatchCopy = () => {
-    if (onCopyTask) {
-      selectedIds.forEach(id => onCopyTask(id));
-    }
+    if (onCopyTask) onCopyTask(Array.from(selectedIds));
     setSelectedIds(new Set());
     setSelectMode(false);
+  };
+
+  const handleSelectAll = () => {
+    const allTaskIds = new Set();
+    data.columnOrder.forEach(colId => {
+      const col = data.columns[colId];
+      col.taskIds.forEach(id => { if (data.tasks[id]) allTaskIds.add(id); });
+    });
+    if (selectedIds.size === allTaskIds.size) {
+      setSelectedIds(new Set());
+    } else {
+      setSelectedIds(allTaskIds);
+    }
   };
 
   const getShiftDirection = (columnId) => {
@@ -197,23 +204,28 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
       </div>
 
       {/* Floating action bar for batch operations */}
-      {selectMode && selectedIds.size > 0 && (
+      {selectMode && (
         <div className="batch-action-bar">
           <span className="batch-count">{selectedIds.size} selected</span>
-          <div className="batch-actions">
-            <button className="batch-btn batch-copy" onClick={handleBatchCopy} title="Copy to Queue">
-              <Copy size={14} />
-              <span>Copy</span>
-            </button>
-            <button className="batch-btn batch-archive" onClick={handleBatchArchive} title="Archive selected">
-              <Archive size={14} />
-              <span>Archive</span>
-            </button>
-            <button className="batch-btn batch-delete" onClick={handleBatchDelete} title="Delete selected">
-              <Trash2 size={14} />
-              <span>Delete</span>
-            </button>
-          </div>
+          <button className="batch-btn" onClick={handleSelectAll}>
+            {selectedIds.size > 0 ? 'Deselect All' : 'Select All'}
+          </button>
+          {selectedIds.size > 0 && (
+            <div className="batch-actions">
+              <button className="batch-btn" onClick={handleBatchCopy} title="Copy to Queue">
+                <Copy size={14} />
+                <span>Copy</span>
+              </button>
+              <button className="batch-btn" onClick={handleBatchArchive} title="Archive selected">
+                <Archive size={14} />
+                <span>Archive</span>
+              </button>
+              <button className="batch-btn" onClick={handleBatchDelete} title="Delete selected">
+                <Trash2 size={14} />
+                <span>Delete</span>
+              </button>
+            </div>
+          )}
           <button className="batch-cancel" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); }}>
             Cancel
           </button>
