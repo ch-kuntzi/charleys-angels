@@ -572,6 +572,13 @@
             "text": "This is a multi word test without quotes",
             "message": "This is a multi word test without quotes",
             "timestamp": "3/1/2026, 8:50:20 PM"
+          },
+          {
+            "id": 1772419903556,
+            "author": "Charley",
+            "text": "Understood, Chris! Trying to add a comment to this card again to test the connection. Hoping for a successful push this time!",
+            "message": "Understood, Chris! Trying to add a comment to this card again to test the connection. Hoping for a successful push this time!",
+            "timestamp": "3/1/2026, 8:51:43 PM"
           }
         ],
         "reviewLink": "",
