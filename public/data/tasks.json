@@ -573,13 +573,33 @@
         "reviewLink": "https://notebooklm.google.com/notebooks/fec1a999-3436-4bd5-9b35-76a1af0db0fe",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772431397227": {
+        "id": "task-1772431397227",
+        "title": "spell cat",
+        "description": "",
+        "agent": "Charley",
+        "priority": "Medium",
+        "dueDate": "2026-03-02",
+        "dueTime": "07:00",
+        "deliveryMethod": "reply",
+        "thinkingLevel": "standard",
+        "tags": [],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772431397227"
+        ]
       },
       "column-2": {
         "id": "column-2",
@@ -625,6 +645,24 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431400202,
+      "action": "moved",
+      "details": "\"spell cat\" moved from In Queue to In Progress",
+      "timestamp": "3/2/2026, 12:03:20 AM"
+    },
+    {
+      "id": 1772431397228,
+      "action": "created",
+      "details": "Task \"spell cat\" created by Charley",
+      "timestamp": "3/2/2026, 12:03:17 AM"
+    },
+    {
+      "id": 1772431389839,
+      "action": "deleted",
+      "details": "\"Create Infographic: Nikon Cameras 2026\" deleted",
+      "timestamp": "3/2/2026, 12:03:09 AM"
+    },
     {
       "id": 1772431384722,
       "action": "deleted",
@@ -906,24 +944,6 @@
       "action": "moved",
       "details": "\"spell DOG\" → In Progress",
       "timestamp": "3/1/2026, 12:03:21 PM"
-    },
-    {
-      "id": 1772387697025,
-      "action": "updated",
-      "details": "\"spell CAT\" updated",
-      "timestamp": "3/1/2026, 11:54:57 AM"
-    },
-    {
-      "id": 1772387538948,
-      "action": "created",
-      "details": "Task \"give me 4 random words\" created by Charley",
-      "timestamp": "3/1/2026, 11:52:18 AM"
-    },
-    {
-      "id": 1772386175442,
-      "action": "moved",
-      "details": "\"Research and present hotel options for Georgia trip\" → In Progress",
-      "timestamp": "3/1/2026, 11:29:35 AM"
     }
   ]
 }
