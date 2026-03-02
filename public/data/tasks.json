@@ -590,14 +590,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772418849016"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772418849016"
+        ]
       },
       "column-3": {
         "id": "column-3",
@@ -637,6 +637,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772420057317,
+      "action": "moved",
+      "details": "\"I want research on new cameras from Nikon in 2026.\" → In Progress",
+      "timestamp": "3/1/2026, 8:54:17 PM"
+    },
     {
       "id": 1772418898233,
       "action": "created",
