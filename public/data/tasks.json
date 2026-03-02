@@ -610,13 +610,35 @@
         "attachments": [],
         "reviewLink": "",
         "archived": false
+      },
+      "task-1772430718855": {
+        "id": "task-1772430718855",
+        "title": "translate super in 3 languages",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "2026-03-02",
+        "dueTime": "07:00",
+        "deliveryMethod": "comment",
+        "thinkingLevel": "quick",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "Just now",
+        "comments": [],
+        "reviewLink": "",
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772430718855"
+        ]
       },
       "column-2": {
         "id": "column-2",
