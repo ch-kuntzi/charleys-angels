@@ -1,0 +1,81 @@
+.mobile-dashboard {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 24px;
+}
+
+.mobile-column {
+  background-color: var(--bg-surface);
+  border-radius: 8px;
+  padding: 16px;
+  border: 1px solid var(--border-subtle);
+}
+
+.mobile-column-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-top: 0;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.mobile-task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Micro-animations for Task Cards */
+.task-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.task-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Loading Skeleton */
+.skeleton-card {
+  background-color: var(--bg-elevated);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-line {
+  background-color: var(--border-default);
+  height: 12px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.7;
+  }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .mobile-dashboard {
+    padding: 8px;
+  }
+  .mobile-column {
+    padding: 12px;
+  }
+}

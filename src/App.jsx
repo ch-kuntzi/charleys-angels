@@ -12,6 +12,7 @@ import Toast from './components/Toast';
 import DeleteConfirmModal from './components/DeleteConfirmModal';
 import StatisticsModal from './components/StatisticsModal';
 import SettingsModal from './components/SettingsModal';
+import MobileDashboard from './components/MobileDashboard';
 
 const DEFAULT_CATEGORIES = ['Bug', 'Feature', 'Research', 'Admin', 'Urgent'];
 
@@ -28,26 +29,10 @@ const initialData = {
     'task-4': { id: 'task-4', title: 'Write the documentation', description: 'Write the documentation for the new API', agent: 'Scout', priority: 'Low', timestamp: '2 days ago', tags: ['Admin'], dueDate: '', dueTime: '07:00', startDate: '', comments: [], attachments: [], reviewLink: '', archived: false, completedAt: '2026-02-27T10:00:00.000Z' },
   },
   columns: {
-    'column-1': {
-      id: 'column-1',
-      title: 'In Queue',
-      taskIds: ['task-1', 'task-2'],
-    },
-    'column-2': {
-      id: 'column-2',
-      title: 'In Progress',
-      taskIds: ['task-3'],
-    },
-    'column-3': {
-      id: 'column-3',
-      title: 'Review',
-      taskIds: [],
-    },
-    'column-4': {
-      id: 'column-4',
-      title: 'Deployed',
-      taskIds: ['task-4'],
-    },
+    'column-1': { id: 'column-1', title: 'In Queue', taskIds: ['task-1', 'task-2'] },
+    'column-2': { id: 'column-2', title: 'In Progress', taskIds: ['task-3'] },
+    'column-3': { id: 'column-3', title: 'Review', taskIds: [] },
+    'column-4': { id: 'column-4', title: 'Deployed', taskIds: ['task-4'] },
   },
   columnOrder: ['column-1', 'column-2', 'column-3', 'column-4'],
 };
@@ -95,6 +80,17 @@ function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     return localStorage.getItem('sidebarCollapsed') === 'true';
   });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   // Load data from JSON file (source of truth from git) and merge with local
   useEffect(() => {
@@ -629,28 +625,38 @@ function App() {
           categories={categories}
         />
         <div className="view-container">
-          {showBoard && (
-            <div className="view-panel board-panel">
-              <Board
-                data={filteredData}
-                onDragEnd={onDragEnd}
-                onTaskClick={handleOpenTaskModal}
-                onRenameColumn={handleRenameColumn}
-                onAddColumn={handleAddColumn}
-                onReorderColumns={handleReorderColumns}
-                onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
-              />
-            </div>
-          )}
-          {showCalendar && (
-            <div className="view-panel calendar-panel">
-              <CalendarView
-                tasks={filteredTasks}
-                onTaskClick={handleOpenTaskModal}
-                onAddTaskWithDate={handleAddTaskWithDate}
-                onUpdateTaskDate={handleUpdateTaskDate}
-              />
-            </div>
+          {isMobile ? (
+            <MobileDashboard
+              columns={filteredData.columns}
+              tasks={filteredData.tasks}
+              onTaskClick={handleOpenTaskModal}
+            />
+          ) : (
+            <>
+              {showBoard && (
+                <div className="view-panel board-panel">
+                  <Board
+                    data={filteredData}
+                    onDragEnd={onDragEnd}
+                    onTaskClick={handleOpenTaskModal}
+                    onRenameColumn={handleRenameColumn}
+                    onAddColumn={handleAddColumn}
+                    onReorderColumns={handleReorderColumns}
+                    onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
+                  />
+                </div>
+              )}
+              {showCalendar && (
+                <div className="view-panel calendar-panel">
+                  <CalendarView
+                    tasks={filteredTasks}
+                    onTaskClick={handleOpenTaskModal}
+                    onAddTaskWithDate={handleAddTaskWithDate}
+                    onUpdateTaskDate={handleUpdateTaskDate}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
         {showActivity && (
