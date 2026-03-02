@@ -124,8 +124,18 @@ const TaskDetailModal = ({ task, agents, onClose, onSave, onDelete, onArchive, c
       author: 'Chris',
       timestamp: new Date().toISOString(),
     };
+    // Include all local state so unsaved field edits aren't lost on send
     onSave({
       ...task,
+      title,
+      description,
+      agent,
+      priority,
+      dueDate,
+      dueTime,
+      deliveryMethod,
+      thinkingLevel,
+      tags,
       comments: [...(task.comments || []), newComment],
     });
     setNewMessage('');
