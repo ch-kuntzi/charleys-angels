@@ -599,13 +599,35 @@
         "reviewLink": "",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772432413232-9jy1": {
+        "id": "task-1772432413232-9jy1",
+        "title": "spell DOG (copy)",
+        "description": "",
+        "agent": "Charley",
+        "priority": "High",
+        "dueDate": "",
+        "dueTime": "07:00",
+        "tags": [
+          "Urgent"
+        ],
+        "attachments": [],
+        "timestamp": "3/2/2026, 12:20:13 AM",
+        "comments": [],
+        "reviewLink": "https://notebooklm.google.com/notebook/857e95fd-4f8c-4a0a-a48d-83867f22ff48",
+        "archived": false,
+        "completedAt": null,
+        "deliveryMethod": "notebook",
+        "thinkingLevel": "quick"
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772432413232-9jy1"
+        ]
       },
       "column-2": {
         "id": "column-2",
