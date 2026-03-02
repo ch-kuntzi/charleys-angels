@@ -643,9 +643,7 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772429150151"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
@@ -666,7 +664,8 @@
           "task-1772397817953",
           "task-1772386173974",
           "task-1772401191550",
-          "task-1772418849016"
+          "task-1772418849016",
+          "task-1772429150151"
         ]
       }
     },
@@ -686,6 +685,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772430735458,
+      "action": "moved",
+      "details": "\"Create Infographic: Nikon Cameras 2026\" → Deployed",
+      "timestamp": "3/1/2026, 11:52:15 PM"
+    },
     {
       "id": 1772429152294,
       "action": "moved",
