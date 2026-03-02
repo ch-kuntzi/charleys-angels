@@ -617,13 +617,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772389885955"
+        ]
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772389885955",
           "task-1772389885955",
           "task-1772429150151"
         ]
