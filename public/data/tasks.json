@@ -546,14 +546,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772432413232-9jy1"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772432413232-9jy1"
+        ]
       },
       "column-3": {
         "id": "column-3",
@@ -593,6 +593,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772432694412,
+      "action": "moved",
+      "details": "\"spell DOG (copy)\" → In Progress",
+      "timestamp": "3/2/2026, 12:24:54 AM"
+    },
     {
       "id": 1772432502238,
       "action": "deleted",
