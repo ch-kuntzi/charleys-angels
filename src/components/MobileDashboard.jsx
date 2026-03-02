@@ -2,7 +2,7 @@ import React from 'react';
 import './MobileDashboard.css';
 import TaskCard from './TaskCard';
 
-const MobileDashboard = ({ columns, tasks, onTaskClick }) => {
+const MobileDashboard = ({ columns, tasks, onTaskClick, categoryColors = {} }) => {
   return (
     <div className="mobile-dashboard">
       {Object.values(columns).map(column => (
@@ -15,7 +15,10 @@ const MobileDashboard = ({ columns, tasks, onTaskClick }) => {
                 <TaskCard
                   key={task.id}
                   task={task}
+                  index={0}
                   onClick={() => onTaskClick(task)}
+                  columnTitle={column.title}
+                  categoryColors={categoryColors}
                 />
               );
             })}

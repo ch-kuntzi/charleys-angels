@@ -639,6 +639,7 @@ function App() {
               columns={filteredData.columns}
               tasks={filteredData.tasks}
               onTaskClick={handleOpenTaskModal}
+              categoryColors={taskColors}
             />
           ) : (
             <>
