@@ -129,17 +129,24 @@ function App() {
                   }
                 }
                 // Merge column taskIds — preserve locally-added task IDs not yet in JSON
+                // BUT avoid duplicating tasks that already exist in another column
                 if (prev.columns && merged.columns) {
+                  // First, collect all task IDs already in any merged column
+                  const allMergedIds = new Set();
+                  for (const col of Object.values(merged.columns)) {
+                    for (const id of (col.taskIds || [])) allMergedIds.add(id);
+                  }
+                  // Then, only add back local-only tasks that are truly missing from ALL columns
                   for (const [colId, localCol] of Object.entries(prev.columns)) {
                     if (merged.columns[colId]) {
-                      const jsonIds = merged.columns[colId].taskIds || [];
                       const localIds = localCol.taskIds || [];
-                      const localOnly = localIds.filter(id => !jsonIds.includes(id) && merged.tasks[id]);
+                      const localOnly = localIds.filter(id => !allMergedIds.has(id) && merged.tasks[id]);
                       if (localOnly.length > 0) {
                         merged.columns[colId] = {
                           ...merged.columns[colId],
-                          taskIds: [...localOnly, ...jsonIds],
+                          taskIds: [...localOnly, ...merged.columns[colId].taskIds],
                         };
+                        localOnly.forEach(id => allMergedIds.add(id));
                       }
                     }
                   }
