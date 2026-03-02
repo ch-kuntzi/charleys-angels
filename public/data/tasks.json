@@ -557,6 +557,23 @@
         "reviewLink": "",
         "archived": false,
         "completedAt": null
+      },
+      "task-1772418898198": {
+        "id": "task-1772418898198",
+        "title": "Build mobile-friendly dashboard",
+        "description": "",
+        "agent": "Coder",
+        "priority": "High",
+        "timestamp": "3/1/2026, 8:34:58 PM",
+        "tags": [
+          "Feature"
+        ],
+        "dueDate": "",
+        "dueTime": "07:00",
+        "comments": [],
+        "attachments": [],
+        "reviewLink": "",
+        "archived": false
       }
     },
     "columns": {
@@ -564,7 +581,8 @@
         "id": "column-1",
         "title": "In Queue",
         "taskIds": [
-          "task-1772418849016"
+          "task-1772418849016",
+          "task-1772418898198"
         ]
       },
       "column-2": {
@@ -610,6 +628,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772418898233,
+      "action": "created",
+      "details": "\"Build mobile-friendly dashboard\" assigned to Coder",
+      "timestamp": "3/1/2026, 8:34:58 PM"
+    },
     {
       "id": 1772409231723,
       "action": "moved",
