@@ -609,19 +609,23 @@
         "comments": [],
         "attachments": [],
         "reviewLink": "",
-        "archived": false
+        "archived": false,
+        "completedAt": null
       }
     },
     "columns": {
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": []
+        "taskIds": [
+          "task-1772429150151"
+        ]
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
+          "task-1772389885955",
           "task-1772429150151"
         ]
       },
@@ -636,7 +640,6 @@
         "id": "column-4",
         "title": "Deployed",
         "taskIds": [
-          "task-1772429150151",
           "task-1772384091510",
           "task-1772387660652",
           "task-1772387538947",
@@ -667,6 +670,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431301985,
+      "action": "moved",
+      "details": "\"Create Infographic: Nikon Cameras 2026\" moved from Deployed to Review",
+      "timestamp": "3/2/2026, 12:01:41 AM"
+    },
     {
       "id": 1772431264207,
       "action": "moved",
