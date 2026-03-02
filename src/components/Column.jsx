@@ -3,7 +3,8 @@ import { Droppable } from '@hello-pangea/dnd';
 import TaskCard from './TaskCard';
 import './Column.css';
 
-const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categoryColors = {} }) => {
+const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categoryColors = {},
+  selectMode = false, selectedIds = new Set(), onToggleSelect, onEnterSelectMode }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(column.title);
 
@@ -29,23 +30,35 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categor
   };
 
   const isQueue = column.id === 'column-1';
+  const selectedInColumn = tasks.filter(t => selectedIds.has(t.id)).length;
 
   return (
     <div className="column">
-      {isEditing ? (
-        <input
-          className="column-title-input"
-          value={editTitle}
-          onChange={(e) => setEditTitle(e.target.value)}
-          onBlur={handleSave}
-          onKeyDown={handleKeyDown}
-          autoFocus
-        />
-      ) : (
-        <h3 className="column-title" onDoubleClick={handleDoubleClick} title="Double-click to rename">
-          {column.title}
-        </h3>
-      )}
+      <div className="column-header-row">
+        {isEditing ? (
+          <input
+            className="column-title-input"
+            value={editTitle}
+            onChange={(e) => setEditTitle(e.target.value)}
+            onBlur={handleSave}
+            onKeyDown={handleKeyDown}
+            autoFocus
+          />
+        ) : (
+          <h3 className="column-title" onDoubleClick={handleDoubleClick} title="Double-click to rename">
+            {column.title}
+            <span className="column-count">{tasks.length}</span>
+          </h3>
+        )}
+        {tasks.length > 0 && (
+          <button
+            className={`select-toggle ${selectMode ? 'active' : ''}`}
+            onClick={onEnterSelectMode}
+          >
+            {selectMode ? (selectedInColumn > 0 ? `${selectedInColumn} selected` : 'Select') : 'Select'}
+          </button>
+        )}
+      </div>
       <Droppable droppableId={column.id}>
         {(provided, snapshot) => (
           <div
@@ -54,14 +67,25 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categor
             {...provided.droppableProps}
           >
             {tasks.map((task, index) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                index={index}
-                onClick={() => onTaskClick(task)}
-                columnTitle={column.title}
-                categoryColors={categoryColors}
-              />
+              <div key={task.id} className={`card-wrapper ${selectMode ? 'select-mode' : ''}`}>
+                {selectMode && (
+                  <label className="card-checkbox" onClick={(e) => e.stopPropagation()}>
+                    <input
+                      type="checkbox"
+                      checked={selectedIds.has(task.id)}
+                      onChange={() => onToggleSelect(task.id)}
+                    />
+                    <span className="checkmark" />
+                  </label>
+                )}
+                <TaskCard
+                  task={task}
+                  index={index}
+                  onClick={() => selectMode ? onToggleSelect(task.id) : onTaskClick(task)}
+                  columnTitle={column.title}
+                  categoryColors={categoryColors}
+                />
+              </div>
             ))}
             {provided.placeholder}
           </div>

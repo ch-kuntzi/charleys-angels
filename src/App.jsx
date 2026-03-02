@@ -400,6 +400,52 @@ function App() {
     setSelectedTask(null);
   };
 
+  const handleBatchDeleteTask = (taskId) => {
+    const task = data.tasks[taskId];
+    if (!task) return;
+    const newTasks = { ...data.tasks };
+    delete newTasks[taskId];
+    const newCols = {};
+    Object.keys(data.columns).forEach(colId => {
+      newCols[colId] = {
+        ...data.columns[colId],
+        taskIds: data.columns[colId].taskIds.filter(id => id !== taskId),
+      };
+    });
+    const newData = { ...data, tasks: newTasks, columns: newCols };
+    handleSetData(newData);
+    addActivity('deleted', `"${task.title}" deleted`);
+  };
+
+  const handleCopyTask = (taskId) => {
+    const task = data.tasks[taskId];
+    if (!task) return;
+    const newId = `task-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+    const copiedTask = {
+      ...task,
+      id: newId,
+      title: `${task.title} (copy)`,
+      timestamp: new Date().toLocaleString(),
+      comments: [],
+      archived: false,
+      completedAt: null,
+    };
+    const newData = {
+      ...data,
+      tasks: { ...data.tasks, [newId]: copiedTask },
+      columns: {
+        ...data.columns,
+        'column-1': {
+          ...data.columns['column-1'],
+          taskIds: [newId, ...data.columns['column-1'].taskIds],
+        },
+      },
+    };
+    handleSetData(newData);
+    addActivity('created', `"${copiedTask.title}" copied to Queue`);
+    showToast('Task copied to Queue!', 'success');
+  };
+
   const handleStartNow = (taskId) => {
     const task = data.tasks[taskId];
     const startComment = {
@@ -684,6 +730,9 @@ function App() {
                       onReorderColumns={handleReorderColumns}
                       onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
                       categoryColors={taskColors}
+                      onArchiveTask={handleArchiveTask}
+                      onDeleteTask={handleBatchDeleteTask}
+                      onCopyTask={handleCopyTask}
                     />
                   </div>
                 )}

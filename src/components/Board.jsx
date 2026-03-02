@@ -1,15 +1,18 @@
 import React, { useState, useRef } from 'react';
 import { DragDropContext } from '@hello-pangea/dnd';
-import { Plus, Check, X } from 'lucide-react';
+import { Plus, Check, X, Archive, Trash2, Copy } from 'lucide-react';
 import Column from './Column';
 import './Board.css';
 
-const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onReorderColumns, onAddTask, categoryColors = {} }) => {
+const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onReorderColumns, onAddTask, categoryColors = {},
+  onArchiveTask, onDeleteTask, onCopyTask }) => {
   const [isAddingColumn, setIsAddingColumn] = useState(false);
   const [newColumnName, setNewColumnName] = useState('');
   const [draggedColumnId, setDraggedColumnId] = useState(null);
   const [dragOverColumnId, setDragOverColumnId] = useState(null);
   const [settledColumnId, setSettledColumnId] = useState(null);
+  const [selectMode, setSelectMode] = useState(false);
+  const [selectedIds, setSelectedIds] = useState(new Set());
   const dragSourceIndex = useRef(null);
 
   const handleAddColumn = () => {
@@ -21,6 +24,48 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
     }
   };
 
+  const handleToggleSelect = (taskId) => {
+    setSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(taskId)) next.delete(taskId);
+      else next.add(taskId);
+      return next;
+    });
+  };
+
+  const handleEnterSelectMode = () => {
+    if (selectMode) {
+      setSelectMode(false);
+      setSelectedIds(new Set());
+    } else {
+      setSelectMode(true);
+    }
+  };
+
+  const handleBatchArchive = () => {
+    if (onArchiveTask) {
+      selectedIds.forEach(id => onArchiveTask(id));
+    }
+    setSelectedIds(new Set());
+    setSelectMode(false);
+  };
+
+  const handleBatchDelete = () => {
+    if (onDeleteTask) {
+      selectedIds.forEach(id => onDeleteTask(id));
+    }
+    setSelectedIds(new Set());
+    setSelectMode(false);
+  };
+
+  const handleBatchCopy = () => {
+    if (onCopyTask) {
+      selectedIds.forEach(id => onCopyTask(id));
+    }
+    setSelectedIds(new Set());
+    setSelectMode(false);
+  };
+
   const getShiftDirection = (columnId) => {
     if (!draggedColumnId || !dragOverColumnId || draggedColumnId === columnId) return '';
     const order = data.columnOrder;
@@ -29,16 +74,15 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
     const thisIdx = order.indexOf(columnId);
 
     if (dragIdx < overIdx) {
-      // Dragging right: columns between drag and over shift left
       if (thisIdx > dragIdx && thisIdx <= overIdx) return 'shift-left';
     } else if (dragIdx > overIdx) {
-      // Dragging left: columns between over and drag shift right
       if (thisIdx >= overIdx && thisIdx < dragIdx) return 'shift-right';
     }
     return '';
   };
 
   const handleColumnDragStart = (e, columnId) => {
+    if (selectMode) { e.preventDefault(); return; }
     setDraggedColumnId(columnId);
     dragSourceIndex.current = data.columnOrder.indexOf(columnId);
     e.dataTransfer.effectAllowed = 'move';
@@ -57,21 +101,16 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
   };
 
   const handleColumnDragLeave = (e) => {
-    // Only clear if actually leaving the column area
     const related = e.relatedTarget;
     if (!related || !e.currentTarget.contains(related)) {
-      // Don't clear dragOverColumnId here to keep shift animation stable
     }
   };
 
   const handleColumnDrop = (e, targetColumnId) => {
     e.preventDefault();
     const sourceColumnId = draggedColumnId;
-
-    // Trigger settle wiggle on the dropped column
     setSettledColumnId(sourceColumnId);
     setTimeout(() => setSettledColumnId(null), 400);
-
     setDragOverColumnId(null);
     if (sourceColumnId && sourceColumnId !== targetColumnId && onReorderColumns) {
       onReorderColumns(sourceColumnId, targetColumnId);
@@ -91,11 +130,11 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
+    <DragDropContext onDragEnd={selectMode ? () => { } : onDragEnd}>
       <div className="board">
         {data.columnOrder.map((columnId) => {
           const column = data.columns[columnId];
-          const tasks = column.taskIds.map((taskId) => data.tasks[taskId]);
+          const tasks = column.taskIds.map((taskId) => data.tasks[taskId]).filter(Boolean);
           const shiftClass = getShiftDirection(columnId);
           const isSettled = settledColumnId === columnId;
           const isDragged = draggedColumnId === columnId;
@@ -105,7 +144,7 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
               key={column.id}
               data-column-id={column.id}
               className={`column-drag-wrapper ${isDragged ? 'column-dragging' : ''} ${shiftClass} ${isSettled ? 'column-settled' : ''}`}
-              draggable
+              draggable={!selectMode}
               onDragStart={(e) => handleColumnDragStart(e, column.id)}
               onDragOver={(e) => handleColumnDragOver(e, column.id)}
               onDragLeave={handleColumnDragLeave}
@@ -119,6 +158,10 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
                 onRenameColumn={onRenameColumn}
                 onAddTask={onAddTask}
                 categoryColors={categoryColors}
+                selectMode={selectMode}
+                selectedIds={selectedIds}
+                onToggleSelect={handleToggleSelect}
+                onEnterSelectMode={handleEnterSelectMode}
               />
             </div>
           );
@@ -152,6 +195,30 @@ const Board = ({ data, onDragEnd, onTaskClick, onRenameColumn, onAddColumn, onRe
           </button>
         )}
       </div>
+
+      {/* Floating action bar for batch operations */}
+      {selectMode && selectedIds.size > 0 && (
+        <div className="batch-action-bar">
+          <span className="batch-count">{selectedIds.size} selected</span>
+          <div className="batch-actions">
+            <button className="batch-btn batch-copy" onClick={handleBatchCopy} title="Copy to Queue">
+              <Copy size={14} />
+              <span>Copy</span>
+            </button>
+            <button className="batch-btn batch-archive" onClick={handleBatchArchive} title="Archive selected">
+              <Archive size={14} />
+              <span>Archive</span>
+            </button>
+            <button className="batch-btn batch-delete" onClick={handleBatchDelete} title="Delete selected">
+              <Trash2 size={14} />
+              <span>Delete</span>
+            </button>
+          </div>
+          <button className="batch-cancel" onClick={() => { setSelectMode(false); setSelectedIds(new Set()); }}>
+            Cancel
+          </button>
+        </div>
+      )}
     </DragDropContext>
   );
 };
