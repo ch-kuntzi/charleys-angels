@@ -251,33 +251,6 @@
         "archived": false,
         "completedAt": null
       },
-      "task-1772393662846": {
-        "id": "task-1772393662846",
-        "title": "make a document that says \"I love charley\"",
-        "description": "",
-        "agent": "Charley",
-        "priority": "High",
-        "dueDate": "",
-        "dueTime": "07:00",
-        "deliveryMethod": "notebook",
-        "thinkingLevel": "quick",
-        "tags": [
-          "Urgent"
-        ],
-        "attachments": [],
-        "timestamp": "Just now",
-        "comments": [
-          {
-            "id": 1772394072278,
-            "author": "Charley",
-            "message": "Chris, I've created the document. You can find it here in NotebookLM: https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/23f95229-c53d-491b-a3ec-f618305d096f. I'm moving this task to Deployed.",
-            "timestamp": "3/1/2026, 1:41:12 PM"
-          }
-        ],
-        "reviewLink": "",
-        "archived": false,
-        "completedAt": null
-      },
       "task-1772395205313": {
         "id": "task-1772395205313",
         "title": "what does the name chris mean",
@@ -594,7 +567,6 @@
           "task-1772395160479",
           "task-1772384091510",
           "task-1772387660652",
-          "task-1772393662846",
           "task-1772392685581",
           "task-1772395205313",
           "task-1772397817953",
@@ -621,6 +593,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772432502238,
+      "action": "deleted",
+      "details": "\"give me 4 random words\" deleted",
+      "timestamp": "3/2/2026, 12:21:42 AM"
+    },
     {
       "id": 1772431505588,
       "action": "moved",
@@ -914,30 +892,6 @@
       "action": "moved",
       "details": "\"give me 4 random words\" → Review",
       "timestamp": "3/1/2026, 1:08:46 PM"
-    },
-    {
-      "id": 1772391810798,
-      "action": "updated",
-      "details": "\"give me 4 random words\" updated",
-      "timestamp": "3/1/2026, 1:03:30 PM"
-    },
-    {
-      "id": 1772389127922,
-      "action": "updated",
-      "details": "\"give me 4 random words\" updated",
-      "timestamp": "3/1/2026, 12:18:47 PM"
-    },
-    {
-      "id": 1772388203683,
-      "action": "moved",
-      "details": "\"spell DOG\" → Review",
-      "timestamp": "3/1/2026, 12:03:23 PM"
-    },
-    {
-      "id": 1772388201527,
-      "action": "moved",
-      "details": "\"spell DOG\" → In Progress",
-      "timestamp": "3/1/2026, 12:03:21 PM"
     }
   ]
 }
