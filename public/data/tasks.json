@@ -624,6 +624,7 @@
         "title": "In Progress",
         "taskIds": [
           "task-1772389885955",
+          "task-1772389885955",
           "task-1772429150151"
         ]
       },
@@ -631,8 +632,7 @@
         "id": "column-3",
         "title": "Review",
         "taskIds": [
-          "task-1772429150151",
-          "task-1772389885955"
+          "task-1772429150151"
         ]
       },
       "column-4": {
