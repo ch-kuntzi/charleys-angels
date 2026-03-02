@@ -626,7 +626,15 @@
         ],
         "attachments": [],
         "timestamp": "Just now",
-        "comments": [],
+        "comments": [
+          {
+            "id": 1772431227739,
+            "author": "Charley",
+            "text": "Here's 'super' translated into 5 languages: \\n- Spanish: súper\\n- French: super\\n- German: super\\n- Italian: super\\n- Portuguese: super",
+            "message": "Here's 'super' translated into 5 languages: \\n- Spanish: súper\\n- French: super\\n- German: super\\n- Italian: super\\n- Portuguese: super",
+            "timestamp": "3/2/2026, 12:00:27 AM"
+          }
+        ],
         "reviewLink": "",
         "archived": false,
         "completedAt": null
@@ -642,14 +650,15 @@
         "id": "column-2",
         "title": "In Progress",
         "taskIds": [
-          "task-1772429150151",
-          "task-1772430718855"
+          "task-1772429150151"
         ]
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": []
+        "taskIds": [
+          "task-1772430718855"
+        ]
       },
       "column-4": {
         "id": "column-4",
@@ -685,6 +694,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431229681,
+      "action": "moved",
+      "details": "\"translate super in 5 languages\" → Review",
+      "timestamp": "3/2/2026, 12:00:29 AM"
+    },
     {
       "id": 1772431225740,
       "action": "moved",
