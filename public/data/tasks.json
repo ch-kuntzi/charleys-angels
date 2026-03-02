@@ -237,7 +237,7 @@
         "attachments": [],
         "timestamp": "3/2/2026, 12:26:28 AM",
         "comments": [],
-        "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/10b190f8-e165-4f3a-8673-4554868e6f1f",
+        "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48",
         "archived": false,
         "completedAt": null
       }
@@ -251,14 +251,14 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772432788286-0mna"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": []
+        "taskIds": [
+          "task-1772432788286-0mna"
+        ]
       },
       "column-4": {
         "id": "column-4",
@@ -286,6 +286,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772433641124,
+      "action": "moved",
+      "details": "\"what does the name charley mean? (copy)\" → Review",
+      "timestamp": "3/2/2026, 12:40:41 AM"
+    },
     {
       "id": 1772433628458,
       "action": "moved",
