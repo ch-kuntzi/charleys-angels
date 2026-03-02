@@ -250,14 +250,14 @@
       "column-1": {
         "id": "column-1",
         "title": "In Queue",
-        "taskIds": [
-          "task-1772477140134"
-        ]
+        "taskIds": []
       },
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": []
+        "taskIds": [
+          "task-1772477140134"
+        ]
       },
       "column-3": {
         "id": "column-3",
@@ -291,6 +291,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772477143986,
+      "action": "moved",
+      "details": "\"Ensure reliable weather requests\" → In Progress",
+      "timestamp": "3/2/2026, 12:45:43 PM"
+    },
     {
       "id": 1772477140148,
       "action": "created",
