@@ -618,111 +618,117 @@ function App() {
         />
       )}
       <div className="main-content">
-        <Header
-          onAddTaskClick={() => { setModalInitialDate(''); setIsModalOpen(true); }}
-          isSaving={isSaving}
-          activeViews={activeViews}
-          onViewToggle={handleViewToggle}
-          onSettingsClick={() => setShowSettings(true)}
-        />
-        <FilterBar
-          agents={agents}
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          onSearch={handleSearch}
-          searchTerm={searchTerm}
-          showArchived={showArchived}
-          onToggleArchived={() => setShowArchived(!showArchived)}
-          categories={categories}
-        />
-        <div className="view-container">
-          {isMobile ? (
-            <MobileDashboard
-              columns={filteredData.columns}
-              tasks={filteredData.tasks}
-              onTaskClick={handleOpenTaskModal}
-              categoryColors={taskColors}
+        {isMobile ? (
+          <MobileDashboard
+            columns={filteredData.columns}
+            columnOrder={filteredData.columnOrder || data.columnOrder}
+            tasks={filteredData.tasks}
+            onTaskClick={handleOpenTaskModal}
+            categoryColors={taskColors}
+            activities={activity}
+            onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
+            onSettingsClick={() => setShowSettings(true)}
+          />
+        ) : (
+          <>
+            <Header
+              onAddTaskClick={() => { setModalInitialDate(''); setIsModalOpen(true); }}
+              isSaving={isSaving}
+              activeViews={activeViews}
+              onViewToggle={handleViewToggle}
+              onSettingsClick={() => setShowSettings(true)}
             />
-          ) : (
-            <>
-              {showBoard && (
-                <div className="view-panel board-panel">
-                  <Board
-                    data={filteredData}
-                    onDragEnd={onDragEnd}
-                    onTaskClick={handleOpenTaskModal}
-                    onRenameColumn={handleRenameColumn}
-                    onAddColumn={handleAddColumn}
-                    onReorderColumns={handleReorderColumns}
-                    onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
-                    categoryColors={taskColors}
-                  />
-                </div>
-              )}
-              {showCalendar && (
-                <div className="view-panel calendar-panel">
-                  <CalendarView
-                    tasks={filteredTasks}
-                    onTaskClick={handleOpenTaskModal}
-                    onAddTaskWithDate={handleAddTaskWithDate}
-                    onUpdateTaskDate={handleUpdateTaskDate}
-                  />
-                </div>
-              )}
-            </>
-          )}
-        </div>
-        {showActivity && (
-          <div className="activity-overlay">
-            <ActivityLog activity={activity} />
-          </div>
+            <FilterBar
+              agents={agents}
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onSearch={handleSearch}
+              searchTerm={searchTerm}
+              showArchived={showArchived}
+              onToggleArchived={() => setShowArchived(!showArchived)}
+              categories={categories}
+            />
+            <div className="view-container">
+              <>
+                {showBoard && (
+                  <div className="view-panel board-panel">
+                    <Board
+                      data={filteredData}
+                      onDragEnd={onDragEnd}
+                      onTaskClick={handleOpenTaskModal}
+                      onRenameColumn={handleRenameColumn}
+                      onAddColumn={handleAddColumn}
+                      onReorderColumns={handleReorderColumns}
+                      onAddTask={() => { setModalInitialDate(''); setIsModalOpen(true); }}
+                      categoryColors={taskColors}
+                    />
+                  </div>
+                )}
+                {showCalendar && (
+                  <div className="view-panel calendar-panel">
+                    <CalendarView
+                      tasks={filteredTasks}
+                      onTaskClick={handleOpenTaskModal}
+                      onAddTaskWithDate={handleAddTaskWithDate}
+                      onUpdateTaskDate={handleUpdateTaskDate}
+                    />
+                  </div>
+                )}
+              </>
+            </div>
+            {showActivity && (
+              <div className="activity-overlay">
+                <ActivityLog activity={activity} />
+              </div>
+            )}
+          </>
         )}
+        {isModalOpen && (
+          <AddTaskModal
+            agents={agents}
+            onAddTask={handleAddTask}
+            onClose={() => setIsModalOpen(false)}
+            initialDate={modalInitialDate}
+            categories={categories}
+            taskColors={taskColors}
+          />
+        )}
+        {selectedTask && (
+          <TaskDetailModal
+            task={selectedTask}
+            agents={agents}
+            onClose={handleCloseTaskModal}
+            onSave={handleSaveTask}
+            onDelete={handleDeleteTask}
+            onArchive={handleArchiveTask}
+            onStartNow={handleStartNow}
+            columnTitle={Object.values(data.columns).find(col => col.taskIds.includes(selectedTask.id))?.title}
+            categories={categories}
+            taskColors={taskColors}
+          />
+        )}
+        {deleteConfirmModal && (
+          <DeleteConfirmModal
+            taskTitle={data.tasks[deleteConfirmModal]?.title}
+            onConfirm={confirmDelete}
+            onCancel={() => setDeleteConfirmModal(null)}
+          />
+        )}
+        {showSettings && (
+          <SettingsModal
+            categories={categories}
+            onUpdateCategories={handleUpdateCategories}
+            columns={data.columns}
+            columnOrder={data.columnOrder}
+            onRenameColumn={handleRenameColumn}
+            onDeleteColumn={handleDeleteColumn}
+            taskColors={taskColors}
+            onUpdateTaskColors={handleUpdateTaskColors}
+            onClose={() => setShowSettings(false)}
+          />
+        )}
+        <Toast toasts={toasts} />
       </div>
-      {isModalOpen && (
-        <AddTaskModal
-          agents={agents}
-          onAddTask={handleAddTask}
-          onClose={() => setIsModalOpen(false)}
-          initialDate={modalInitialDate}
-          categories={categories}
-          taskColors={taskColors}
-        />
-      )}
-      {selectedTask && (
-        <TaskDetailModal
-          task={selectedTask}
-          agents={agents}
-          onClose={handleCloseTaskModal}
-          onSave={handleSaveTask}
-          onDelete={handleDeleteTask}
-          onArchive={handleArchiveTask}
-          onStartNow={handleStartNow}
-          columnTitle={Object.values(data.columns).find(col => col.taskIds.includes(selectedTask.id))?.title}
-          categories={categories}
-          taskColors={taskColors}
-        />
-      )}
-      {deleteConfirmModal && (
-        <DeleteConfirmModal
-          taskTitle={data.tasks[deleteConfirmModal]?.title}
-          onConfirm={confirmDelete}
-          onCancel={() => setDeleteConfirmModal(null)}
-        />
-      )}
-      {showSettings && (
-        <SettingsModal
-          categories={categories}
-          onUpdateCategories={handleUpdateCategories}
-          columns={data.columns}
-          columnOrder={data.columnOrder}
-          onRenameColumn={handleRenameColumn}
-          onDeleteColumn={handleDeleteColumn}
-          taskColors={taskColors}
-          onUpdateTaskColors={handleUpdateTaskColors}
-          onClose={() => setShowSettings(false)}
-        />
-      )}
-      <Toast toasts={toasts} />
     </div>
   );
 }
