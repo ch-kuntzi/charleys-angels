@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { db } from './firebase';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import './App.css';
 import Board from './components/Board';
 import Sidebar from './components/Sidebar';
@@ -52,7 +54,13 @@ const agents = [
 
 const getInitialData = () => {
   const savedData = localStorage.getItem('taskDashboardData');
-  return savedData ? JSON.parse(savedData) : initialData;
+  if (savedData) {
+    const parsed = JSON.parse(savedData);
+    // Ensure legacy data without lastModified still works
+    if (!parsed._lastModified) parsed._lastModified = Date.now();
+    return parsed;
+  }
+  return { ...initialData, _lastModified: 0 };
 };
 
 const getInitialActivity = () => {
@@ -96,76 +104,22 @@ function App() {
     };
   }, []);
 
-  // Load data from JSON file (source of truth from git) and merge with local
+  // Real-time Firestore listener — replaces the old 30-second JSON polling
   useEffect(() => {
-    const loadFromJson = async () => {
-      try {
-        const base = import.meta.env.BASE_URL || '/';
-        const res = await fetch(`${base}data/tasks.json?t=${Date.now()}`);
-        if (res.ok) {
-          const jsonData = await res.json();
-          if (jsonData.boardData) {
-            setData(prev => {
-              const merged = { ...jsonData.boardData };
-              // Merge tasks — keep local comments/edits not yet in JSON
-              if (prev && prev.tasks) {
-                merged.tasks = { ...merged.tasks };
-                for (const [id, localTask] of Object.entries(prev.tasks)) {
-                  if (merged.tasks[id]) {
-                    // Merge comments: combine both, deduplicate by timestamp
-                    const jsonComments = merged.tasks[id].comments || [];
-                    const localComments = localTask.comments || [];
-                    const allComments = [...jsonComments];
-                    for (const lc of localComments) {
-                      if (!allComments.find(jc => jc.timestamp === lc.timestamp)) {
-                        allComments.push(lc);
-                      }
-                    }
-                    allComments.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-                    merged.tasks[id] = { ...merged.tasks[id], comments: allComments };
-                  } else {
-                    // Keep locally-added tasks that aren't in JSON yet
-                    merged.tasks[id] = localTask;
-                  }
-                }
-                // Merge column taskIds — preserve locally-added task IDs not yet in JSON
-                // BUT avoid duplicating tasks that already exist in another column
-                if (prev.columns && merged.columns) {
-                  // First, collect all task IDs already in any merged column
-                  const allMergedIds = new Set();
-                  for (const col of Object.values(merged.columns)) {
-                    for (const id of (col.taskIds || [])) allMergedIds.add(id);
-                  }
-                  // Then, only add back local-only tasks that are truly missing from ALL columns
-                  for (const [colId, localCol] of Object.entries(prev.columns)) {
-                    if (merged.columns[colId]) {
-                      const localIds = localCol.taskIds || [];
-                      const localOnly = localIds.filter(id => !allMergedIds.has(id) && merged.tasks[id]);
-                      if (localOnly.length > 0) {
-                        merged.columns[colId] = {
-                          ...merged.columns[colId],
-                          taskIds: [...localOnly, ...merged.columns[colId].taskIds],
-                        };
-                        localOnly.forEach(id => allMergedIds.add(id));
-                      }
-                    }
-                  }
-                }
-              }
-              localStorage.setItem('taskDashboardData', JSON.stringify(merged));
-              return merged;
-            });
-          }
-          if (jsonData.categories) setCategories(jsonData.categories);
-          if (jsonData.activity) setActivity(jsonData.activity);
+    const unsub = onSnapshot(doc(db, 'board', 'state'), (snap) => {
+      if (snap.exists()) {
+        const remote = snap.data();
+        if (remote.boardData) {
+          setData(remote.boardData);
+          localStorage.setItem('taskDashboardData', JSON.stringify(remote.boardData));
         }
-      } catch (err) {
-        console.log('Using localStorage data (JSON fetch failed)');
+        if (remote.categories) setCategories(remote.categories);
+        if (remote.activity) setActivity(remote.activity);
       }
-    };
-    loadFromJson();
-    const interval = setInterval(loadFromJson, 30000);
-    return () => clearInterval(interval);
+    }, (err) => {
+      console.warn('Firestore listener error, falling back to localStorage:', err.message);
+    });
+    return () => unsub();
   }, []);
 
   const showToast = (message, type = 'info') => {
@@ -188,20 +142,17 @@ function App() {
     localStorage.setItem('taskDashboardActivity', JSON.stringify(updatedActivity));
   };
 
-  // Sync data back to tasks.json via local API (dev server only)
-  const syncToJson = async (boardData, cats, act) => {
+  // Write board state to Firestore — propagates to all connected clients instantly
+  const syncToFirestore = async (boardData, cats, act) => {
     try {
-      await fetch('/api/sync', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          boardData: boardData,
-          categories: cats || categories,
-          activity: act || activity,
-        }),
+      await setDoc(doc(db, 'board', 'state'), {
+        boardData,
+        categories: cats || categories,
+        activity: act || activity,
+        _lastModified: Date.now(),
       });
     } catch (err) {
-      // Sync only works on localhost dev server — silent fail on production
+      console.warn('Firestore write failed:', err.message);
     }
   };
 
@@ -209,7 +160,7 @@ function App() {
     setIsSaving(true);
     setData(newData);
     localStorage.setItem('taskDashboardData', JSON.stringify(newData));
-    syncToJson(newData);
+    syncToFirestore(newData);
     setTimeout(() => setIsSaving(false), 500);
   };
 

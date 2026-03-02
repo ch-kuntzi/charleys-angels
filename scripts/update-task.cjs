@@ -3,58 +3,47 @@
  * Dashboard Task Manager — CLI for Charley's agents
  * 
  * Usage:
- *   node scripts/update-task.js add --title "Fix login" --agent Coder --priority High --category Bug
- *   node scripts/update-task.js move --id task-123 --column "In Progress"
- *   node scripts/update-task.js complete --id task-123
- *   node scripts/update-task.js list
+ *   node scripts/update-task.cjs add --title "Fix login" --agent Coder --priority High --category Bug
+ *   node scripts/update-task.cjs move --id task-123 --column "In Progress"
+ *   node scripts/update-task.cjs complete --id task-123
+ *   node scripts/update-task.cjs list
  * 
- * After updating, the script auto-commits and pushes to GitHub.
+ * Writes directly to Firestore — all browsers update within ~100ms.
  */
 
-const fs = require('fs');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getFirestore } = require('firebase-admin/firestore');
 const path = require('path');
-const { execSync } = require('child_process');
+const fs = require('fs');
 
-const DATA_FILE = path.join(__dirname, '..', 'public', 'data', 'tasks.json');
+const SERVICE_ACCOUNT_PATH = path.join(__dirname, 'firebase-service-account.json');
 
-function loadData() {
-    return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+if (!fs.existsSync(SERVICE_ACCOUNT_PATH)) {
+    console.error('❌ Missing firebase-service-account.json in scripts/. See README for setup.');
+    process.exit(1);
 }
 
-function saveData(data) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2) + '\n');
-}
+initializeApp({ credential: cert(require(SERVICE_ACCOUNT_PATH)) });
+const db = getFirestore();
+const BOARD_REF = db.collection('board').doc('state');
 
-function commitAndPush(message) {
-    const repoDir = path.resolve(path.dirname(DATA_FILE), '..');
-    const git = (cmd) => execSync(`git -C "${repoDir}" ${cmd}`, { stdio: 'pipe' }).toString().trim();
-
-    try {
-        // Save current tasks.json content before any git operations
-        const currentContent = fs.readFileSync(DATA_FILE, 'utf-8');
-
-        // Pull latest (reset any conflicts)
-        try { git('stash'); } catch (e) { }
-        try { git('pull --rebase'); } catch (e) {
-            try { git('rebase --abort'); } catch (e2) { }
-            try { git('pull --ff-only'); } catch (e3) { }
-        }
-        try { git('stash pop'); } catch (e) { }
-
-        // Overwrite with our version (our local data is always the truth for tasks.json)
-        fs.writeFileSync(DATA_FILE, currentContent);
-
-        git('add public/data/tasks.json');
-        try { git(`commit -m "${message}"`); } catch (e) { }
-        git('push');
-        console.log(`✅ Pushed: ${message}`);
-    } catch (err) {
-        console.log('⚠️  Saved locally (git sync issue)');
+async function loadData() {
+    const snap = await BOARD_REF.get();
+    if (!snap.exists) {
+        console.error('❌ No board data found in Firestore. Run the seed script first.');
+        process.exit(1);
     }
+    return snap.data();
 }
 
-function addTask({ title, description = '', agent = 'Charley', priority = 'Medium', category = 'Feature', dueDate = '', column = 'column-1' }) {
-    const data = loadData();
+async function saveData(data) {
+    data._lastModified = Date.now();
+    await BOARD_REF.set(data);
+}
+
+
+async function addTask({ title, description = '', agent = 'Charley', priority = 'Medium', category = 'Feature', dueDate = '', column = 'column-1' }) {
+    const data = await loadData();
     const id = `task-${Date.now()}`;
 
     data.boardData.tasks[id] = {
@@ -85,29 +74,24 @@ function addTask({ title, description = '', agent = 'Charley', priority = 'Mediu
         timestamp: new Date().toLocaleString(),
     });
 
-    saveData(data);
-    commitAndPush(`[dashboard] Add task: ${title}`);
+    await saveData(data);
     console.log(`📋 Created task ${id}: "${title}"`);
     return id;
 }
 
-function moveTask(taskId, columnTitle) {
-    const data = loadData();
+async function moveTask(taskId, columnTitle) {
+    const data = await loadData();
     const task = data.boardData.tasks[taskId];
     if (!task) { console.error(`❌ Task ${taskId} not found`); return; }
 
-    // Find target column
     const targetCol = Object.values(data.boardData.columns).find(c =>
         c.title.toLowerCase() === columnTitle.toLowerCase()
     );
     if (!targetCol) { console.error(`❌ Column "${columnTitle}" not found`); return; }
 
-    // Remove from current column
     for (const col of Object.values(data.boardData.columns)) {
         col.taskIds = col.taskIds.filter(id => id !== taskId);
     }
-
-    // Add to target column
     targetCol.taskIds.push(taskId);
 
     data.activity = data.activity || [];
@@ -118,19 +102,17 @@ function moveTask(taskId, columnTitle) {
         timestamp: new Date().toLocaleString(),
     });
 
-    saveData(data);
-    commitAndPush(`[dashboard] Move "${task.title}" to ${targetCol.title}`);
+    await saveData(data);
     console.log(`📦 Moved "${task.title}" → ${targetCol.title}`);
 }
 
-function completeTask(taskId) {
-    moveTask(taskId, 'Deployed');
+async function completeTask(taskId) {
+    await moveTask(taskId, 'Deployed');
 }
 
-function listTasks() {
-    const data = loadData();
+async function listTasks() {
+    const data = await loadData();
     const { columns, columnOrder, tasks } = data.boardData;
-
     for (const colId of columnOrder) {
         const col = columns[colId];
         console.log(`\n📂 ${col.title} (${col.taskIds.length})`);
@@ -141,8 +123,8 @@ function listTasks() {
     }
 }
 
-function addComment(taskId, message, author = 'Charley') {
-    const data = loadData();
+async function addComment(taskId, message, author = 'Charley') {
+    const data = await loadData();
     const task = data.boardData.tasks[taskId];
     if (!task) { console.error(`❌ Task ${taskId} not found`); return; }
 
@@ -152,27 +134,21 @@ function addComment(taskId, message, author = 'Charley') {
         author,
         text: message,
         message,
-        timestamp: new Date().toLocaleString(),
+        timestamp: new Date().toISOString(),
     });
 
-    saveData(data);
-    commitAndPush(`[dashboard] Comment on "${task.title}"`);
+    await saveData(data);
     console.log(`💬 Added comment to "${task.title}"`);
 }
 
-function viewTask(taskId) {
-    pullLatest();
-    const data = loadData();
+async function viewTask(taskId) {
+    const data = await loadData();
     const task = data.boardData.tasks[taskId];
     if (!task) { console.error(`❌ Task ${taskId} not found`); return; }
 
-    // Find which column it's in
     let currentColumn = 'Unknown';
     for (const col of Object.values(data.boardData.columns)) {
-        if (col.taskIds.includes(taskId)) {
-            currentColumn = col.title;
-            break;
-        }
+        if (col.taskIds.includes(taskId)) { currentColumn = col.title; break; }
     }
 
     console.log(`\n📋 ${task.title}`);
@@ -215,9 +191,8 @@ function pullLatest() {
     }
 }
 
-function updateTask(taskId, fields) {
-    pullLatest();
-    const data = loadData();
+async function updateTask(taskId, fields) {
+    const data = await loadData();
     const task = data.boardData.tasks[taskId];
     if (!task) { console.error(`❌ Task ${taskId} not found`); return; }
 
@@ -234,19 +209,16 @@ function updateTask(taskId, fields) {
         changes.push(`category="${fields.category}"`);
     }
 
-    // Handle --status flag by moving to matching column
     if (fields.status) {
         const targetCol = Object.values(data.boardData.columns).find(c =>
             c.title.toLowerCase() === fields.status.toLowerCase()
         );
         if (targetCol) {
-            // Remove from all columns first
             for (const col of Object.values(data.boardData.columns)) {
                 col.taskIds = col.taskIds.filter(id => id !== taskId);
             }
             targetCol.taskIds.push(taskId);
             changes.push(`status="${targetCol.title}"`);
-
             data.activity = data.activity || [];
             data.activity.unshift({
                 id: Date.now(),
@@ -264,8 +236,7 @@ function updateTask(taskId, fields) {
         return;
     }
 
-    saveData(data);
-    commitAndPush(`[dashboard] Update "${task.title}": ${changes.join(', ')}`);
+    await saveData(data);
     console.log(`✏️  Updated "${task.title}": ${changes.join(', ')}`);
 }
 
@@ -284,27 +255,21 @@ function saveLastCheckTime() {
     fs.writeFileSync(LAST_CHECK_FILE, new Date().toISOString());
 }
 
-function dashboardCheck() {
-    pullLatest();
-    const data = loadData();
+async function dashboardCheck() {
+    const data = await loadData();
     const { columns, columnOrder, tasks } = data.boardData;
     const lastCheck = getLastCheckTime();
 
     console.log(`\n🔍 Dashboard Check (since ${lastCheck.toLocaleString()})`);
     console.log('─'.repeat(50));
 
-    // Collect tasks with new activity
     let hasUpdates = false;
-
-    // Check for 🚀 flagged tasks first
     const flagged = [];
     const withNewComments = [];
 
     for (const [id, task] of Object.entries(tasks)) {
         if (task.archived) continue;
-        const comments = task.comments || [];
-
-        for (const c of comments) {
+        for (const c of (task.comments || [])) {
             const commentTime = new Date(c.timestamp);
             if (commentTime > lastCheck) {
                 const text = c.text || c.message || '';
@@ -335,21 +300,15 @@ function dashboardCheck() {
         hasUpdates = true;
     }
 
-    // Check activity log for new entries
     const newActivity = (data.activity || []).filter(a => new Date(a.timestamp) > lastCheck);
     if (newActivity.length > 0) {
         console.log(`\n📊 ACTIVITY LOG (${newActivity.length} new):`);
-        for (const a of newActivity.slice(0, 10)) {
-            console.log(`   [${a.action}] ${a.details}`);
-        }
+        for (const a of newActivity.slice(0, 10)) console.log(`   [${a.action}] ${a.details}`);
         hasUpdates = true;
     }
 
-    if (!hasUpdates) {
-        console.log('\n✅ No new updates since last check.');
-    }
+    if (!hasUpdates) console.log('\n✅ No new updates since last check.');
 
-    // Show current board summary
     console.log('\n📋 BOARD STATUS:');
     for (const colId of columnOrder) {
         const col = columns[colId];
@@ -385,32 +344,17 @@ for (let i = 0; i < args.length; i++) {
     }
 }
 
-switch (command) {
-    case 'add':
-        addTask(flags);
-        break;
-    case 'move':
-        moveTask(flags.id, flags.column || flags.to);
-        break;
-    case 'complete':
-        completeTask(flags.id);
-        break;
-    case 'comment':
-        addComment(flags.id, flags.text || flags.message, flags.author);
-        break;
-    case 'view':
-        viewTask(flags.id);
-        break;
-    case 'update':
-        updateTask(flags.id, flags);
-        break;
-    case 'check':
-        dashboardCheck();
-        break;
-    case 'list':
-        pullLatest();
-        listTasks();
-        break;
-    default:
-        console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|update|check|list> [--flags]`);
-}
+(async () => {
+    switch (command) {
+        case 'add': await addTask(flags); break;
+        case 'move': await moveTask(flags.id, flags.column || flags.to); break;
+        case 'complete': await completeTask(flags.id); break;
+        case 'comment': await addComment(flags.id, flags.text || flags.message, flags.author); break;
+        case 'view': await viewTask(flags.id); break;
+        case 'update': await updateTask(flags.id, flags); break;
+        case 'check': await dashboardCheck(); break;
+        case 'list': await listTasks(); break;
+        default: console.log(`Usage: node update-task.cjs <add|move|complete|comment|view|update|check|list> [--flags]`);
+    }
+    process.exit(0);
+})();

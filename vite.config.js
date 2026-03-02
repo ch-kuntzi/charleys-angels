@@ -18,8 +18,15 @@ function localSyncPlugin() {
           req.on('end', () => {
             try {
               const data = JSON.parse(body);
+              // Preserve _lastModified at top level so the browser can compare timestamps on next poll
+              const toWrite = {
+                boardData: data.boardData,
+                categories: data.categories,
+                activity: data.activity,
+                _lastModified: data._lastModified || Date.now(),
+              };
               const filePath = path.resolve(__dirname, 'public/data/tasks.json');
-              fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n');
+              fs.writeFileSync(filePath, JSON.stringify(toWrite, null, 2) + '\n');
 
               // Auto-commit and push
               const { execSync } = require('child_process');

@@ -23,3 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 .last-dashboard-check
+
+# Firebase — never commit these
+scripts/firebase-service-account.json
