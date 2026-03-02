@@ -330,63 +330,6 @@
         "archived": false,
         "completedAt": null
       },
-      "task-1772395160479": {
-        "id": "task-1772395160479",
-        "title": "what does the name charley mean?",
-        "description": "",
-        "agent": "Charley",
-        "priority": "High",
-        "dueDate": "",
-        "dueTime": "07:00",
-        "deliveryMethod": "notebook",
-        "thinkingLevel": "quick",
-        "tags": [
-          "Urgent"
-        ],
-        "attachments": [],
-        "timestamp": "Just now",
-        "comments": [
-          {
-            "id": 1772395739471,
-            "author": "Charley",
-            "timestamp": "3/1/2026, 2:08:59 PM"
-          },
-          {
-            "id": 1772395850193,
-            "author": "Charley",
-            "message": "Chris, the name Charley is typically a diminutive of Charles or Charlotte, meaning 'free man' or 'petite and feminine' respectively. I've added this to NotebookLM here: https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/10b190f8-e165-4f3a-8673-4554868e6f1f. I'm moving this task to Deployed.",
-            "timestamp": "3/1/2026, 2:10:50 PM"
-          },
-          {
-            "id": 1772395952443,
-            "author": "Charley",
-            "timestamp": "3/1/2026, 2:12:32 PM"
-          },
-          {
-            "id": 1772396061799,
-            "author": "Charley",
-            "timestamp": "3/1/2026, 2:14:21 PM"
-          },
-          {
-            "id": 1772396150332,
-            "author": "Charley",
-            "timestamp": "3/1/2026, 2:15:50 PM"
-          },
-          {
-            "id": 1772396241511,
-            "author": "Charley",
-            "timestamp": "3/1/2026, 2:17:21 PM"
-          },
-          {
-            "id": 1772396865811,
-            "author": "Charley",
-            "timestamp": "3/1/2026, 2:27:45 PM"
-          }
-        ],
-        "reviewLink": "https://notebooklm.google.com/notebooks/857e95fd-4f8c-4a0a-a48d-83867f22ff48/sources/10b190f8-e165-4f3a-8673-4554868e6f1f",
-        "archived": false,
-        "completedAt": null
-      },
       "task-1772395205313": {
         "id": "task-1772395205313",
         "title": "what does the name chris mean",
@@ -649,7 +592,6 @@
           "task-1772393662846",
           "task-1772392685581",
           "task-1772395205313",
-          "task-1772395160479",
           "task-1772397817953",
           "task-1772386173974",
           "task-1772401191550",
