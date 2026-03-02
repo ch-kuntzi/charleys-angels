@@ -573,24 +573,6 @@
         "reviewLink": "https://notebooklm.google.com/notebooks/fec1a999-3436-4bd5-9b35-76a1af0db0fe",
         "archived": false,
         "completedAt": null
-      },
-      "task-1772429150151": {
-        "id": "task-1772429150151",
-        "title": "Create Infographic: Nikon Cameras 2026",
-        "description": "Generate an infographic based on the Nikon Cameras 2026 research from NotebookLM. Focus on key models, features, and market position.",
-        "agent": "Charley",
-        "priority": "High",
-        "timestamp": "3/1/2026, 11:25:50 PM",
-        "tags": [
-          "Research"
-        ],
-        "dueDate": "",
-        "dueTime": "07:00",
-        "comments": [],
-        "attachments": [],
-        "reviewLink": "",
-        "archived": false,
-        "completedAt": null
       }
     },
     "columns": {
@@ -602,16 +584,12 @@
       "column-2": {
         "id": "column-2",
         "title": "In Progress",
-        "taskIds": [
-          "task-1772429150151"
-        ]
+        "taskIds": []
       },
       "column-3": {
         "id": "column-3",
         "title": "Review",
-        "taskIds": [
-          "task-1772429150151"
-        ]
+        "taskIds": []
       },
       "column-4": {
         "id": "column-4",
@@ -647,6 +625,12 @@
     "Task"
   ],
   "activity": [
+    {
+      "id": 1772431384722,
+      "action": "deleted",
+      "details": "\"provide 2  basic colors\" deleted",
+      "timestamp": "3/2/2026, 12:03:04 AM"
+    },
     {
       "id": 1772431378467,
       "action": "moved",
@@ -940,12 +924,6 @@
       "action": "moved",
       "details": "\"Research and present hotel options for Georgia trip\" → In Progress",
       "timestamp": "3/1/2026, 11:29:35 AM"
-    },
-    {
-      "id": 1772386173988,
-      "action": "created",
-      "details": "\"Research and present hotel options for Georgia trip\" assigned to Charley",
-      "timestamp": "3/1/2026, 11:29:33 AM"
     }
   ]
 }
