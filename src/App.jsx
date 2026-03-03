@@ -49,7 +49,6 @@ const agents = [
   { name: 'Planner', icon: 'calendar' },
   { name: 'Architect', icon: 'compass' },
   { name: 'Coder', icon: 'code' },
-  { name: 'QA', icon: 'check-circle' },
 ];
 
 const getInitialData = () => {

@@ -55,7 +55,15 @@ function writeInbox(entries) {
             '',
         ].join('\n')),
     ];
-    fs.writeFileSync(INBOX_PATH, lines.join('\n'));
+    try {
+        fs.writeFileSync(INBOX_PATH, lines.join('\n'));
+        return true;
+    } catch (err) {
+        console.error(`[watch-board] Write failed for DASHBOARD_INBOX.md: ${err.message}`);
+        console.error(`[watch-board] Path: ${INBOX_PATH}`);
+        console.error(`[watch-board] Check permissions and that the directory exists: ${require('path').dirname(INBOX_PATH)}`);
+        return false;
+    }
 }
 
 async function pingCharley(entries) {
@@ -99,11 +107,15 @@ function flushPending() {
     // Find the latest timestamp in this batch
     const latestTs = Math.max(...toSend.map(e => new Date(e.commentTs).getTime()));
 
-    writeInbox(toSend);
+    const writeOk = writeInbox(toSend);
     saveLastSeen(latestTs);
     lastSeen = latestTs;
 
-    pingCharley(toSend);
+    if (writeOk) {
+        pingCharley(toSend);
+    } else {
+        console.error('[watch-board] Skipping agent ping — inbox write failed. Charley would read a stale/empty file.');
+    }
 
     for (const e of toSend) {
         console.log(`[watch-board] NEW: "${e.taskTitle}" (${e.taskId}): ${e.text}`);

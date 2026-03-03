@@ -26,3 +26,7 @@ dist-ssr
 
 # Firebase — never commit these
 scripts/firebase-service-account.json
+
+# Pre-Firebase flat-file data — board state now lives in Firestore
+public/data/tasks.json
+public/uploads/
