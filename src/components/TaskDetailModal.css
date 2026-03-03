@@ -16,6 +16,7 @@
 .modal-content {
   width: 90%;
   max-width: 900px;
+  height: 85vh;
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 8px;
@@ -23,7 +24,8 @@
   animation: slideUp 0.3s ease;
   display: flex;
   flex-direction: column;
-  max-height: 95vh;
+  /* Fixed height so the modal never grows/shrinks as sidebar opens */
+  overflow: hidden;
 }
 
 @keyframes slideUp {
@@ -79,29 +81,107 @@
 }
 
 .modal-body {
-  display: flex;
+  position: relative;
   flex-grow: 1;
-  overflow: visible;
+  overflow: hidden;
   min-height: 0;
 }
 
 .modal-main {
-  flex: 2;
+  position: absolute;
+  /* Left edge always anchored to the right of the tab strip (40px) */
+  left: 40px;
+  right: 0;
+  top: 0;
+  bottom: 0;
   padding: 24px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  overflow-y: auto;
+  overflow: hidden;
+  transition: left 0.25s ease;
+}
+
+/* When sidebar is open, slide main right to clear the panel */
+.sidebar-container--open~.modal-main {
+  left: 340px;
+}
+
+/* Collapsible sidebar container — absolute, left-anchored, layers over modal-main */
+.sidebar-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  /* Collapsed: only the tab width */
+  width: 40px;
+  transition: width 0.25s ease;
+  z-index: 2;
+}
+
+.sidebar-container--open {
+  /* Open: sidebar panel (300px) + tab (40px) */
+  width: 340px;
+}
+
+/* Folder tab always spans full height */
+.sidebar-tab {
+  width: 40px;
+  flex-shrink: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-left: none;
+  border-radius: 0 6px 6px 0;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: all 0.15s ease;
+  /* No min-height; height is inherited from flex-stretch */
+}
+
+.sidebar-container:hover .sidebar-tab {
+  border-color: var(--border-emphasis);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.sidebar-tab-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
 }
 
 .modal-sidebar {
-  flex: 1;
-  padding: 20px;
+  width: 0;
+  /* overflow must be hidden on BOTH axes when collapsed */
+  overflow: hidden;
+  transition: width 0.25s ease, padding 0.25s ease;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  border-left: 1px solid var(--border-subtle);
-  overflow-y: visible;
+  padding: 0;
+  border-right: none;
+  /* Constrain content to parent height — no vertical bleed */
+  min-height: 0;
+  align-self: stretch;
+}
+
+.modal-sidebar--open {
+  width: 300px;
+  padding: 20px;
+  border-right: 1px solid var(--border-subtle);
+  /* Only allow scrolling when actually open */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .form-group {
@@ -290,9 +370,63 @@
 
 /* DISCUSSION / CHAT STYLES */
 .discussion-section {
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+  /* Needed for the ::before screen overlay */
+  position: relative;
+}
+
+/* Screen that sits over the thread, opaque at top, fades to transparent at badge bottom.
+   Messages scroll behind this — creating the "disappear behind header" effect. */
+.discussion-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  /* Height covers avatar + badge area */
+  height: 95px;
+  background: linear-gradient(to bottom,
+      var(--bg-surface) 0%,
+      var(--bg-surface) 55%,
+      transparent 100%);
+  /* Above thread, below agent header */
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Agent avatar above discussion title — floats over the thread */
+.discussion-agent-header {
+  position: absolute;
+  top: 16px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Above the screen overlay */
+  z-index: 2;
+  pointer-events: none;
+}
+
+.discussion-agent-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.22);
+  border: 2px solid rgba(139, 92, 246, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #c4b5fd;
+  /* Slightly overlaps the name pill below */
+  margin-bottom: -6px;
+  z-index: 1;
+  position: relative;
+  flex-shrink: 0;
 }
 
 .discussion-title {
@@ -302,20 +436,31 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 12px 0;
+  text-align: center;
+  /* Badge gradient — not flat */
+  background: linear-gradient(145deg, var(--bg-elevated) 30%, rgba(139, 92, 246, 0.18) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 8px 18px 5px;
+  position: relative;
+  z-index: 0;
 }
 
 .discussion-thread {
-  flex-grow: 1;
+  flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
   margin-bottom: 8px;
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding-right: 4px;
-  min-height: 150px;
-  max-height: calc(100vh - 400px);
+  min-height: 0;
   scrollbar-width: thin;
-  scrollbar-color: var(--border-subtle) transparent;
+  scrollbar-color: transparent transparent;
 }
 
 .discussion-thread::-webkit-scrollbar {
@@ -323,8 +468,13 @@
 }
 
 .discussion-thread::-webkit-scrollbar-thumb {
-  background: var(--border-subtle);
+  background: transparent;
   border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.discussion-thread:hover::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
 }
 
 .empty-state {
@@ -335,8 +485,17 @@
 }
 
 /* iMessage-style chat rows */
+.chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* Push first message below the floating agent header (avatar+badge = ~110px) */
+  padding-top: 110px;
+}
+
 .chat-row {
   display: flex;
+  position: relative;
   animation: fadeIn 0.2s ease;
 }
 
@@ -375,19 +534,15 @@
 }
 
 .chat-time {
-  display: block;
+  position: absolute;
+  right: -84px;
+  bottom: 4px;
   font-size: 9px;
-  margin-top: 1px;
-  padding: 0 4px;
   color: var(--text-muted);
-  opacity: 0.5;
-}
-
-.chat-right .chat-time {
-  text-align: right;
-}
-
-.chat-left .chat-time {
+  opacity: 0.7;
+  white-space: nowrap;
+  pointer-events: none;
+  min-width: 70px;
   text-align: left;
 }
 
@@ -410,7 +565,14 @@
   color: var(--text-primary);
   font-size: 13px;
   font-family: 'Inter', sans-serif;
-  transition: all 0.15s ease;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, height 0.1s ease;
+  /* Textarea-specific */
+  resize: none;
+  overflow: hidden;
+  line-height: 1.5;
+  min-height: 40px;
+  max-height: 120px;
+  display: block;
 }
 
 .message-input:focus {
@@ -426,8 +588,9 @@
 .send-button-inlay {
   position: absolute;
   right: 6px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 6px;
+  top: auto;
+  transform: none;
   background: var(--accent-primary);
   border: none;
   color: white;
@@ -448,8 +611,9 @@
 .attach-button-inlay {
   position: absolute;
   left: 8px;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 6px;
+  top: auto;
+  transform: none;
   background: transparent;
   border: none;
   color: var(--text-secondary);
@@ -512,6 +676,12 @@
   gap: 8px;
 }
 
+.footer-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -526,4 +696,101 @@
 .start-now-btn:hover {
   background-color: var(--accent-secondary-alpha-hover);
   color: var(--accent-secondary-darker);
+}
+
+/* ─── Mobile Responsive ─── */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95vw;
+    height: 94dvh;
+    border-radius: 12px;
+    max-width: none;
+  }
+
+  .modal-header {
+    padding: 12px 16px;
+  }
+
+  .modal-title-input {
+    font-size: 15px;
+  }
+
+  /* On mobile: hide the sidebar tab, message area fills full width */
+  .sidebar-container {
+    display: none;
+  }
+
+  .modal-main {
+    left: 0 !important;
+    padding: 16px;
+  }
+
+  /* Floating agent header: stays pinned but tighter */
+  .discussion-agent-header {
+    top: 10px;
+  }
+
+  .discussion-agent-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .discussion-title {
+    font-size: 11px;
+    padding: 6px 12px 4px;
+  }
+
+  /* Screen overlay: matches tighter header height */
+  .discussion-section::before {
+    height: 78px;
+  }
+
+  /* First message offset for smaller header */
+  .chat-messages {
+    padding-top: 88px;
+  }
+
+  /* Chat bubbles: allow more width on narrow screens */
+  .chat-bubble {
+    max-width: 88%;
+  }
+
+  /* Touch-friendly input */
+  .message-input {
+    font-size: 16px;
+    /* prevents iOS zoom on focus */
+    min-height: 44px;
+    padding: 10px 48px 10px 40px;
+  }
+
+  .send-button-inlay {
+    width: 34px;
+    height: 34px;
+    bottom: 5px;
+    right: 5px;
+  }
+
+  .attach-button-inlay {
+    bottom: 10px;
+    left: 10px;
+  }
+
+  /* Footer: stack into 2-row layout */
+  .modal-footer {
+    padding: 10px 16px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .footer-left,
+  .footer-right {
+    gap: 6px;
+  }
+
+  /* Smaller footer buttons */
+  .modal-footer .btn,
+  .modal-footer button {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
 }

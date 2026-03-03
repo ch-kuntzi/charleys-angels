@@ -188,7 +188,7 @@
 .quick-add-task {
   width: 100%;
   padding: 8px;
-  margin-top: 8px;
+  margin-top: auto;
   background: transparent;
   border: 1px dashed var(--border-default);
   border-radius: 6px;
