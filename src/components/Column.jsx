@@ -30,6 +30,8 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categor
   };
 
   const isQueue = column.id === 'column-1';
+  const isInProgress = column.id === 'column-2';
+  const showAddButton = (isQueue || isInProgress) && onAddTask;
   const selectedInColumn = tasks.filter(t => selectedIds.has(t.id)).length;
 
   return (
@@ -62,7 +64,7 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categor
       <Droppable droppableId={column.id}>
         {(provided, snapshot) => (
           <div
-            className={`task-list ${snapshot.isDraggingOver ? 'dragging-over' : ''}`}
+            className={`task-list ${snapshot.isDraggingOver ? 'dragging-over' : ''} ${showAddButton ? 'has-add-btn' : 'no-add-btn'}`}
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
@@ -88,14 +90,14 @@ const Column = ({ column, tasks, onTaskClick, onRenameColumn, onAddTask, categor
               </div>
             ))}
             {provided.placeholder}
+            {showAddButton && (
+              <button className="quick-add-task" onClick={onAddTask}>
+                + New Task
+              </button>
+            )}
           </div>
         )}
       </Droppable>
-      {isQueue && onAddTask && (
-        <button className="quick-add-task" onClick={onAddTask}>
-          + New Task
-        </button>
-      )}
     </div>
   );
 };
