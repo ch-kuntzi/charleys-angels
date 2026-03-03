@@ -198,6 +198,16 @@ function App() {
       updatedTask.completedAt = null;
     }
 
+    // Chris dragging In Queue → In Progress triggers "Start this now"
+    // Charley uses the CLI (update-task.cjs) which bypasses this entirely
+    if (start.id === 'column-1' && finish.id === 'column-2') {
+      updatedTask.comments = [
+        ...(updatedTask.comments || []),
+        { text: 'Start this now', author: 'Chris', timestamp: new Date().toISOString() },
+      ];
+      showToast('Started — Charley will be notified', 'info');
+    }
+
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
@@ -293,7 +303,15 @@ function App() {
   };
 
   const handleOpenTaskModal = (task) => {
-    setSelectedTask(task);
+    // Clear the agent update dot as soon as Chris opens the card
+    if (task.hasAgentUpdate) {
+      const cleared = { ...task, hasAgentUpdate: false };
+      const newData = { ...data, tasks: { ...data.tasks, [task.id]: cleared } };
+      handleSetData(newData);
+      setSelectedTask(cleared);
+    } else {
+      setSelectedTask(task);
+    }
   };
 
   const handleCloseTaskModal = () => {
